@@ -1,0 +1,9 @@
+C:\Users\fabri\OneDrive\Escritorio\SPP\SPP\obj\Debug\net6.0\SPP.csproj.AssemblyReference.cache
+C:\Users\fabri\OneDrive\Escritorio\SPP\SPP\obj\Debug\net6.0\SPP.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\fabri\OneDrive\Escritorio\SPP\SPP\obj\Debug\net6.0\SPP.AssemblyInfoInputs.cache
+C:\Users\fabri\OneDrive\Escritorio\SPP\SPP\obj\Debug\net6.0\SPP.AssemblyInfo.cs
+C:\Users\fabri\OneDrive\Escritorio\SPP\SPP\obj\Debug\net6.0\SPP.csproj.CoreCompileInputs.cache
+C:\Users\fabri\OneDrive\Escritorio\SPP\SPP\obj\Debug\net6.0\SPP.MvcApplicationPartsAssemblyInfo.cs
+C:\Users\fabri\OneDrive\Escritorio\SPP\SPP\obj\Debug\net6.0\SPP.MvcApplicationPartsAssemblyInfo.cache
+C:\Users\fabri\OneDrive\Escritorio\SPP\SPP\obj\Debug\net6.0\SPP.RazorAssemblyInfo.cache
+C:\Users\fabri\OneDrive\Escritorio\SPP\SPP\obj\Debug\net6.0\SPP.RazorAssemblyInfo.cs
