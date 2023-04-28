@@ -9,77 +9,77 @@ build_property.EnforceExtendedAnalyzerRules =
 build_property._SupportedPlatformList = Linux,macOS,Windows
 build_property.RootNamespace = SPP
 build_property.RootNamespace = SPP
-build_property.ProjectDir = C:\MEDIA\Trabajo\GoIntegreat\TaskRecord\SPP\SPP\SPP\
+build_property.ProjectDir = C:\Users\fabri\OneDrive\Escritorio\SPP\SPP\
 build_property.RazorLangVersion = 7.0
 build_property.SupportLocalizedComponentNames = 
 build_property.GenerateRazorMetadataSourceChecksumAttributes = true
-build_property.MSBuildProjectDirectory = C:\MEDIA\Trabajo\GoIntegreat\TaskRecord\SPP\SPP\SPP
+build_property.MSBuildProjectDirectory = C:\Users\fabri\OneDrive\Escritorio\SPP\SPP
 build_property._RazorSourceGeneratorDebug = 
 
-[C:/MEDIA/Trabajo/GoIntegreat/TaskRecord/SPP/SPP/SPP/Views/Acceso/Login.cshtml]
+[C:/Users/fabri/OneDrive/Escritorio/SPP/SPP/Views/Acceso/Login.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWNjZXNvXExvZ2luLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/MEDIA/Trabajo/GoIntegreat/TaskRecord/SPP/SPP/SPP/Views/Administracion/ListaSolicitud.cshtml]
+[C:/Users/fabri/OneDrive/Escritorio/SPP/SPP/Views/Administracion/ListaSolicitud.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5pc3RyYWNpb25cTGlzdGFTb2xpY2l0dWQuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/MEDIA/Trabajo/GoIntegreat/TaskRecord/SPP/SPP/SPP/Views/Administracion/PendientePago.cshtml]
+[C:/Users/fabri/OneDrive/Escritorio/SPP/SPP/Views/Administracion/PendientePago.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5pc3RyYWNpb25cUGVuZGllbnRlUGFnby5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/MEDIA/Trabajo/GoIntegreat/TaskRecord/SPP/SPP/SPP/Views/Inicio/Bienvenido.cshtml]
+[C:/Users/fabri/OneDrive/Escritorio/SPP/SPP/Views/Inicio/Bienvenido.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSW5pY2lvXEJpZW52ZW5pZG8uY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/MEDIA/Trabajo/GoIntegreat/TaskRecord/SPP/SPP/SPP/Views/Mantenimiento/Aprobadores.cshtml]
+[C:/Users/fabri/OneDrive/Escritorio/SPP/SPP/Views/Mantenimiento/Aprobadores.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTWFudGVuaW1pZW50b1xBcHJvYmFkb3Jlcy5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/MEDIA/Trabajo/GoIntegreat/TaskRecord/SPP/SPP/SPP/Views/Mantenimiento/Compania.cshtml]
+[C:/Users/fabri/OneDrive/Escritorio/SPP/SPP/Views/Mantenimiento/Compania.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTWFudGVuaW1pZW50b1xDb21wYW5pYS5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/MEDIA/Trabajo/GoIntegreat/TaskRecord/SPP/SPP/SPP/Views/Mantenimiento/Correo.cshtml]
+[C:/Users/fabri/OneDrive/Escritorio/SPP/SPP/Views/Mantenimiento/Correo.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTWFudGVuaW1pZW50b1xDb3JyZW8uY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/MEDIA/Trabajo/GoIntegreat/TaskRecord/SPP/SPP/SPP/Views/Mantenimiento/Proveedor.cshtml]
+[C:/Users/fabri/OneDrive/Escritorio/SPP/SPP/Views/Mantenimiento/Proveedor.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTWFudGVuaW1pZW50b1xQcm92ZWVkb3IuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/MEDIA/Trabajo/GoIntegreat/TaskRecord/SPP/SPP/SPP/Views/Mantenimiento/Usuario.cshtml]
+[C:/Users/fabri/OneDrive/Escritorio/SPP/SPP/Views/Mantenimiento/Usuario.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTWFudGVuaW1pZW50b1xVc3VhcmlvLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/MEDIA/Trabajo/GoIntegreat/TaskRecord/SPP/SPP/SPP/Views/Pago/AdelantoPago.cshtml]
+[C:/Users/fabri/OneDrive/Escritorio/SPP/SPP/Views/Pago/AdelantoPago.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUGFnb1xBZGVsYW50b1BhZ28uY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/MEDIA/Trabajo/GoIntegreat/TaskRecord/SPP/SPP/SPP/Views/Reporte/PendienteAprobacion.cshtml]
+[C:/Users/fabri/OneDrive/Escritorio/SPP/SPP/Views/Reporte/PendienteAprobacion.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUmVwb3J0ZVxQZW5kaWVudGVBcHJvYmFjaW9uLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/MEDIA/Trabajo/GoIntegreat/TaskRecord/SPP/SPP/SPP/Views/Reporte/Solicitud.cshtml]
+[C:/Users/fabri/OneDrive/Escritorio/SPP/SPP/Views/Reporte/Solicitud.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUmVwb3J0ZVxTb2xpY2l0dWQuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/MEDIA/Trabajo/GoIntegreat/TaskRecord/SPP/SPP/SPP/Views/Shared/_Layout.cshtml]
+[C:/Users/fabri/OneDrive/Escritorio/SPP/SPP/Views/Shared/_Layout.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9MYXlvdXQuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/MEDIA/Trabajo/GoIntegreat/TaskRecord/SPP/SPP/SPP/Views/Shared/_LayoutApp .cshtml]
+[C:/Users/fabri/OneDrive/Escritorio/SPP/SPP/Views/Shared/_LayoutApp .cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9MYXlvdXRBcHAgLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/MEDIA/Trabajo/GoIntegreat/TaskRecord/SPP/SPP/SPP/Views/Shared/_LayoutLogin.cshtml]
+[C:/Users/fabri/OneDrive/Escritorio/SPP/SPP/Views/Shared/_LayoutLogin.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9MYXlvdXRMb2dpbi5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/MEDIA/Trabajo/GoIntegreat/TaskRecord/SPP/SPP/SPP/Views/_ViewImports.cshtml]
+[C:/Users/fabri/OneDrive/Escritorio/SPP/SPP/Views/_ViewImports.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcX1ZpZXdJbXBvcnRzLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/MEDIA/Trabajo/GoIntegreat/TaskRecord/SPP/SPP/SPP/Views/_ViewStart.cshtml]
+[C:/Users/fabri/OneDrive/Escritorio/SPP/SPP/Views/_ViewStart.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcX1ZpZXdTdGFydC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 

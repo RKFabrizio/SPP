@@ -9985,26 +9985,26 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\esteb\\.nuget\\packages\\": {},
+    "C:\\Users\\fabri\\.nuget\\packages\\": {},
     "C:\\Program Files\\DevExpress 22.1\\Components\\Offline Packages": {},
     "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\MEDIA\\Trabajo\\GoIntegreat\\TaskRecord\\SPP\\SPP\\SPP\\SPP.csproj",
+      "projectUniqueName": "C:\\Users\\fabri\\OneDrive\\Escritorio\\SPP\\SPP\\SPP.csproj",
       "projectName": "SPP",
-      "projectPath": "C:\\MEDIA\\Trabajo\\GoIntegreat\\TaskRecord\\SPP\\SPP\\SPP\\SPP.csproj",
-      "packagesPath": "C:\\Users\\esteb\\.nuget\\packages\\",
-      "outputPath": "C:\\MEDIA\\Trabajo\\GoIntegreat\\TaskRecord\\SPP\\SPP\\SPP\\obj\\",
+      "projectPath": "C:\\Users\\fabri\\OneDrive\\Escritorio\\SPP\\SPP\\SPP.csproj",
+      "packagesPath": "C:\\Users\\fabri\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\fabri\\OneDrive\\Escritorio\\SPP\\SPP\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files\\DevExpress 22.1\\Components\\Offline Packages",
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
       ],
       "configFilePaths": [
-        "C:\\MEDIA\\Trabajo\\GoIntegreat\\TaskRecord\\SPP\\SPP\\NuGet.Config",
-        "C:\\Users\\esteb\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\fabri\\OneDrive\\Escritorio\\SPP\\NuGet.Config",
+        "C:\\Users\\fabri\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\DevExpress 22.1.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
@@ -10016,6 +10016,7 @@
         "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
         "C:\\Program Files\\DevExpress 22.1\\Components\\System\\Components\\Packages": {},
         "C:\\Program Files\\DevExpress 22.1\\DevExtreme\\System\\DevExtreme\\Bin\\AspNetCore": {},
+        "C:\\Program Files\\dotnet\\library-packs": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
@@ -10096,7 +10097,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.201\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.102\\RuntimeIdentifierGraph.json"
       }
     }
   }
