@@ -7,3 +7,12 @@ C:\Users\fabri\OneDrive\Escritorio\SPP\SPP\obj\Debug\net6.0\SPP.MvcApplicationPa
 C:\Users\fabri\OneDrive\Escritorio\SPP\SPP\obj\Debug\net6.0\SPP.MvcApplicationPartsAssemblyInfo.cache
 C:\Users\fabri\OneDrive\Escritorio\SPP\SPP\obj\Debug\net6.0\SPP.RazorAssemblyInfo.cache
 C:\Users\fabri\OneDrive\Escritorio\SPP\SPP\obj\Debug\net6.0\SPP.RazorAssemblyInfo.cs
+C:\MEDIA\Trabajo\GoIntegreat\TaskRecord\SPP\SPP\SPP\obj\Debug\net6.0\SPP.csproj.AssemblyReference.cache
+C:\MEDIA\Trabajo\GoIntegreat\TaskRecord\SPP\SPP\SPP\obj\Debug\net6.0\SPP.GeneratedMSBuildEditorConfig.editorconfig
+C:\MEDIA\Trabajo\GoIntegreat\TaskRecord\SPP\SPP\SPP\obj\Debug\net6.0\SPP.AssemblyInfoInputs.cache
+C:\MEDIA\Trabajo\GoIntegreat\TaskRecord\SPP\SPP\SPP\obj\Debug\net6.0\SPP.AssemblyInfo.cs
+C:\MEDIA\Trabajo\GoIntegreat\TaskRecord\SPP\SPP\SPP\obj\Debug\net6.0\SPP.csproj.CoreCompileInputs.cache
+C:\MEDIA\Trabajo\GoIntegreat\TaskRecord\SPP\SPP\SPP\obj\Debug\net6.0\SPP.MvcApplicationPartsAssemblyInfo.cs
+C:\MEDIA\Trabajo\GoIntegreat\TaskRecord\SPP\SPP\SPP\obj\Debug\net6.0\SPP.MvcApplicationPartsAssemblyInfo.cache
+C:\MEDIA\Trabajo\GoIntegreat\TaskRecord\SPP\SPP\SPP\obj\Debug\net6.0\SPP.RazorAssemblyInfo.cache
+C:\MEDIA\Trabajo\GoIntegreat\TaskRecord\SPP\SPP\SPP\obj\Debug\net6.0\SPP.RazorAssemblyInfo.cs
