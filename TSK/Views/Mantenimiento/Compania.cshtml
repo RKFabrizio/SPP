@@ -1,0 +1,68 @@
+﻿
+@{
+    ViewData["Title"] = "Compania";
+    Layout = "~/Views/Shared/_LayoutApp.cshtml";
+}
+
+<style>
+    .user-icon-container {
+        display: flex;
+        align-items: center;
+    }
+
+        .user-icon-container .icon-tabler {
+            margin-right: 10px;
+            width: 50px;
+            height: 50px;
+        }
+
+        .user-icon-container .page-title {
+            margin-left: -4px;
+        }
+
+    .page-title {
+        color: #a79a66;
+    }
+
+</style>
+
+@section PagePreTitle{
+
+    <div class="col">
+        <!-- Page pre-title -->
+        <div class="user-icon-container">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-building-factory" width="32" height="32" viewBox="0 0 24 24" stroke-width="1.5" stroke="#a79a66" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M4 21c1.147 -4.02 1.983 -8.027 2 -12h6c.017 3.973 .853 7.98 2 12" />
+  <path d="M12.5 13h4.5c.025 2.612 .894 5.296 2 8" />
+  <path d="M9 5a2.4 2.4 0 0 1 2 -1a2.4 2.4 0 0 1 2 1a2.4 2.4 0 0 0 2 1a2.4 2.4 0 0 0 2 -1a2.4 2.4 0 0 1 2 -1a2.4 2.4 0 0 1 2 1" />
+  <line x1="3" y1="21" x2="22" y2="21" />
+</svg>
+            <h2 class="page-title">
+                Compa&ntilde;ía
+            </h2>
+        </div>
+    </div>
+}
+
+@section PageActions{
+
+
+}
+
+@(Html.DevExtreme().DataGrid<SPP.Models.Entity.Compania>()
+    .DataSource(ds => ds.Mvc()
+        .Controller("Companias")
+        .LoadAction("Get")
+        .Key("IdCompania")
+    )
+    .RemoteOperations(true)
+    .Columns(columns => {
+
+        columns.AddFor(m => m.IdCompania);
+
+        columns.AddFor(m => m.NombreCompania);
+
+        columns.AddFor(m => m.IdPais);
+    })
+)
