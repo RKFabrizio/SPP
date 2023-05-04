@@ -1,0 +1,1 @@
+function e(e,o){const n=e.ownerDocument.getElementById(o);if(null!==n){const o=n.getBoundingClientRect(),t=e.getBoundingClientRect();return new Promise(((r,i)=>{requestAnimationFrame((i=>{!(e.compareDocumentPosition(document.body)&Node.DOCUMENT_POSITION_DISCONNECTED)&&o.top>t.top&&n.scrollTop>0&&(n.scrollTop=0),r()}))}))}return Promise.resolve()}export{e as scrollIntoView};

@@ -1,0 +1,84 @@
+﻿
+@{
+    ViewData["Title"] = "Bienvenida";
+    Layout = "~/Views/Shared/_LayoutApp.cshtml";
+}
+
+
+<style>
+    .user-icon-container {
+        display: flex;
+        align-items: center;
+    }
+
+        .user-icon-container .icon-tabler {
+            margin-right: 10px;
+            width: 50px;
+            height: 50px;
+        }
+
+        .user-icon-container .page-title {
+            margin-left: -4px;
+        }
+
+    .page-title {
+        color: #a79a66;
+    }
+
+    .container{
+        width: 85%;
+    }
+
+</style>
+
+@section PagePreTitle{
+
+    <div class="col">
+        <!-- Page pre-title -->
+        <div class="user-icon-container">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="36" height="36" viewBox="0 0 24 24" stroke-width="1.5" stroke="#a79a66" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                <polyline points="5 12 3 12 12 3 21 12 19 12" />
+                <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
+                <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
+            </svg>
+            <h2 class="page-title">
+                Bienvenida
+            </h2>
+        </div>
+    </div>
+}
+
+@section PageActions{
+
+
+}
+
+
+<div class="row row-cards">
+    <div class="col-12">
+        <div class="card card-md">
+            <div class="card-stamp card-stamp-lg">
+                <div class="card-stamp-icon bg-primary">
+                    <!-- Download SVG icon from -->
+          
+
+
+
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="row align-items-center">
+                    <div class="col-10">
+                        <div class="markdown">
+                            <p>¡Hola y bienvenido a la aplicación web de Pago de Proveedores de Barrick!</p>
+                            <p>¿Estás listo para empezar tu día con el pie derecho? Nosotros estamos aquí para ayudarte a administrar tus pagos de una manera fácil y rápida. Con nuestra aplicación web, podrás realizar tus pagos de proveedores en un abrir y cerrar de ojos.</p>
+                            <p>Así que, toma tu café, relájate y disfruta de la tranquilidad de saber que tus pagos están en buenas manos. ¡Bienvenido a la familia Barrick!</p>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
