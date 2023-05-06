@@ -1,0 +1,146 @@
+﻿
+@{
+    ViewData["Title"] = "Usuario";
+    Layout = "~/Views/Shared/_LayoutApp.cshtml";
+}
+
+<style>
+    .user-icon-container {
+        display: flex;
+        align-items: center;
+    }
+
+        .user-icon-container .icon-tabler {
+            margin-right: 10px;
+            width: 50px;
+            height: 50px;
+        }
+
+        .user-icon-container .page-title {
+            margin-left: -4px;
+        }
+
+    .page-title {
+        color: #a79a66;
+    }
+
+</style>
+
+@section PagePreTitle{
+
+        <div class="col">
+            <!-- Page pre-title -->
+            <div class="user-icon-container">
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user-circle" viewBox="0 0 24 24" stroke-width="1" stroke="#a79a66" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                    <circle cx="12" cy="12" r="9" />
+                    <circle cx="12" cy="10" r="3" />
+                    <path d="M6.168 18.849a4 4 0 0 1 3.832 -2.849h4a4 4 0 0 1 3.834 2.855" />
+                </svg>
+                <h2 class="page-title">
+                    Usuario
+                </h2>
+            </div>
+        </div>
+}
+
+@section PageActions{
+
+
+}
+
+@(Html.DevExtreme().DataGrid<SPP.Models.Entity.Usuario>()
+    .DataSource(ds => ds.Mvc()
+        .Controller("Usuarios")
+        .LoadAction("Get")
+        .InsertAction("Post")
+        .UpdateAction("Put")
+        .Key("IdUsuario")
+    )
+    .RemoteOperations(true)
+    .Columns(columns => {
+
+        columns.AddFor(m => m.Login).Caption("Username").Width(200);
+
+        columns.AddFor(m => m.Nombre).Width(200).Caption("Nombres");
+
+        columns.AddFor(m => m.Apellido).Width(200).Caption("Apellidos");
+        
+        columns.AddFor(m => m.MontoAprobacion).Caption("Monto de Aprobación");
+
+        columns.AddFor(m => m.Contrasena).Visible(false);
+
+        columns.AddFor(m => m.IdPerfil).Lookup(lookup => lookup
+            .DataSource(ds => ds.WebApi().Controller("Usuarios").LoadAction("PerfilesLookup").Key("Value"))
+            .ValueExpr("Value")
+            .DisplayExpr("Text")
+        ).GroupIndex(0).Caption("Perfil");
+
+        columns.AddFor(m => m.IdArea).Lookup(lookup => lookup
+            .DataSource(ds => ds.WebApi().Controller("Usuarios").LoadAction("AreasLookup").Key("Value"))
+            .ValueExpr("Value")
+            .DisplayExpr("Text")
+        ).Caption("Area").Visible(false);
+
+        columns.AddFor(m => m.IdCompania).Lookup(lookup => lookup
+            .DataSource(ds => ds.WebApi().Controller("Usuarios").LoadAction("CompaniasLookup").Key("Value"))
+            .ValueExpr("Value")
+            .DisplayExpr("Text")
+        ).Caption("Compañia").Visible(false);
+
+        columns.AddFor(m => m.Habilitado).Caption("Estado").Width(200);
+    })
+    .ShowBorders(true)
+            .AllowColumnReordering(true)
+            .RowAlternationEnabled(false)
+            .ShowColumnLines(true)
+            .ShowRowLines(true)
+            .Paging(paging => paging.PageSize(20))
+            .FilterRow(f => f.Visible(true))
+            .Pager(pager =>
+            {
+                pager.ShowPageSizeSelector(true);
+                pager.AllowedPageSizes(new[] { 20, 50, 100 });
+                pager.ShowInfo(true);
+            })
+            .SearchPanel(s => s
+                .Visible(true)
+                .HighlightCaseSensitive(true)
+            )
+            .Editing(e => e.Mode(GridEditMode.Popup)
+                    .AllowUpdating(true)
+                    .AllowAdding(true)
+                    .UseIcons(true)
+                    .Popup(p => p
+                        .Title("Usuario")
+                        .ShowTitle(true)
+                        .Width("70%")
+                        .Height(300)
+                    )
+
+                    .Form(f => f.Items(items =>
+                    {
+                        items.AddGroup()
+                            .ColCount(2)
+                            .ColSpan(2)
+                            .Items(groupItems =>
+                            {
+                                groupItems.AddSimpleFor(m => m.Nombre);
+                                groupItems.AddSimpleFor(m => m.Apellido);
+                                groupItems.AddSimpleFor(m => m.Login);
+                                groupItems.AddSimpleFor(m => m.Contrasena)
+                                    .Editor(e => e.TextBox().Mode(TextBoxMode.Password));
+                                groupItems.AddSimpleFor(m => m.Correo);
+                                groupItems.AddSimpleFor(m => m.MontoAprobacion);
+                                groupItems.AddSimpleFor(m => m.IdPerfil);
+                                groupItems.AddSimpleFor(m => m.IdArea);
+                                groupItems.AddSimpleFor(m => m.IdCompania);
+                                groupItems.AddSimpleFor(m => m.Habilitado).CssClass("myFormMargin").Label(label => label.Location(FormLabelLocation.Left));
+                                groupItems.AddSimpleFor(m => m.Apr).CssClass("myFormMargin").Label(label => label.Location(FormLabelLocation.Left));
+                            });
+                    }))
+
+                )
+)
+
+

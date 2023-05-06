@@ -1,0 +1,135 @@
+﻿
+@{
+    ViewData["Title"] = "AdelantoPago";
+    Layout = "~/Views/Shared/_LayoutApp.cshtml";
+}
+
+@using DevExpress.AspNetCore;
+
+
+<style>
+    .user-icon-container {
+        display: flex;
+        align-items: center;
+    }
+
+        .user-icon-container .icon-tabler {
+            margin-right: 10px;
+            width: 50px;
+            height: 50px;
+        }
+
+        .user-icon-container .page-title {
+            margin-left: -4px;
+        }
+
+    .page-title {
+        color: #a79a66;
+    }
+
+    .container{
+        width: 85%;
+    }
+
+</style>
+
+@section PagePreTitle{
+
+    <div class="col">
+        <!-- Page pre-title -->
+        <div class="user-icon-container">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user-circle" viewBox="0 0 24 24" stroke-width="1" stroke="#a79a66" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                <circle cx="12" cy="12" r="9" />
+                <circle cx="12" cy="10" r="3" />
+                <path d="M6.168 18.849a4 4 0 0 1 3.832 -2.849h4a4 4 0 0 1 3.834 2.855" />
+            </svg>
+            <h2 class="page-title">
+                Adelanto de Pago
+            </h2>
+        </div>
+    </div>
+}
+
+@section PageActions{
+
+
+}
+
+
+<div class="container">
+    @(Html.DevExtreme().Form<SPP.Models.Entity.Pago>()
+    .ColCount(2)
+    .Items(items =>
+    {
+         items.AddSimpleFor(m => m.IdTipoAdelanto)
+         .Label(l => l.Text("Tipo de Solicitud:"))
+         .Editor(e => e.SelectBox()
+             .DataSource(d => d.Mvc()
+                 .Controller("Pagoes")
+                 .LoadAction("TipoAdelantosLookup"))
+             .DisplayExpr("Text")
+             .ValueExpr("Value")
+         )
+         .ColSpan(2);
+
+
+        items.AddSimpleFor(m => m.IdProveedor)
+             .Label(l => l.Text("Nombre de Proveedor y/o Beneficiario:"))
+             .Editor(e => e.SelectBox()
+                 .DataSource(d => d.Mvc()
+                     .Controller("Pagoes")
+                     .LoadAction("ProveedoresLookup"))
+                 .DisplayExpr("Text")
+                 .ValueExpr("Value")
+             ).ColSpan(2);
+        items.AddSimpleFor(m => m.FechaSolicitud)
+         .ColSpan(2)
+         .Label(l => l.Text("Fecha y Hora:"))
+         .Editor(e => e.DateBox());
+
+        items.AddSimpleFor(m => m.IdTipoMoneda)
+            .Label(l => l.Text("Moneda:"))
+             .Editor(e => e.SelectBox()
+                 .DataSource(d => d.Mvc()
+                     .Controller("Pagoes")
+                     .LoadAction("TipoMonedasLookup"))
+                 .DisplayExpr("Text")
+                 .ValueExpr("Value")
+
+             );
+        items.AddSimpleFor(m => m.Importe);
+
+        items.AddSimpleFor(m => m.Concepto).ColSpan(2)
+            .Editor(e => e.TextArea().Height("50px"));
+
+          @*      items.AddSimpleFor(m => m.ReferenciaOC)
+             .Editor(e => e.FileUploader()
+                 .Multiple(false)
+                 .UploadMode(FileUploadMode.UseForm)
+                 .Name("referenceFile")
+             );*@
+            items.AddSimpleFor(m => m.Observaciones).ColSpan(2)
+            .Editor(e => e.TextArea().Height("50px"));
+        items.AddSimpleFor(m => m.LoginSolicitante)
+             .Label(l => l.Text("Solicitante:"))
+             .Editor(e => e.SelectBox()
+                 .DataSource(d => d.Mvc()
+                     .Controller("Pagoes")
+                     .LoadAction("UsuariosLookup"))
+                 .DisplayExpr("Text")
+                 .ValueExpr("Value")
+             );
+        items.AddSimpleFor(m => m.LoginAprobador)
+            .Label(l => l.Text("Aprobador (Monto max. Aprobación):"))
+             .Editor(e => e.SelectBox()
+                 .DataSource(d => d.Mvc()
+                     .Controller("Pagoes")
+                     .LoadAction("UsuariosLookup"))
+                 .DisplayExpr("Text")
+                 .ValueExpr("Value")
+             );
+    })
+)
+
+</div>

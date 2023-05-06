@@ -1,0 +1,185 @@
+is_global = true
+build_property.TargetFramework = net6.0
+build_property.TargetPlatformMinVersion = 
+build_property.UsingMicrosoftNETSdkWeb = true
+build_property.ProjectTypeGuids = 
+build_property.InvariantGlobalization = 
+build_property.PlatformNeutralAssembly = 
+build_property.EnforceExtendedAnalyzerRules = 
+build_property._SupportedPlatformList = Linux,macOS,Windows
+build_property.RootNamespace = TSK
+build_property.RootNamespace = TSK
+build_property.ProjectDir = C:\Users\fabri\OneDrive\Escritorio\CODE REPUESTO\TaskRecord\TSK\
+build_property.RazorLangVersion = 6.0
+build_property.SupportLocalizedComponentNames = 
+build_property.GenerateRazorMetadataSourceChecksumAttributes = true
+build_property.MSBuildProjectDirectory = C:\Users\fabri\OneDrive\Escritorio\CODE REPUESTO\TaskRecord\TSK
+build_property._RazorSourceGeneratorDebug = 
+
+[C:/Users/fabri/OneDrive/Escritorio/CODE REPUESTO/TaskRecord/TSK/Views/Acceso/Login.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWNjZXNvXExvZ2luLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/fabri/OneDrive/Escritorio/CODE REPUESTO/TaskRecord/TSK/Views/EstructuraPM/Actividad.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRXN0cnVjdHVyYVBNXEFjdGl2aWRhZC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/fabri/OneDrive/Escritorio/CODE REPUESTO/TaskRecord/TSK/Views/EstructuraPM/PM.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRXN0cnVjdHVyYVBNXFBNLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/fabri/OneDrive/Escritorio/CODE REPUESTO/TaskRecord/TSK/Views/EstructuraPM/PMSistema.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRXN0cnVjdHVyYVBNXFBNU2lzdGVtYS5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/fabri/OneDrive/Escritorio/CODE REPUESTO/TaskRecord/TSK/Views/EstructuraPM/PMSistemaActividad.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRXN0cnVjdHVyYVBNXFBNU2lzdGVtYUFjdGl2aWRhZC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/fabri/OneDrive/Escritorio/CODE REPUESTO/TaskRecord/TSK/Views/EstructuraPM/Sistema.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRXN0cnVjdHVyYVBNXFNpc3RlbWEuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/fabri/OneDrive/Escritorio/CODE REPUESTO/TaskRecord/TSK/Views/Inicio/Bienvenida.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSW5pY2lvXEJpZW52ZW5pZGEuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/fabri/OneDrive/Escritorio/CODE REPUESTO/TaskRecord/TSK/Views/Inicio/Bienvenidaold.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSW5pY2lvXEJpZW52ZW5pZGFvbGQuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/fabri/OneDrive/Escritorio/CODE REPUESTO/TaskRecord/TSK/Views/Mantenimiento/Area.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTWFudGVuaW1pZW50b1xBcmVhLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/fabri/OneDrive/Escritorio/CODE REPUESTO/TaskRecord/TSK/Views/Mantenimiento/ClaseMantencion.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTWFudGVuaW1pZW50b1xDbGFzZU1hbnRlbmNpb24uY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/fabri/OneDrive/Escritorio/CODE REPUESTO/TaskRecord/TSK/Views/Mantenimiento/Complemento.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTWFudGVuaW1pZW50b1xDb21wbGVtZW50by5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/fabri/OneDrive/Escritorio/CODE REPUESTO/TaskRecord/TSK/Views/Mantenimiento/Componente.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTWFudGVuaW1pZW50b1xDb21wb25lbnRlLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/fabri/OneDrive/Escritorio/CODE REPUESTO/TaskRecord/TSK/Views/Mantenimiento/Condicion.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTWFudGVuaW1pZW50b1xDb25kaWNpb24uY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/fabri/OneDrive/Escritorio/CODE REPUESTO/TaskRecord/TSK/Views/Mantenimiento/Consecuencia.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTWFudGVuaW1pZW50b1xDb25zZWN1ZW5jaWEuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/fabri/OneDrive/Escritorio/CODE REPUESTO/TaskRecord/TSK/Views/Mantenimiento/Disciplina.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTWFudGVuaW1pZW50b1xEaXNjaXBsaW5hLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/fabri/OneDrive/Escritorio/CODE REPUESTO/TaskRecord/TSK/Views/Mantenimiento/Entrega.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTWFudGVuaW1pZW50b1xFbnRyZWdhLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/fabri/OneDrive/Escritorio/CODE REPUESTO/TaskRecord/TSK/Views/Mantenimiento/Equipo.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTWFudGVuaW1pZW50b1xFcXVpcG8uY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/fabri/OneDrive/Escritorio/CODE REPUESTO/TaskRecord/TSK/Views/Mantenimiento/Flota.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTWFudGVuaW1pZW50b1xGbG90YS5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/fabri/OneDrive/Escritorio/CODE REPUESTO/TaskRecord/TSK/Views/Mantenimiento/Frecuencia.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTWFudGVuaW1pZW50b1xGcmVjdWVuY2lhLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/fabri/OneDrive/Escritorio/CODE REPUESTO/TaskRecord/TSK/Views/Mantenimiento/Herramienta.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTWFudGVuaW1pZW50b1xIZXJyYW1pZW50YS5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/fabri/OneDrive/Escritorio/CODE REPUESTO/TaskRecord/TSK/Views/Mantenimiento/Nivel.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTWFudGVuaW1pZW50b1xOaXZlbC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/fabri/OneDrive/Escritorio/CODE REPUESTO/TaskRecord/TSK/Views/Mantenimiento/Posicion.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTWFudGVuaW1pZW50b1xQb3NpY2lvbi5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/fabri/OneDrive/Escritorio/CODE REPUESTO/TaskRecord/TSK/Views/Mantenimiento/Rango.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTWFudGVuaW1pZW50b1xSYW5nby5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/fabri/OneDrive/Escritorio/CODE REPUESTO/TaskRecord/TSK/Views/Mantenimiento/ReporteSistema.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTWFudGVuaW1pZW50b1xSZXBvcnRlU2lzdGVtYS5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/fabri/OneDrive/Escritorio/CODE REPUESTO/TaskRecord/TSK/Views/Mantenimiento/Repuesto.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTWFudGVuaW1pZW50b1xSZXB1ZXN0by5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/fabri/OneDrive/Escritorio/CODE REPUESTO/TaskRecord/TSK/Views/Mantenimiento/Tarea.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTWFudGVuaW1pZW50b1xUYXJlYS5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/fabri/OneDrive/Escritorio/CODE REPUESTO/TaskRecord/TSK/Views/Mantenimiento/TipoEquipo.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTWFudGVuaW1pZW50b1xUaXBvRXF1aXBvLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/fabri/OneDrive/Escritorio/CODE REPUESTO/TaskRecord/TSK/Views/Mantenimiento/Unidad.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTWFudGVuaW1pZW50b1xVbmlkYWQuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/fabri/OneDrive/Escritorio/CODE REPUESTO/TaskRecord/TSK/Views/Mantenimiento/UnidadMedida.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTWFudGVuaW1pZW50b1xVbmlkYWRNZWRpZGEuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/fabri/OneDrive/Escritorio/CODE REPUESTO/TaskRecord/TSK/Views/Mantenimiento/Usuario.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTWFudGVuaW1pZW50b1xVc3VhcmlvLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/fabri/OneDrive/Escritorio/CODE REPUESTO/TaskRecord/TSK/Views/Shared/Error.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXEVycm9yLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/fabri/OneDrive/Escritorio/CODE REPUESTO/TaskRecord/TSK/Views/Shared/_Layout.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9MYXlvdXQuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/fabri/OneDrive/Escritorio/CODE REPUESTO/TaskRecord/TSK/Views/Shared/_LayoutApp.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9MYXlvdXRBcHAuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/fabri/OneDrive/Escritorio/CODE REPUESTO/TaskRecord/TSK/Views/TaskRecord/Registro.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVGFza1JlY29yZFxSZWdpc3Ryby5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/fabri/OneDrive/Escritorio/CODE REPUESTO/TaskRecord/TSK/Views/TaskRecord/RegistroDetalle.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVGFza1JlY29yZFxSZWdpc3Ryb0RldGFsbGUuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/fabri/OneDrive/Escritorio/CODE REPUESTO/TaskRecord/TSK/Views/TaskRecord/RegistroNuevo.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVGFza1JlY29yZFxSZWdpc3Ryb051ZXZvLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/fabri/OneDrive/Escritorio/CODE REPUESTO/TaskRecord/TSK/Views/TaskRecord/Reporte.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVGFza1JlY29yZFxSZXBvcnRlLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/fabri/OneDrive/Escritorio/CODE REPUESTO/TaskRecord/TSK/Views/TaskRecord/ReporteDetalle.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVGFza1JlY29yZFxSZXBvcnRlRGV0YWxsZS5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/fabri/OneDrive/Escritorio/CODE REPUESTO/TaskRecord/TSK/Views/TaskRecord/VerDetalle.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVGFza1JlY29yZFxWZXJEZXRhbGxlLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/fabri/OneDrive/Escritorio/CODE REPUESTO/TaskRecord/TSK/Views/_ViewImports.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcX1ZpZXdJbXBvcnRzLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/fabri/OneDrive/Escritorio/CODE REPUESTO/TaskRecord/TSK/Views/_ViewStart.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcX1ZpZXdTdGFydC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/fabri/OneDrive/Escritorio/CODE REPUESTO/TaskRecord/TSK/Views/Shared/_LayoutLogin.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9MYXlvdXRMb2dpbi5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = b-l4hzki1q1a
