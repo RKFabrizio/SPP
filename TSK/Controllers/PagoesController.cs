@@ -100,7 +100,7 @@ namespace TSK.Controllers
                          orderby i.Simbologia
                          select new {
                              Value = i.IdTipoMoneda,
-                             Text = i.Simbologia + " - " + i.TipoMoneda
+                             Text = i.TipoMoneda + " - " + i.Simbologia
                          };
             return Json(await DataSourceLoader.LoadAsync(lookup, loadOptions));
         }
