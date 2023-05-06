@@ -8,7 +8,6 @@ namespace SPP.Models.Entity
     {
         public Usuario()
         {
-            AprobadorAreas = new HashSet<AprobadorArea>();
             LoginSolicitante = new HashSet<Pago>();
             LoginAprobador = new HashSet<Pago>();
         }
@@ -24,11 +23,11 @@ namespace SPP.Models.Entity
         public int IdArea { get; set; }
         public int IdCompania { get; set; }
         public bool Habilitado { get; set; }
+        public bool Aprobador { get; set; }
 
         public virtual Perfil PerfilDisNavigation { get; set; }
         public virtual Area AreaDisNavigation { get; set; }
         public virtual Compania CompaniaDisNavigation { get; set; }
-        public virtual ICollection<AprobadorArea> AprobadorAreas { get; set; }
         public virtual ICollection<Pago> LoginSolicitante { get; set; }
         public virtual ICollection<Pago> LoginAprobador { get; set; }
     }

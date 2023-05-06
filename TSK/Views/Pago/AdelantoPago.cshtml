@@ -83,7 +83,11 @@
                  .DisplayExpr("Text")
                  .ValueExpr("Value")
              ).ColSpan(2);
-        items.AddSimpleFor(m => m.FechaSolicitud).ColSpan(2).Label(l => l.Text("Fecha y Hora:"));
+        items.AddSimpleFor(m => m.FechaSolicitud)
+         .ColSpan(2)
+         .Label(l => l.Text("Fecha y Hora:"))
+         .Editor(e => e.DateBox());
+
         items.AddSimpleFor(m => m.IdTipoMoneda)
             .Label(l => l.Text("Moneda:"))
              .Editor(e => e.SelectBox()
@@ -96,14 +100,17 @@
              );
         items.AddSimpleFor(m => m.Importe);
 
-        items.AddSimpleFor(m => m.Concepto).ColSpan(2);
+        items.AddSimpleFor(m => m.Concepto).ColSpan(2)
+            .Editor(e => e.TextArea().Height("50px"));
+
           @*      items.AddSimpleFor(m => m.ReferenciaOC)
              .Editor(e => e.FileUploader()
                  .Multiple(false)
                  .UploadMode(FileUploadMode.UseForm)
                  .Name("referenceFile")
              );*@
-        items.AddSimpleFor(m => m.Observaciones).ColSpan(2);
+            items.AddSimpleFor(m => m.Observaciones).ColSpan(2)
+            .Editor(e => e.TextArea().Height("50px"));
         items.AddSimpleFor(m => m.LoginSolicitante)
              .Label(l => l.Text("Solicitante:"))
              .Editor(e => e.SelectBox()

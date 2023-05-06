@@ -17,7 +17,6 @@ namespace SPP.Models.Entity
         {
         }
 
-        public virtual DbSet<AprobadorArea> AprobadorAreas { get; set; }
         public virtual DbSet<Proveedor> Proveedores { get; set; }
         public virtual DbSet<Area> Areas { get; set; }
         public virtual DbSet<Banco> Bancos { get; set; }
@@ -162,29 +161,6 @@ namespace SPP.Models.Entity
                     .HasColumnName("NOMBREBANCO");
             });
 
-            modelBuilder.Entity<AprobadorArea>(entity =>
-            {
-                entity.HasKey(e => new { e.IdArea, e.IdUsuario });
-
-                entity.ToTable("APROBADOR_AREA");
-
-                entity.Property(e => e.IdArea).HasColumnName("ID_AREA");
-
-                entity.Property(e => e.IdUsuario)
-                    .HasMaxLength(50)
-                    .HasColumnName("LOGIN");
-
-                entity.HasOne(d => d.AreaDisNavigation)
-                    .WithMany(p => p.AprobadorAreas)
-                    .HasForeignKey(d => d.IdArea)
-                    .HasConstraintName("FK_APROBADOR_AREA_AREA");
-
-                entity.HasOne(d => d.UsuarioDisNavigation)
-                    .WithMany(p => p.AprobadorAreas)
-                    .HasForeignKey(d => d.IdUsuario)
-                    .HasConstraintName("FK_APROBADOR_AREA_USUARIO");
-            });
-
             modelBuilder.Entity<Usuario>(entity =>
             {
                 entity.HasKey(e => e.IdUsuario);
@@ -226,6 +202,7 @@ namespace SPP.Models.Entity
                 entity.Property(e => e.IdArea).HasColumnName("IDAREA");
                 entity.Property(e => e.IdCompania).HasColumnName("IDCOMPANIA");
                 entity.Property(e => e.Habilitado).HasColumnName("HABILITADO");
+                entity.Property(e => e.Aprobador).HasColumnName("APROBADOR");
 
                 entity.HasOne(d => d.PerfilDisNavigation)
                     .WithMany(p => p.Usuarios)
