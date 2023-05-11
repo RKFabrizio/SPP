@@ -7,6 +7,7 @@ using System.Security.Cryptography;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication;
 using System.Security.Claims;
+using Newtonsoft.Json;
 
 namespace TSK.Controllers
 {
@@ -22,7 +23,7 @@ namespace TSK.Controllers
         [HttpPost]
         public async Task<IActionResult> Login(Usuario _usuario)
         {
-            var usuario = _UsuarioDatos.ValidarUsuario(_usuario.Login, ConvertirSha256(_usuario.Contrasena));
+            var usuario = _UsuarioDatos.ValidarUsuario(_usuario.Login, _usuario.Contrasena);
 
             if (usuario != null && usuario.Habilitado)
             {
@@ -31,6 +32,7 @@ namespace TSK.Controllers
                     new Claim(ClaimTypes.Name, usuario.Nombre),
                     new Claim("Usuario", usuario.Login),
                     new Claim("NOMBREPERFIL", usuario.Perfiles[0])
+
                 };
 
                 foreach (string per in usuario.Perfiles)
@@ -38,9 +40,13 @@ namespace TSK.Controllers
                     claims.Add(new Claim(ClaimTypes.Role, per));
                 };
 
-                var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+                claims.Add(new Claim("UsuarioInfo", JsonConvert.SerializeObject(usuario)));
 
-                await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity));
+                var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+                var claimsPrincipal = new ClaimsPrincipal(claimsIdentity);
+
+                await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, claimsPrincipal);
+
 
                 return RedirectToAction("Bienvenida", "Inicio");
             }
@@ -55,20 +61,6 @@ namespace TSK.Controllers
         {
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
             return RedirectToAction("Login", "Acceso");
-        }
-
-        public static string ConvertirSha256(string texto)
-        {
-            StringBuilder Sb = new StringBuilder();
-
-            using (SHA256 hash = SHA256.Create())
-            {
-                Encoding enc = Encoding.UTF8;
-                byte[] result = hash.ComputeHash(enc.GetBytes(texto));
-                foreach (byte b in result)
-                    Sb.Append(b.ToString("x2"));
-            }
-            return Sb.ToString();
         }
 
 

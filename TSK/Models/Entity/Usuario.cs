@@ -20,7 +20,7 @@ namespace SPP.Models.Entity
         public string Correo { get; set; }
         public int MontoAprobacion { get; set; }
         public int IdPerfil { get; set; }
-        public int IdArea { get; set; }
+        public int? IdArea { get; set; }
         public int IdCompania { get; set; }
         public bool Habilitado { get; set; }
         public bool Aprobador { get; set; }

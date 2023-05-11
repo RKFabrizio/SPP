@@ -1,7 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 
-namespace SPP.Controllers
+namespace TSK.Controllers
 {
+    [Authorize]
     public class PagoController : Controller
     {
         public IActionResult AdelantoPago()

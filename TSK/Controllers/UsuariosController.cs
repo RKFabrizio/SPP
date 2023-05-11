@@ -12,7 +12,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using SPP.Models.Entity;
 
-namespace SPP.Controllers
+namespace TSK.Controllers
 {
     [Route("api/[controller]/[action]")]
     public class UsuariosController : Controller
@@ -36,7 +36,8 @@ namespace SPP.Controllers
                 i.IdPerfil,
                 i.IdArea,
                 i.IdCompania,
-                i.Habilitado
+                i.Habilitado,
+                i.Aprobador
             });
 
             // If underlying data is a large SQL table, specify PrimaryKey and PaginateViaPrimaryKey.
@@ -133,6 +134,7 @@ namespace SPP.Controllers
             string ID_AREA = nameof(Usuario.IdArea);
             string ID_COMPANIA = nameof(Usuario.IdCompania);
             string HABILITADO = nameof(Usuario.Habilitado);
+            string APROBADOR = nameof(Usuario.Aprobador);
 
             if(values.Contains(ID_USUARIO)) {
                 model.IdUsuario = Convert.ToInt32(values[ID_USUARIO]);
@@ -176,6 +178,10 @@ namespace SPP.Controllers
 
             if(values.Contains(HABILITADO)) {
                 model.Habilitado = Convert.ToBoolean(values[HABILITADO]);
+            }
+
+            if(values.Contains(APROBADOR)) {
+                model.Aprobador = Convert.ToBoolean(values[APROBADOR]);
             }
         }
 
