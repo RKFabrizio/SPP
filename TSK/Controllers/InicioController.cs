@@ -7,9 +7,9 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace TSK.Controllers
 {
+
     public class InicioController : Controller
     {
-
         public IActionResult Bienvenida()
         {
             @ViewBag.bienvenida = "active";

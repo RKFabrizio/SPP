@@ -32,14 +32,12 @@ namespace SPP.Data
                             Login = dr["LOGIN"].ToString(),
                             Contrasena = dr["CONTRASENA"].ToString(),
                             Correo = dr["CORREO"].ToString(),
-                            MontoAprobacion = Convert.ToInt32(dr["ID_POS"]),
-                            IdPerfil = Convert.ToInt32(dr["IDPERFIL"]),
+                            MontoAprobacion = Convert.ToInt32(dr["MONTOAPROBACION"]),
                             Perfiles = new string[] { dr["NOMBREPERFIL"].ToString() },
-                            IdArea = Convert.ToInt32(dr["IDAREA"]),
                             Areas = new string[] { dr["NOMBREAREA"].ToString() },
                             Habilitado = Convert.ToBoolean(dr["HABILITADO"]),
-                            IdCompania = Convert.ToInt32(dr["IDCOMPANIA"]),
-                            Companias = new string[] { dr["NOMBRECOMPANIA"].ToString() }
+                            Companias = new string[] { dr["NOMBRECOMPANIA"].ToString() },
+                            Aprobador = Convert.ToBoolean(dr["HABILITADO"])
                         });
                     }
                 }

@@ -11,16 +11,21 @@ using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using SPP.Models.Entity;
+using DevExpress.CodeParser;
+using Microsoft.AspNetCore.Identity;
 
 namespace TSK.Controllers
 {
     [Route("api/[controller]/[action]")]
     public class PagoesController : Controller
     {
+
         private SPPEU2GIGDEVSQLContext _context;
 
         public PagoesController(SPPEU2GIGDEVSQLContext context) {
+
             _context = context;
+
         }
 
         [HttpGet]
@@ -116,16 +121,44 @@ namespace TSK.Controllers
             return Json(await DataSourceLoader.LoadAsync(lookup, loadOptions));
         }
 
-        [HttpGet]
-        public async Task<IActionResult> UsuariosLookup(DataSourceLoadOptions loadOptions) {
-            var lookup = from i in _context.Usuarios
-                         orderby i.Contrasena
-                         select new {
+        public async Task<IActionResult> UsuariosLookup(DataSourceLoadOptions loadOptions, FormCollection form)
+        {
+            decimal Importe = Convert.ToDecimal(form["importeEditor"]);
+
+            //Obtenemos el claim del usuario actual
+            var usuarioClaim = User?.FindFirst("UsuarioInfo")?.Value;
+            var usuario = JsonConvert.DeserializeObject<Usuario>(usuarioClaim);
+
+            //Filtro 1: Usuarios con perfil = 1 y Aprobador = true
+            var aprobadores = _context.Usuarios
+                .Where(u => u.IdPerfil == 1 && u.Aprobador)
+                .AsQueryable();
+
+            //Filtro 2: Usuarios con el mismo IdArea que el usuario actual y MontoAprobacion mayor o igual al del usuario actual
+            var usuariosFiltrados = _context.Usuarios
+                .Where(u => u.IdArea == usuario.IdArea && u.MontoAprobacion >= Importe)
+                .AsQueryable();
+
+            //Si no hay datos luego de aplicar los filtros anteriores, aplicamos el filtro 3
+            if (!usuariosFiltrados.Any())
+            {
+                //Filtro 3: Usuarios con perfil = 3 y Aprobador = true
+                usuariosFiltrados = _context.Usuarios
+                    .Where(u => u.IdPerfil == 3 && u.Aprobador)
+                    .AsQueryable();
+            }
+
+            //Proyectamos los resultados en una lista anónima para el DataSourceLoader
+            var lookup = from i in usuariosFiltrados
+                         orderby i.Nombre
+                         select new
+                         {
                              Value = i.IdUsuario,
-                             Text = i.Contrasena
+                             Text = i.Nombre + " " + i.Apellido
                          };
             return Json(await DataSourceLoader.LoadAsync(lookup, loadOptions));
         }
+
 
 
 

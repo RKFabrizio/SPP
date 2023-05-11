@@ -1,10 +1,15 @@
 ﻿
+
 @{
     ViewData["Title"] = "AdelantoPago";
     Layout = "~/Views/Shared/_LayoutApp.cshtml";
 }
 
+@using DevExtreme.AspNet.Mvc;
 @using DevExpress.AspNetCore;
+@using Newtonsoft.Json;
+@using Models;
+
 
 
 <style>
@@ -57,70 +62,65 @@
 }
 
 
+
 <div class="container">
     @(Html.DevExtreme().Form<SPP.Models.Entity.Pago>()
     .ColCount(2)
     .Items(items =>
     {
-         items.AddSimpleFor(m => m.IdTipoAdelanto)
-         .Label(l => l.Text("Tipo de Solicitud:"))
-         .Editor(e => e.SelectBox()
-             .DataSource(d => d.Mvc()
-                 .Controller("Pagoes")
-                 .LoadAction("TipoAdelantosLookup"))
-             .DisplayExpr("Text")
-             .ValueExpr("Value")
-         )
-         .ColSpan(2);
-
-
-        items.AddSimpleFor(m => m.IdProveedor)
-             .Label(l => l.Text("Nombre de Proveedor y/o Beneficiario:"))
+             items.AddSimpleFor(m => m.IdTipoAdelanto)
+             .Label(l => l.Text("Tipo de Solicitud:"))
              .Editor(e => e.SelectBox()
                  .DataSource(d => d.Mvc()
                      .Controller("Pagoes")
-                     .LoadAction("ProveedoresLookup"))
+                     .LoadAction("TipoAdelantosLookup"))
                  .DisplayExpr("Text")
                  .ValueExpr("Value")
-             ).ColSpan(2);
-        items.AddSimpleFor(m => m.FechaSolicitud)
-         .ColSpan(2)
-         .Label(l => l.Text("Fecha y Hora:"))
-         .Editor(e => e.DateBox());
+             )
+             .ColSpan(2);
 
-        items.AddSimpleFor(m => m.IdTipoMoneda)
-            .Label(l => l.Text("Moneda:"))
-             .Editor(e => e.SelectBox()
-                 .DataSource(d => d.Mvc()
-                     .Controller("Pagoes")
-                     .LoadAction("TipoMonedasLookup"))
-                 .DisplayExpr("Text")
-                 .ValueExpr("Value")
+            items.AddSimpleFor(m => m.IdProveedor)
+                 .Label(l => l.Text("Nombre de Proveedor y/o Beneficiario:"))
+                 .Editor(e => e.SelectBox()
+                     .DataSource(d => d.Mvc()
+                         .Controller("Pagoes")
+                         .LoadAction("ProveedoresLookup"))
+                     .DisplayExpr("Text")
+                     .ValueExpr("Value")
+                 ).ColSpan(2);
+            items.AddSimpleFor(m => m.FechaSolicitud)
+             .ColSpan(2)
+             .Label(l => l.Text("Fecha y Hora:"))
+             .Editor(e => e.DateBox());
 
-             );
-        items.AddSimpleFor(m => m.Importe);
+            items.AddSimpleFor(m => m.IdTipoMoneda)
+                .Label(l => l.Text("Moneda:"))
+                 .Editor(e => e.SelectBox()
+                     .DataSource(d => d.Mvc()
+                         .Controller("Pagoes")
+                         .LoadAction("TipoMonedasLookup"))
+                     .DisplayExpr("Text")
+                     .ValueExpr("Value")
 
-        items.AddSimpleFor(m => m.Concepto).ColSpan(2)
-            .Editor(e => e.TextArea().Height("50px"));
+                 );
+            items.AddSimpleFor(m => m.Importe)
+            .Editor(e => e.NumberBox().ID("importeEditor"));
 
-          @*      items.AddSimpleFor(m => m.ReferenciaOC)
-             .Editor(e => e.FileUploader()
-                 .Multiple(false)
-                 .UploadMode(FileUploadMode.UseForm)
-                 .Name("referenceFile")
-             );*@
+
+
+            items.AddSimpleFor(m => m.Concepto).ColSpan(2)
+                .Editor(e => e.TextArea().Height("50px"));
+        
             items.AddSimpleFor(m => m.Observaciones).ColSpan(2)
             .Editor(e => e.TextArea().Height("50px"));
-        items.AddSimpleFor(m => m.LoginSolicitante)
-             .Label(l => l.Text("Solicitante:"))
-             .Editor(e => e.SelectBox()
-                 .DataSource(d => d.Mvc()
-                     .Controller("Pagoes")
-                     .LoadAction("UsuariosLookup"))
-                 .DisplayExpr("Text")
-                 .ValueExpr("Value")
-             );
-        items.AddSimpleFor(m => m.LoginAprobador)
+
+            items.AddSimpleFor(m => m.LoginSolicitante)
+            .Label(l => l.Text("Solicitante:"))
+            .Editor(e => e.TextBox()
+            .Value(JsonConvert.DeserializeObject<Usuario>(User?.FindFirst("UsuarioInfo")?.Value)?.Nombre) 
+            .ReadOnly(true));
+
+            items.AddSimpleFor(m => m.LoginAprobador)
             .Label(l => l.Text("Aprobador (Monto max. Aprobación):"))
              .Editor(e => e.SelectBox()
                  .DataSource(d => d.Mvc()
@@ -133,3 +133,16 @@
 )
 
 </div>
+
+<script>
+    $(function() {
+        // Obtenemos el campo "Importe"
+        var importe = $('#Importe');
+
+        // Añadimos un evento para detectar cambios en el campo
+        importe.change(function() {
+            // Enviamos el formulario al controlador
+            $('#form').submit();
+        });
+    });
+</script>
