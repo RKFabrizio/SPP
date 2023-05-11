@@ -33,7 +33,7 @@ namespace SPP.Models.Entity
         public virtual Proveedor ProveedorNavigation { get; set; }
         public virtual Tipo_Moneda TipoMonedaNavigation { get; set; }
         public virtual Usuario SolicitanteNavigation { get; set; }
-        public virtual Usuario AprobadorNavigation { get; set; }
+        public virtual Aprobador_Area AprobadorNavigation { get; set; }
         public virtual Tipo_Pago TipoPagoNavigation { get; set; }
         public virtual Estado EstadoNavigation { get; set; }
         public virtual ICollection<EnvioCorreo> EnvioCorreos { get; set; }

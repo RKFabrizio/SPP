@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using SPP.Models.Entity;
 
 namespace SPP.Models.Entity
 {
@@ -9,7 +10,7 @@ namespace SPP.Models.Entity
         public Usuario()
         {
             LoginSolicitante = new HashSet<Pago>();
-            LoginAprobador = new HashSet<Pago>();
+            AprobadorAreas = new HashSet<Aprobador_Area>();
         }
 
         public int IdUsuario { get; set; }
@@ -29,7 +30,7 @@ namespace SPP.Models.Entity
         public virtual Area AreaDisNavigation { get; set; }
         public virtual Compania CompaniaDisNavigation { get; set; }
         public virtual ICollection<Pago> LoginSolicitante { get; set; }
-        public virtual ICollection<Pago> LoginAprobador { get; set; }
+        public virtual ICollection<Aprobador_Area> AprobadorAreas { get; set; }
     }
 
 }

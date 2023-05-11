@@ -31,6 +31,7 @@ namespace SPP.Models.Entity
         public virtual DbSet<Tipo_Adelanto> TipoAdelantos { get; set; }
         public virtual DbSet<Tipo_Cuenta> TipoCuentas { get; set; }
         public virtual DbSet<Tipo_Pago> TipoPagos { get; set; }
+        public virtual DbSet<Aprobador_Area> AprobadorAreas { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -43,6 +44,37 @@ namespace SPP.Models.Entity
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+
+            modelBuilder.Entity<Aprobador_Area>(entity =>
+            {
+                entity.HasKey(e => e.IdAprobador);
+
+                entity.Property(e => e.IdAprobador)
+                    .HasColumnName("ID_APROBADOR");
+
+                entity.ToTable("APROBADOR_AREA");
+
+                entity.Property(e => e.IdArea)
+                    .HasColumnName("ID_AREA");
+
+                entity.Property(e => e.IdUsuario)
+                     .HasColumnName("ID_USUARIO");
+
+
+                entity.HasOne(d => d.IdAreaNavigation)
+                    .WithMany(p => p.AprobadorAreas)
+                    .HasForeignKey(d => d.IdArea)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_APROBADOR_AREA_AREA");
+                
+                entity.HasOne(d => d.IdUsrNavigation)
+                    .WithMany(p => p.AprobadorAreas)
+                    .HasForeignKey(d => d.IdUsuario)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_APROBADOR_AREA_USUARIO");
+            });
+
+
             modelBuilder.Entity<Tipo_Moneda>(entity =>
             {
                 entity.HasKey(e => e.IdTipoMoneda);
@@ -202,7 +234,6 @@ namespace SPP.Models.Entity
                 entity.Property(e => e.IdArea).HasColumnName("IDAREA");
                 entity.Property(e => e.IdCompania).HasColumnName("IDCOMPANIA");
                 entity.Property(e => e.Habilitado).HasColumnName("HABILITADO");
-                entity.Property(e => e.Aprobador).HasColumnName("APROBADOR");
 
                 entity.HasOne(d => d.PerfilDisNavigation)
                     .WithMany(p => p.Usuarios)
