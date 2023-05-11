@@ -36,7 +36,7 @@
               <polyline points="3 7 12 13 21 7" />
             </svg>
             <h2 class="page-title">
-                Correo
+                Mantenimiento de Correos de Destinatarios de Informe de Aprobación
             </h2>
         </div>
     </div>
@@ -87,6 +87,29 @@
                 .Visible(true)
                 .HighlightCaseSensitive(true)
             )
+            .Editing(e => e.Mode(GridEditMode.Popup)
+                    .AllowUpdating(true)
+                    .UseIcons(true)
+                    .Popup(p => p
+                        .Title("Usuario")
+                        .ShowTitle(true)
+                        .Width("70%")
+                        .Height(200)
+                    )
+
+                    .Form(f => f.Items(items =>
+                    {
+                        items.AddGroup()
+                            .ColCount(2)
+                            .ColSpan(2)
+                            .Items(groupItems =>
+                            {
+                                groupItems.AddSimpleFor(m => m.Login);
+                                groupItems.AddSimpleFor(m => m.Correo);
+                            });
+                    }))
+
+                )
 )
 
 

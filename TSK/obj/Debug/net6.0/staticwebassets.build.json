@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "e7evz4IN0G+IzwSAeDgYK7URhExNSaqzWdRGEMaX7iU=",
+  "Hash": "ZP05Ju/oLxvQzv7Dz5SWmYBvWCzTYgVS50FZS5QYOrA=",
   "Source": "TSK",
   "BasePath": "_content/TSK",
   "Mode": "Default",
@@ -17406,6 +17406,23 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\favicon.ico"
+    },
+    {
+      "Identity": "C:\\Users\\fabri\\OneDrive\\Escritorio\\SPP NEW\\TSK\\wwwroot\\img\\barrick.webp",
+      "SourceId": "TSK",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\fabri\\OneDrive\\Escritorio\\SPP NEW\\TSK\\wwwroot\\",
+      "BasePath": "_content/TSK",
+      "RelativePath": "img/barrick.webp",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\img\\barrick.webp"
     },
     {
       "Identity": "C:\\Users\\fabri\\OneDrive\\Escritorio\\SPP NEW\\TSK\\wwwroot\\img\\barrick1.webp",
