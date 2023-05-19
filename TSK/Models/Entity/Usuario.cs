@@ -14,17 +14,16 @@ namespace SPP.Models.Entity
         }
 
         public int IdUsuario { get; set; }
-        public string Contrasena { get; set; }
-        public string Login { get; set; }
         public string Nombre { get; set; }
         public string Apellido { get; set; }
+        public string Login { get; set; }
+        public string Contrasena { get; set; }
         public string Correo { get; set; }
         public int MontoAprobacion { get; set; }
         public int IdPerfil { get; set; }
         public int? IdArea { get; set; }
-        public int IdCompania { get; set; }
         public bool Habilitado { get; set; }
-        public bool Aprobador { get; set; }
+        public int IdCompania { get; set; }
 
         public virtual Perfil PerfilDisNavigation { get; set; }
         public virtual Area AreaDisNavigation { get; set; }

@@ -49,50 +49,29 @@
 
 }
 
-@(Html.DevExtreme().DataGrid<SPP.Models.Entity.Usuario>()
+@(Html.DevExtreme().DataGrid<SPP.Models.Entity.Aprobador_Area>()
     .DataSource(ds => ds.Mvc()
-        .Controller("Usuarios")
+        .Controller("Aprobador_Area")
         .LoadAction("Get")
-        .InsertAction("Post")
-        .UpdateAction("Put")
-        .Key("IdUsuario")
+        .Key("IdAprobador")
     )
     .RemoteOperations(true)
     .Columns(columns =>
     {
 
-        columns.AddFor(m => m.Login).Caption("Username").Width(200);
-
-        columns.AddFor(m => m.Nombre).Width(330).Caption("Nombres");
-
-        columns.AddFor(m => m.Apellido).Width(330).Caption("Apellidos");
-
-        columns.AddFor(m => m.MontoAprobacion).Caption("Monto de Aprobación").Visible(false);
-
-        columns.AddFor(m => m.Correo).Visible(false);
-
-        columns.AddFor(m => m.Contrasena).Visible(false);
-
-        columns.AddFor(m => m.IdPerfil).Lookup(lookup => lookup
-            .DataSource(ds => ds.WebApi().Controller("Usuarios").LoadAction("PerfilesLookup").Key("Value"))
-            .ValueExpr("Value")
-            .DisplayExpr("Text")
-        ).GroupIndex(0).Caption("Perfil");
+        columns.AddFor(m => m.IdAprobador);
 
         columns.AddFor(m => m.IdArea).Lookup(lookup => lookup
-            .DataSource(ds => ds.WebApi().Controller("Usuarios").LoadAction("AreasLookup").Key("Value"))
+            .DataSource(ds => ds.WebApi().Controller("Aprobador_Area").LoadAction("UsuariosLookup").Key("Value"))
             .ValueExpr("Value")
             .DisplayExpr("Text")
-        ).Caption("Area");
+        );
 
-        columns.AddFor(m => m.IdCompania).Lookup(lookup => lookup
-            .DataSource(ds => ds.WebApi().Controller("Usuarios").LoadAction("CompaniasLookup").Key("Value"))
+        columns.AddFor(m => m.IdUsuario).Lookup(lookup => lookup
+            .DataSource(ds => ds.WebApi().Controller("Aprobador_Area").LoadAction("AreasLookup").Key("Value"))
             .ValueExpr("Value")
             .DisplayExpr("Text")
-        ).Caption("Compañia").Visible(false);
-
-        columns.AddFor(m => m.Habilitado).Caption("Estado").Width(200).Visible(false);
-        columns.AddFor(m => m.Aprobador);
+        );
     })
     .ShowBorders(true)
             .AllowColumnReordering(true)
@@ -128,18 +107,15 @@
                             .ColSpan(2)
                             .Items(groupItems =>
                             {
-                                groupItems.AddSimpleFor(m => m.Nombre);
-                                groupItems.AddSimpleFor(m => m.Apellido);
-                                groupItems.AddSimpleFor(m => m.MontoAprobacion);
+                                groupItems.AddSimpleFor(m => m.IdUsuario);
                                 groupItems.AddSimpleFor(m => m.IdArea);
-                                groupItems.AddSimpleFor(m => m.Aprobador).CssClass("myFormMargin").Label(label => label.Location(FormLabelLocation.Left));
                             });
                     }))
 
                 )
 )
 
-
+ 
 
 
 

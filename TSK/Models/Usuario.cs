@@ -32,6 +32,5 @@ namespace SPP.Models
         public string[] Areas { get; set; }
 
         public bool Habilitado { get; set; }
-        public bool Aprobador { get; set; }
     }
 }

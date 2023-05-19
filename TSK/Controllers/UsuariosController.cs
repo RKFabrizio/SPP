@@ -27,17 +27,16 @@ namespace TSK.Controllers
         public async Task<IActionResult> Get(DataSourceLoadOptions loadOptions) {
             var usuarios = _context.Usuarios.Select(i => new {
                 i.IdUsuario,
-                i.Contrasena,
-                i.Login,
                 i.Nombre,
                 i.Apellido,
+                i.Login,
+                i.Contrasena,
                 i.Correo,
                 i.MontoAprobacion,
                 i.IdPerfil,
                 i.IdArea,
-                i.IdCompania,
                 i.Habilitado,
-                i.Aprobador
+                i.IdCompania
             });
 
             // If underlying data is a large SQL table, specify PrimaryKey and PaginateViaPrimaryKey.
@@ -124,28 +123,19 @@ namespace TSK.Controllers
 
         private void PopulateModel(Usuario model, IDictionary values) {
             string ID_USUARIO = nameof(Usuario.IdUsuario);
-            string CONTRASENA = nameof(Usuario.Contrasena);
-            string LOGIN = nameof(Usuario.Login);
             string NOMBRE = nameof(Usuario.Nombre);
             string APELLIDO = nameof(Usuario.Apellido);
+            string LOGIN = nameof(Usuario.Login);
+            string CONTRASENA = nameof(Usuario.Contrasena);
             string CORREO = nameof(Usuario.Correo);
             string MONTO_APROBACION = nameof(Usuario.MontoAprobacion);
             string ID_PERFIL = nameof(Usuario.IdPerfil);
             string ID_AREA = nameof(Usuario.IdArea);
-            string ID_COMPANIA = nameof(Usuario.IdCompania);
             string HABILITADO = nameof(Usuario.Habilitado);
-            string APROBADOR = nameof(Usuario.Aprobador);
+            string ID_COMPANIA = nameof(Usuario.IdCompania);
 
             if(values.Contains(ID_USUARIO)) {
                 model.IdUsuario = Convert.ToInt32(values[ID_USUARIO]);
-            }
-
-            if(values.Contains(CONTRASENA)) {
-                model.Contrasena = Convert.ToString(values[CONTRASENA]);
-            }
-
-            if(values.Contains(LOGIN)) {
-                model.Login = Convert.ToString(values[LOGIN]);
             }
 
             if(values.Contains(NOMBRE)) {
@@ -154,6 +144,14 @@ namespace TSK.Controllers
 
             if(values.Contains(APELLIDO)) {
                 model.Apellido = Convert.ToString(values[APELLIDO]);
+            }
+
+            if(values.Contains(LOGIN)) {
+                model.Login = Convert.ToString(values[LOGIN]);
+            }
+
+            if(values.Contains(CONTRASENA)) {
+                model.Contrasena = Convert.ToString(values[CONTRASENA]);
             }
 
             if(values.Contains(CORREO)) {
@@ -169,19 +167,15 @@ namespace TSK.Controllers
             }
 
             if(values.Contains(ID_AREA)) {
-                model.IdArea = Convert.ToInt32(values[ID_AREA]);
-            }
-
-            if(values.Contains(ID_COMPANIA)) {
-                model.IdCompania = Convert.ToInt32(values[ID_COMPANIA]);
+                model.IdArea = values[ID_AREA] != null ? Convert.ToInt32(values[ID_AREA]) : (int?)null;
             }
 
             if(values.Contains(HABILITADO)) {
                 model.Habilitado = Convert.ToBoolean(values[HABILITADO]);
             }
 
-            if(values.Contains(APROBADOR)) {
-                model.Aprobador = Convert.ToBoolean(values[APROBADOR]);
+            if(values.Contains(ID_COMPANIA)) {
+                model.IdCompania = Convert.ToInt32(values[ID_COMPANIA]);
             }
         }
 

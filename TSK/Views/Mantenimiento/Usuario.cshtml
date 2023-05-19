@@ -91,7 +91,7 @@
         ).Caption("Compañia").Visible(false);
 
         columns.AddFor(m => m.Habilitado).Caption("Estado").Width(200);
-        columns.AddFor(m => m.Aprobador).Visible(false);
+
     })
     .ShowBorders(true)
             .AllowColumnReordering(true)
@@ -134,16 +134,18 @@
                                 groupItems.AddSimpleFor(m => m.Contrasena)
                                     .Editor(e => e.TextBox().Mode(TextBoxMode.Password));
                                 groupItems.AddSimpleFor(m => m.Correo);
-                                groupItems.AddSimpleFor(m => m.MontoAprobacion).Visible(false);
+                                groupItems.AddSimpleFor(m => m.MontoAprobacion);
                                 groupItems.AddSimpleFor(m => m.IdPerfil);
                                 groupItems.AddSimpleFor(m => m.IdArea);
                                 groupItems.AddSimpleFor(m => m.IdCompania);
                                 groupItems.AddSimpleFor(m => m.Habilitado).CssClass("myFormMargin").Label(label => label.Location(FormLabelLocation.Left));
-                                groupItems.AddSimpleFor(m => m.Aprobador).CssClass("myFormMargin").Label(label => label.Location(FormLabelLocation.Left)).Visible(false);
+
                             });
                     }))
 
                 )
+
+
 )
 
 

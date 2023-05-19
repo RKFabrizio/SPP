@@ -11,21 +11,16 @@ using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using SPP.Models.Entity;
-using DevExpress.CodeParser;
-using Microsoft.AspNetCore.Identity;
 
 namespace TSK.Controllers
 {
     [Route("api/[controller]/[action]")]
     public class PagoesController : Controller
     {
-
         private SPPEU2GIGDEVSQLContext _context;
 
         public PagoesController(SPPEU2GIGDEVSQLContext context) {
-
             _context = context;
-
         }
 
         [HttpGet]
@@ -100,12 +95,12 @@ namespace TSK.Controllers
 
 
         [HttpGet]
-        public async Task<IActionResult> TipoMonedasLookup(DataSourceLoadOptions loadOptions) {
-            var lookup = from i in _context.TipoMonedas
-                         orderby i.Simbologia
+        public async Task<IActionResult> TipoAdelantosLookup(DataSourceLoadOptions loadOptions) {
+            var lookup = from i in _context.TipoAdelantos
+                         orderby i.TipoAdelanto
                          select new {
-                             Value = i.IdTipoMoneda,
-                             Text = i.TipoMoneda + " - " + i.Simbologia
+                             Value = i.IdTipoAdelanto,
+                             Text = i.TipoAdelanto
                          };
             return Json(await DataSourceLoader.LoadAsync(lookup, loadOptions));
         }
@@ -121,46 +116,38 @@ namespace TSK.Controllers
             return Json(await DataSourceLoader.LoadAsync(lookup, loadOptions));
         }
 
-        public async Task<IActionResult> UsuariosLookup(DataSourceLoadOptions loadOptions, FormCollection form)
-        {
-            decimal Importe = Convert.ToDecimal(form["importeEditor"]);
-
-            //Obtenemos el claim del usuario actual
-            var usuarioClaim = User?.FindFirst("UsuarioInfo")?.Value;
-            var usuario = JsonConvert.DeserializeObject<Usuario>(usuarioClaim);
-
-            //Filtro 1: Usuarios con perfil = 1 y Aprobador = true
-            var aprobadores = _context.Usuarios
-                .Where(u => u.IdPerfil == 1 && u.Aprobador)
-                .AsQueryable();
-
-            //Filtro 2: Usuarios con el mismo IdArea que el usuario actual y MontoAprobacion mayor o igual al del usuario actual
-            var usuariosFiltrados = _context.Usuarios
-                .Where(u => u.IdArea == usuario.IdArea && u.MontoAprobacion >= Importe)
-                .AsQueryable();
-
-            //Si no hay datos luego de aplicar los filtros anteriores, aplicamos el filtro 3
-            if (!usuariosFiltrados.Any())
-            {
-                //Filtro 3: Usuarios con perfil = 3 y Aprobador = true
-                usuariosFiltrados = _context.Usuarios
-                    .Where(u => u.IdPerfil == 3 && u.Aprobador)
-                    .AsQueryable();
-            }
-
-            //Proyectamos los resultados en una lista anónima para el DataSourceLoader
-            var lookup = from i in usuariosFiltrados
-                         orderby i.Nombre
-                         select new
-                         {
-                             Value = i.IdUsuario,
-                             Text = i.Nombre + " " + i.Apellido
+        [HttpGet]
+        public async Task<IActionResult> TipoMonedasLookup(DataSourceLoadOptions loadOptions) {
+            var lookup = from i in _context.TipoMonedas
+                         orderby i.TipoMoneda
+                         select new {
+                             Value = i.IdTipoMoneda,
+                             Text = i.TipoMoneda
                          };
             return Json(await DataSourceLoader.LoadAsync(lookup, loadOptions));
         }
 
+        [HttpGet]
+        public async Task<IActionResult> UsuariosLookup(DataSourceLoadOptions loadOptions) {
+            var lookup = from i in _context.Usuarios
+                         orderby i.Nombre
+                         select new {
+                             Value = i.IdUsuario,
+                             Text = i.Nombre
+                         };
+            return Json(await DataSourceLoader.LoadAsync(lookup, loadOptions));
+        }
 
-
+        [HttpGet]
+        public async Task<IActionResult> AprobadorAreasLookup(DataSourceLoadOptions loadOptions) {
+            var lookup = from i in _context.AprobadorAreas
+                         orderby i.IdArea
+                         select new {
+                             Value = i.IdAprobador,
+                             Text = i.IdArea
+                         };
+            return Json(await DataSourceLoader.LoadAsync(lookup, loadOptions));
+        }
 
         [HttpGet]
         public async Task<IActionResult> TipoPagosLookup(DataSourceLoadOptions loadOptions) {
@@ -169,21 +156,6 @@ namespace TSK.Controllers
                          select new {
                              Value = i.IdTipoPago,
                              Text = i.TipoPago
-                         };
-            return Json(await DataSourceLoader.LoadAsync(lookup, loadOptions));
-        }
-
-    
-
-        [HttpGet]
-        public async Task<IActionResult> TipoAdelantosLookup(DataSourceLoadOptions loadOptions)
-        {
-            var lookup = from i in _context.TipoAdelantos
-                         orderby i.TipoAdelanto
-                         select new
-                         {
-                             Value = i.IdTipoAdelanto,
-                             Text = i.TipoAdelanto
                          };
             return Json(await DataSourceLoader.LoadAsync(lookup, loadOptions));
         }
@@ -210,7 +182,7 @@ namespace TSK.Controllers
             string LOGIN_SOLICITANTE = nameof(Pago.LoginSolicitante);
             string LOGIN_APROBADOR = nameof(Pago.LoginAprobador);
             string REFERENCIA_OC = nameof(Pago.ReferenciaOC);
-            string PROFORMACOTIZACION = nameof(Pago.ProformaCotizacion);
+            string PROFORMA_COTIZACION = nameof(Pago.ProformaCotizacion);
             string FACTURA = nameof(Pago.Factura);
             string ID_TIPO_PAGO = nameof(Pago.IdTipoPago);
             string OBSERVACIONES = nameof(Pago.Observaciones);
@@ -258,8 +230,8 @@ namespace TSK.Controllers
                 model.ReferenciaOC = Convert.ToString(values[REFERENCIA_OC]);
             }
 
-            if(values.Contains(PROFORMACOTIZACION)) {
-                model.ProformaCotizacion = Convert.ToString(values[PROFORMACOTIZACION]);
+            if(values.Contains(PROFORMA_COTIZACION)) {
+                model.ProformaCotizacion = Convert.ToString(values[PROFORMA_COTIZACION]);
             }
 
             if(values.Contains(FACTURA)) {

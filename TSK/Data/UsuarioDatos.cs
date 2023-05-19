@@ -37,7 +37,6 @@ namespace SPP.Data
                             Areas = new string[] { dr["NOMBREAREA"].ToString() },
                             Habilitado = Convert.ToBoolean(dr["HABILITADO"]),
                             Companias = new string[] { dr["NOMBRECOMPANIA"].ToString() },
-                            Aprobador = Convert.ToBoolean(dr["HABILITADO"])
                         });
                     }
                 }
@@ -46,9 +45,9 @@ namespace SPP.Data
 
         }
 
-        public Usuario ValidarUsuario(string _correo, string _clave)
+        public Usuario ValidarUsuario(string _login, string _contrasena)
         {
-            return ListaUsuario().Where(item => item.Login == _correo && item.Contrasena == _clave).FirstOrDefault();
+            return ListaUsuario().Where(item => item.Login == _login && item.Contrasena == _contrasena).FirstOrDefault();
 
         }
     }
