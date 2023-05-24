@@ -42,7 +42,12 @@ namespace TSK.Controllers
                 i.Observaciones,
                 i.FechaAprobacion,
                 i.IdEstado,
-                i.InformacionContable
+                i.InformacionContable,
+                i.CuentaBancaria,
+                i.BeneficiarioNombre,
+                i.BeneficiarioDni,
+                i.IdBanco,
+                i.IdTipoCuenta
             });
 
             // If underlying data is a large SQL table, specify PrimaryKey and PaginateViaPrimaryKey.
@@ -171,6 +176,28 @@ namespace TSK.Controllers
             return Json(await DataSourceLoader.LoadAsync(lookup, loadOptions));
         }
 
+        [HttpGet]
+        public async Task<IActionResult> BancosLookup(DataSourceLoadOptions loadOptions) {
+            var lookup = from i in _context.Bancos
+                         orderby i.NombreBanco
+                         select new {
+                             Value = i.IdBanco,
+                             Text = i.NombreBanco
+                         };
+            return Json(await DataSourceLoader.LoadAsync(lookup, loadOptions));
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> TipoCuentasLookup(DataSourceLoadOptions loadOptions) {
+            var lookup = from i in _context.TipoCuentas
+                         orderby i.TipoCuenta
+                         select new {
+                             Value = i.IdTipoCuenta,
+                             Text = i.TipoCuenta
+                         };
+            return Json(await DataSourceLoader.LoadAsync(lookup, loadOptions));
+        }
+
         private void PopulateModel(Pago model, IDictionary values) {
             string ID_PAGO = nameof(Pago.IdPago);
             string ID_TIPO_ADELANTO = nameof(Pago.IdTipoAdelanto);
@@ -189,6 +216,11 @@ namespace TSK.Controllers
             string FECHA_APROBACION = nameof(Pago.FechaAprobacion);
             string ID_ESTADO = nameof(Pago.IdEstado);
             string INFORMACION_CONTABLE = nameof(Pago.InformacionContable);
+            string CUENTA_BANCARIA = nameof(Pago.CuentaBancaria);
+            string BENEFICIARIO_NOMBRE = nameof(Pago.BeneficiarioNombre);
+            string BENEFICIARIO_DNI = nameof(Pago.BeneficiarioDni);
+            string ID_BANCO = nameof(Pago.IdBanco);
+            string ID_TIPO_CUENTA = nameof(Pago.IdTipoCuenta);
 
             if(values.Contains(ID_PAGO)) {
                 model.IdPago = Convert.ToInt32(values[ID_PAGO]);
@@ -256,6 +288,26 @@ namespace TSK.Controllers
 
             if(values.Contains(INFORMACION_CONTABLE)) {
                 model.InformacionContable = Convert.ToString(values[INFORMACION_CONTABLE]);
+            }
+
+            if(values.Contains(CUENTA_BANCARIA)) {
+                model.CuentaBancaria = Convert.ToString(values[CUENTA_BANCARIA]);
+            }
+
+            if(values.Contains(BENEFICIARIO_NOMBRE)) {
+                model.BeneficiarioNombre = Convert.ToString(values[BENEFICIARIO_NOMBRE]);
+            }
+
+            if(values.Contains(BENEFICIARIO_DNI)) {
+                model.BeneficiarioDni = Convert.ToString(values[BENEFICIARIO_DNI]);
+            }
+
+            if(values.Contains(ID_BANCO)) {
+                model.IdBanco = Convert.ToInt32(values[ID_BANCO]);
+            }
+
+            if(values.Contains(ID_TIPO_CUENTA)) {
+                model.IdTipoCuenta = Convert.ToInt32(values[ID_TIPO_CUENTA]);
             }
         }
 

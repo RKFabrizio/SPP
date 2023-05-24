@@ -1,9 +1,12 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 
 namespace SPP.Controllers
 {
+    [Authorize]
     public class MantenimientoController : Controller
     {
+
         public IActionResult Usuario()
         {
             @ViewBag.mantenimiento = "active";

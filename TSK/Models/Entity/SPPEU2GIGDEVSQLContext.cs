@@ -30,6 +30,7 @@ namespace SPP.Models.Entity
         public virtual DbSet<Tipo_Moneda> TipoMonedas { get; set; }
         public virtual DbSet<Tipo_Adelanto> TipoAdelantos { get; set; }
         public virtual DbSet<Tipo_Cuenta> TipoCuentas { get; set; }
+        public virtual DbSet<Tipo_Documento> Tipo_Documentos { get; set; }
         public virtual DbSet<Tipo_Pago> TipoPagos { get; set; }
         public virtual DbSet<Aprobador_Area> AprobadorAreas { get; set; }
 
@@ -107,6 +108,20 @@ namespace SPP.Models.Entity
                     .HasMaxLength(50)
                     .HasColumnName("TIPOCUENTA");
 
+            });
+
+            modelBuilder.Entity<Tipo_Documento>(entity =>
+            {
+                entity.HasKey(e => e.IdTipoDocumento);
+
+                entity.ToTable("TIPO_DOCUMENTO");
+
+                entity.Property(e => e.IdTipoDocumento).HasColumnName("IDTIPODOCUMENTO");
+
+                entity.Property(e => e.NombreDocumento)
+                    .IsRequired()
+                    .HasMaxLength(50)
+                    .HasColumnName("NOMBREDOCUMENTO");
             });
 
             modelBuilder.Entity<Tipo_Adelanto>(entity =>
@@ -235,6 +250,11 @@ namespace SPP.Models.Entity
                 entity.Property(e => e.IdCompania).HasColumnName("IDCOMPANIA");
                 entity.Property(e => e.Habilitado).HasColumnName("HABILITADO");
 
+                entity.Property(e => e.Token)
+                    .HasMaxLength(250)
+                    .IsUnicode(false)
+                    .HasColumnName("TOKEN");
+
                 entity.HasOne(d => d.PerfilDisNavigation)
                     .WithMany(p => p.Usuarios)
                     .HasForeignKey(d => d.IdPerfil)
@@ -295,55 +315,25 @@ namespace SPP.Models.Entity
                     .HasMaxLength(50)
                     .HasColumnName("NOMBREPROVEEDOR");
 
-                entity.Property(e => e.CuentaBancaria)
-                    .IsRequired()
-                    .HasMaxLength(50)
-                    .HasColumnName("CUENTABANCARIA");
-
-                entity.Property(e => e.CCI)
-                   .IsRequired()
-                   .HasMaxLength(50)
-                   .HasColumnName("CCI");
-
-                entity.Property(e => e.BeneficiarioNombre)
-                   .IsRequired()
-                   .HasMaxLength(50)
-                   .HasColumnName("BENEFICIARIONOMBRE");
-
-                entity.Property(e => e.BeneficiarioDni)
-                   .IsRequired()
-                   .HasMaxLength(50)
-                   .HasColumnName("BENEFICIARIODNI");
-
-                entity.Property(e => e.IdBanco)
-                   .IsRequired()
-                   .HasMaxLength(50)
-                   .HasColumnName("IDBANCO");
-
-                entity.Property(e => e.IdTipoCuenta)
-                   .IsRequired()
-                   .HasMaxLength(50)
-                   .HasColumnName("IDTIPOCUENTA");
-
                 entity.Property(e => e.IdPais)
                    .IsRequired()
                    .HasMaxLength(50)
                    .HasColumnName("IDPAIS");
-
-                entity.HasOne(d => d.IdDisBanco)
-                    .WithMany(p => p.Proveedores)
-                    .HasForeignKey(d => d.IdBanco)
-                    .HasConstraintName("FK_PROVEEDOR_BANCO");
 
                 entity.HasOne(d => d.IdDisPais)
                     .WithMany(p => p.Proveedores)
                     .HasForeignKey(d => d.IdPais)
                     .HasConstraintName("FK_PROVEEDOR_PAIS");
 
-                entity.HasOne(d => d.IdDisTipoCuenta)
+                entity.Property(e => e.IdTipoDoc)
+                  .IsRequired()
+                  .HasMaxLength(50)
+                  .HasColumnName("IDTIPODOC");
+
+                entity.HasOne(d => d.IdDisDocumento)
                     .WithMany(p => p.Proveedores)
-                    .HasForeignKey(d => d.IdTipoCuenta)
-                    .HasConstraintName("FK_PROVEEDOR_TIPO_CUENTA");
+                    .HasForeignKey(d => d.IdTipoDoc)
+                    .HasConstraintName("FK_PROVEEDOR_TIPO_DOCUMENTO");
 
             });
 
@@ -478,6 +468,37 @@ namespace SPP.Models.Entity
                   .HasColumnName("INFORMACIONCONTABLE")
                   .IsFixedLength();
 
+                entity.Property(e => e.IdBanco)
+                   .IsRequired()
+                   .HasMaxLength(50)
+                   .HasColumnName("IDBANCO");
+
+                entity.Property(e => e.IdTipoCuenta)
+                   .IsRequired()
+                   .HasMaxLength(50)
+                   .HasColumnName("IDTIPOCUENTA");
+
+                entity.Property(e => e.IdTipoPago)
+                   .IsRequired()
+                   .HasMaxLength(50)
+                   .HasColumnName("IDTIPOPAGO");
+
+                entity.Property(e => e.BeneficiarioNombre)
+                 .IsRequired()
+                 .HasMaxLength(50)
+                 .HasColumnName("BENEFICIARIONOMBRE");
+
+                entity.Property(e => e.BeneficiarioDni)
+                   .IsRequired()
+                   .HasMaxLength(50)
+                   .HasColumnName("BENEFICIARIODNI");
+
+                entity.Property(e => e.CuentaBancaria)
+                  .IsRequired()
+                  .HasMaxLength(50)
+                  .HasColumnName("CUENTABANCARIA");
+
+
                 entity.HasOne(d => d.ProveedorNavigation)
                     .WithMany(p => p.Pagos)
                     .HasForeignKey(d => d.IdProveedor)
@@ -512,6 +533,16 @@ namespace SPP.Models.Entity
                     .WithMany(p => p.Pagos)
                     .HasForeignKey(d => d.IdEstado)
                     .HasConstraintName("FK_PAGO_ESTADO");
+
+                entity.HasOne(d => d.BancoNavigation)
+                    .WithMany(p => p.Pagos)
+                    .HasForeignKey(d => d.IdBanco)
+                    .HasConstraintName("FK_PAGO_BANCO");
+
+                entity.HasOne(d => d.TipoCuentaNavigation)
+                    .WithMany(p => p.Pagos)
+                    .HasForeignKey(d => d.IdTipoCuenta)
+                    .HasConstraintName("FK_PAGO_TIPO_CUENTA");
             });
 
             OnModelCreatingPartial(modelBuilder);

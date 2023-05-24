@@ -8,13 +8,13 @@ namespace SPP.Models.Entity
     {
         public Tipo_Cuenta()
         {
-            Proveedores = new HashSet<Proveedor>();
+            Pagos = new HashSet<Pago>();
         }
 
         public int IdTipoCuenta { get; set; }
         public string TipoCuenta { get; set; }
 
-        public virtual ICollection<Proveedor> Proveedores { get; set; }
+        public virtual ICollection<Pago> Pagos { get; set; }
     }
 
 }

@@ -26,6 +26,8 @@ namespace SPP.Models
         [Required(ErrorMessage = "El campo Contraseña es obligatorio")]
         public string Contrasena { get; set; }
 
+        public string Token { get; set; }
+
 
         public string[] Perfiles { get; set; }
         public string[] Companias { get; set; }

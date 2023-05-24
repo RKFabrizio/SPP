@@ -28,12 +28,8 @@ namespace TSK.Controllers
             var proveedores = _context.Proveedores.Select(i => new {
                 i.IdProveedor,
                 i.NombreProveedor,
-                i.CuentaBancaria,
-                i.CCI,
-                i.BeneficiarioNombre,
-                i.BeneficiarioDni,
-                i.IdBanco,
-                i.IdTipoCuenta,
+                i.IdTipoDoc,
+                i.Numero_Doc,
                 i.IdPais
             });
 
@@ -87,23 +83,12 @@ namespace TSK.Controllers
 
 
         [HttpGet]
-        public async Task<IActionResult> BancosLookup(DataSourceLoadOptions loadOptions) {
-            var lookup = from i in _context.Bancos
-                         orderby i.NombreBanco
+        public async Task<IActionResult> Tipo_DocumentosLookup(DataSourceLoadOptions loadOptions) {
+            var lookup = from i in _context.Tipo_Documentos
+                         orderby i.NombreDocumento
                          select new {
-                             Value = i.IdBanco,
-                             Text = i.NombreBanco
-                         };
-            return Json(await DataSourceLoader.LoadAsync(lookup, loadOptions));
-        }
-
-        [HttpGet]
-        public async Task<IActionResult> TipoCuentasLookup(DataSourceLoadOptions loadOptions) {
-            var lookup = from i in _context.TipoCuentas
-                         orderby i.TipoCuenta
-                         select new {
-                             Value = i.IdTipoCuenta,
-                             Text = i.TipoCuenta
+                             Value = i.IdTipoDocumento,
+                             Text = i.NombreDocumento
                          };
             return Json(await DataSourceLoader.LoadAsync(lookup, loadOptions));
         }
@@ -122,12 +107,8 @@ namespace TSK.Controllers
         private void PopulateModel(Proveedor model, IDictionary values) {
             string ID_PROVEEDOR = nameof(Proveedor.IdProveedor);
             string NOMBRE_PROVEEDOR = nameof(Proveedor.NombreProveedor);
-            string CUENTA_BANCARIA = nameof(Proveedor.CuentaBancaria);
-            string CCI = nameof(Proveedor.CCI);
-            string BENEFICIARIO_NOMBRE = nameof(Proveedor.BeneficiarioNombre);
-            string BENEFICIARIO_DNI = nameof(Proveedor.BeneficiarioDni);
-            string ID_BANCO = nameof(Proveedor.IdBanco);
-            string ID_TIPO_CUENTA = nameof(Proveedor.IdTipoCuenta);
+            string ID_TIPO_DOC = nameof(Proveedor.IdTipoDoc);
+            string NUMERO_DOC = nameof(Proveedor.Numero_Doc);
             string ID_PAIS = nameof(Proveedor.IdPais);
 
             if(values.Contains(ID_PROVEEDOR)) {
@@ -138,28 +119,12 @@ namespace TSK.Controllers
                 model.NombreProveedor = Convert.ToString(values[NOMBRE_PROVEEDOR]);
             }
 
-            if(values.Contains(CUENTA_BANCARIA)) {
-                model.CuentaBancaria = Convert.ToString(values[CUENTA_BANCARIA]);
+            if(values.Contains(ID_TIPO_DOC)) {
+                model.IdTipoDoc = Convert.ToInt32(values[ID_TIPO_DOC]);
             }
 
-            if(values.Contains(CCI)) {
-                model.CCI = Convert.ToString(values[CCI]);
-            }
-
-            if(values.Contains(BENEFICIARIO_NOMBRE)) {
-                model.BeneficiarioNombre = Convert.ToString(values[BENEFICIARIO_NOMBRE]);
-            }
-
-            if(values.Contains(BENEFICIARIO_DNI)) {
-                model.BeneficiarioDni = Convert.ToString(values[BENEFICIARIO_DNI]);
-            }
-
-            if(values.Contains(ID_BANCO)) {
-                model.IdBanco = Convert.ToInt32(values[ID_BANCO]);
-            }
-
-            if(values.Contains(ID_TIPO_CUENTA)) {
-                model.IdTipoCuenta = Convert.ToInt32(values[ID_TIPO_CUENTA]);
+            if(values.Contains(NUMERO_DOC)) {
+                model.Numero_Doc = Convert.ToString(values[NUMERO_DOC]);
             }
 
             if(values.Contains(ID_PAIS)) {

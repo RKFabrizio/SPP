@@ -36,6 +36,7 @@ namespace TSK.Controllers
                 i.IdPerfil,
                 i.IdArea,
                 i.Habilitado,
+                i.Token,
                 i.IdCompania
             });
 
@@ -132,13 +133,16 @@ namespace TSK.Controllers
             string ID_PERFIL = nameof(Usuario.IdPerfil);
             string ID_AREA = nameof(Usuario.IdArea);
             string HABILITADO = nameof(Usuario.Habilitado);
+            string TOKEN = nameof(Usuario.Token);
             string ID_COMPANIA = nameof(Usuario.IdCompania);
 
-            if(values.Contains(ID_USUARIO)) {
+            if (values.Contains(ID_USUARIO) && values[ID_USUARIO] != DBNull.Value)
+            {
                 model.IdUsuario = Convert.ToInt32(values[ID_USUARIO]);
             }
 
-            if(values.Contains(NOMBRE)) {
+
+            if (values.Contains(NOMBRE)) {
                 model.Nombre = Convert.ToString(values[NOMBRE]);
             }
 
@@ -166,12 +170,22 @@ namespace TSK.Controllers
                 model.IdPerfil = Convert.ToInt32(values[ID_PERFIL]);
             }
 
-            if(values.Contains(ID_AREA)) {
-                model.IdArea = values[ID_AREA] != null ? Convert.ToInt32(values[ID_AREA]) : (int?)null;
+            if (values.Contains(ID_AREA) && values[ID_AREA] != DBNull.Value)
+            {
+                model.IdArea = Convert.ToInt32(values[ID_AREA]);
+            }
+            else
+            {
+                model.IdArea = null;
             }
 
-            if(values.Contains(HABILITADO)) {
+
+            if (values.Contains(HABILITADO)) {
                 model.Habilitado = Convert.ToBoolean(values[HABILITADO]);
+            }
+
+            if(values.Contains(TOKEN)) {
+                model.Token = Convert.ToString(values[TOKEN]);
             }
 
             if(values.Contains(ID_COMPANIA)) {

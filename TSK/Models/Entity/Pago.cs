@@ -28,6 +28,12 @@ namespace SPP.Models.Entity
         public DateTime FechaAprobacion { get; set; }
         public int IdEstado { get; set; }
         public string InformacionContable { get; set; }
+        public string CuentaBancaria { get; set; }
+        public string BeneficiarioNombre { get; set; }
+        public string BeneficiarioDni { get; set; }
+        public int IdBanco { get; set; }
+        public int IdTipoCuenta { get; set; }
+
 
         public virtual Tipo_Adelanto TipoAdelantoNavigation { get; set; }
         public virtual Proveedor ProveedorNavigation { get; set; }
@@ -36,6 +42,8 @@ namespace SPP.Models.Entity
         public virtual Aprobador_Area AprobadorNavigation { get; set; }
         public virtual Tipo_Pago TipoPagoNavigation { get; set; }
         public virtual Estado EstadoNavigation { get; set; }
+        public virtual Banco BancoNavigation { get; set; }
+        public virtual Tipo_Cuenta TipoCuentaNavigation { get; set; }
         public virtual ICollection<EnvioCorreo> EnvioCorreos { get; set; }
     }
 

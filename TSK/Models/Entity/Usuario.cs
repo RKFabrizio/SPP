@@ -23,7 +23,9 @@ namespace SPP.Models.Entity
         public int IdPerfil { get; set; }
         public int? IdArea { get; set; }
         public bool Habilitado { get; set; }
+        public string? Token { get; set; }
         public int IdCompania { get; set; }
+
 
         public virtual Perfil PerfilDisNavigation { get; set; }
         public virtual Area AreaDisNavigation { get; set; }

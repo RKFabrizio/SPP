@@ -58,25 +58,13 @@
 
         columns.AddFor(m => m.NombreProveedor).Caption("Proveedor");
 
-        columns.AddFor(m => m.CuentaBancaria).Caption("Cuenta Bancaria");
-
-        columns.AddFor(m => m.CCI).Caption("Nro de Cuenta");
-
-        columns.AddFor(m => m.BeneficiarioNombre).Caption("Nombre del Beneficiario");
-
-        columns.AddFor(m => m.BeneficiarioDni);
-
-        columns.AddFor(m => m.IdBanco).Lookup(lookup => lookup
-            .DataSource(ds => ds.WebApi().Controller("Proveedors").LoadAction("BancosLookup").Key("Value"))
+        columns.AddFor(m => m.IdTipoDoc).Lookup(lookup => lookup
+            .DataSource(ds => ds.WebApi().Controller("Proveedors").LoadAction("Tipo_DocumentosLookup").Key("Value"))
             .ValueExpr("Value")
             .DisplayExpr("Text")
-        ).Caption("Banco");
+        ).Caption("Tipo Documento");
 
-        columns.AddFor(m => m.IdTipoCuenta).Lookup(lookup => lookup
-            .DataSource(ds => ds.WebApi().Controller("Proveedors").LoadAction("TipoCuentasLookup").Key("Value"))
-            .ValueExpr("Value")
-            .DisplayExpr("Text")
-        ).Caption("Tipo Cuenta");
+        columns.AddFor(m => m.Numero_Doc).Caption("Número Documento:");
 
         columns.AddFor(m => m.IdPais).Lookup(lookup => lookup
             .DataSource(ds => ds.WebApi().Controller("Proveedors").LoadAction("PaisesLookup").Key("Value"))
@@ -120,15 +108,9 @@
                             .Items(groupItems =>
                             {
                                 groupItems.AddSimpleFor(m => m.NombreProveedor);
-                                groupItems.AddSimpleFor(m => m.CuentaBancaria);
-                                groupItems.AddSimpleFor(m => m.CCI);
-                                groupItems.AddSimpleFor(m => m.BeneficiarioNombre).Label(l => l.Text("Nombre del Beneficiario:"));
-                                groupItems.AddSimpleFor(m => m.BeneficiarioDni).Label(l => l.Text("Dni del Beneficiario:"));
-                                groupItems.AddSimpleFor(m => m.IdBanco).Label(l => l.Text("Banco:"));
-                                groupItems.AddSimpleFor(m => m.IdTipoCuenta).Label(l => l.Text("Tipo Cuenta:"));
+                                groupItems.AddSimpleFor(m => m.IdTipoDoc).Label(l => l.Text("Tipo de Documento:"));
+                                groupItems.AddSimpleFor(m => m.Numero_Doc).Label(l => l.Text("Número de Documento:"));
                                 groupItems.AddSimpleFor(m => m.IdPais).Label(l => l.Text("Pais:"));
-
-
                             });
                     }))
 

@@ -26,18 +26,20 @@ namespace SPP.Data
                     {
                         _usuario.Add(new Usuario()
                         {
-                            IdUsuario = Convert.ToInt32(dr["IDUSUARIO"]),
+                            IdUsuario = dr["IDUSUARIO"] == DBNull.Value ? 0 : Convert.ToInt32(dr["IDUSUARIO"]),
                             Nombre = dr["NOMBRE"].ToString(),
                             Apellido = dr["APELLIDO"].ToString(),
                             Login = dr["LOGIN"].ToString(),
                             Contrasena = dr["CONTRASENA"].ToString(),
                             Correo = dr["CORREO"].ToString(),
-                            MontoAprobacion = Convert.ToInt32(dr["MONTOAPROBACION"]),
+                            MontoAprobacion = dr["MONTOAPROBACION"] == DBNull.Value ? 0 : Convert.ToInt32(dr["MONTOAPROBACION"]),
                             Perfiles = new string[] { dr["NOMBREPERFIL"].ToString() },
                             Areas = new string[] { dr["NOMBREAREA"].ToString() },
-                            Habilitado = Convert.ToBoolean(dr["HABILITADO"]),
+                            Habilitado = dr["HABILITADO"] == DBNull.Value ? false : Convert.ToBoolean(dr["HABILITADO"]),
                             Companias = new string[] { dr["NOMBRECOMPANIA"].ToString() },
+                            Token = dr["TOKEN"].ToString(),
                         });
+
                     }
                 }
             }
