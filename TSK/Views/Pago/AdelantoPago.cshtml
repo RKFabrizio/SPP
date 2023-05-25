@@ -75,10 +75,10 @@
                         {
 
                             items.Add()
-                            .Title("Tipo de Solicitud: Cheque")
+                            .Title("Cheque")
                             .Template(new TemplateName("TAB1"));
                             items.Add()
-                            .Title("Tipo de Solicitud: Anticipo")
+                            .Title("Anticipo")
                             .Template(new TemplateName("TAB2"));
 
                         })
@@ -110,6 +110,16 @@
                 .ColCount(2)
                 .Items(items =>
                 {
+                    items.AddSimpleFor(m => m.IdTipoAdelanto)
+                    .Label(l => l.Text("Tipo de Solicitud:"))
+                    .Editor(e => e.SelectBox()
+                    .DataSource(d => d.Mvc()
+                    .Controller("Pagoes")
+                    .LoadAction("TipoAdelantos1Lookup"))
+                    .DisplayExpr("Text")
+                    .ValueExpr("Value")
+
+                    ).ColSpan(2);
 
                     items.AddSimpleFor(m => m.IdProveedor)
                     .Label(l => l.Text("Nombre de Proveedor y/o Beneficiario:"))
@@ -194,7 +204,16 @@
                 .ColCount(2)
                 .Items(items =>
                 {
+                     items.AddSimpleFor(m => m.IdTipoAdelanto)
+                    .Label(l => l.Text("Tipo de Solicitud:"))
+                    .Editor(e => e.SelectBox()
+                    .DataSource(d => d.Mvc()
+                    .Controller("Pagoes")
+                    .LoadAction("TipoAdelantos2Lookup"))
+                    .DisplayExpr("Text")
+                    .ValueExpr("Value")
 
+                    ).ColSpan(2);
                     items.AddSimpleFor(m => m.IdProveedor)
                     .Label(l => l.Text("Nombre de Proveedor y/o Beneficiario:"))
                     .Editor(e => e.SelectBox()

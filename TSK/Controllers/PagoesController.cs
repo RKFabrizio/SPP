@@ -109,15 +109,34 @@ namespace TSK.Controllers
 
 
         [HttpGet]
-        public async Task<IActionResult> TipoAdelantosLookup(DataSourceLoadOptions loadOptions) {
+        public async Task<IActionResult> TipoAdelantos1Lookup(DataSourceLoadOptions loadOptions)
+        {
             var lookup = from i in _context.TipoAdelantos
+                         where i.IdTipoAdelanto == 1
                          orderby i.TipoAdelanto
-                         select new {
+                         select new
+                         {
                              Value = i.IdTipoAdelanto,
                              Text = i.TipoAdelanto
                          };
             return Json(await DataSourceLoader.LoadAsync(lookup, loadOptions));
         }
+
+
+        [HttpGet]
+        public async Task<IActionResult> TipoAdelantos2Lookup(DataSourceLoadOptions loadOptions)
+        {
+            var lookup = from i in _context.TipoAdelantos
+                         where i.IdTipoAdelanto == 2
+                         orderby i.TipoAdelanto
+                         select new
+                         {
+                             Value = i.IdTipoAdelanto,
+                             Text = i.TipoAdelanto
+                         };
+            return Json(await DataSourceLoader.LoadAsync(lookup, loadOptions));
+        }
+
 
         [HttpGet]
         public async Task<IActionResult> ProveedoresLookup(DataSourceLoadOptions loadOptions) {
