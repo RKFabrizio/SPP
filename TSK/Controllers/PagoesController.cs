@@ -279,7 +279,7 @@ namespace TSK.Controllers
             }
 
             if(values.Contains(FECHA_APROBACION)) {
-                model.FechaAprobacion = Convert.ToDateTime(values[FECHA_APROBACION]);
+                model.FechaAprobacion = values[FECHA_APROBACION] != null ? Convert.ToDateTime(values[FECHA_APROBACION]) : (DateTime?)null;
             }
 
             if(values.Contains(ID_ESTADO)) {

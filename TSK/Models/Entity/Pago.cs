@@ -17,22 +17,22 @@ namespace SPP.Models.Entity
         public DateTime FechaSolicitud { get; set; }
         public int IdTipoMoneda { get; set; }
         public float Importe { get; set; }
-        public string Concepto { get; set; }
+        public string? Concepto { get; set; }
         public int LoginSolicitante { get; set; }
         public int LoginAprobador { get; set; }
-        public string ReferenciaOC { get; set; }
-        public string ProformaCotizacion { get; set; }
-        public string Factura { get; set; }
-        public int IdTipoPago { get; set; }
-        public string Observaciones { get; set; }
-        public DateTime FechaAprobacion { get; set; }
+        public string? ReferenciaOC { get; set; }
+        public string? ProformaCotizacion { get; set; }
+        public string? Factura { get; set; }
+        public int? IdTipoPago { get; set; }
+        public string? Observaciones { get; set; }
+        public DateTime? FechaAprobacion { get; set; }
         public int IdEstado { get; set; }
         public string? InformacionContable { get; set; }
-        public string CuentaBancaria { get; set; }
-        public string BeneficiarioNombre { get; set; }
+        public string? CuentaBancaria { get; set; }
+        public string? BeneficiarioNombre { get; set; }
         public string? BeneficiarioDni { get; set; }
-        public int IdBanco { get; set; }
-        public int IdTipoCuenta { get; set; }
+        public int? IdBanco { get; set; }
+        public int? IdTipoCuenta { get; set; }
 
 
         public virtual Tipo_Adelanto TipoAdelantoNavigation { get; set; }

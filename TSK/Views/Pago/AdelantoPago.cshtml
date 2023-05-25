@@ -274,7 +274,7 @@
             .Text("Guardar")
             .ID("submitButton2")
             .Width(100)
-            .OnClick("function() { saveForm(2); }") // Llamar a la función saveForm con el valor 2
+            .OnClick("saveform")
             )
 
     </div>
@@ -330,128 +330,31 @@
 });
 
 
-        function saveForm(tipoAdelanto) {
+        function saveForm(){
             // Obtener los valores del formulario
-            var formData = $("#formID").dxForm("option", "formData");
+            console.log("Hola");
+            //var formData = $("#formID").dxForm("option", "formData");
 
-            // Enviar los valores al controlador
-            $.ajax({
-                url: "/api/Pagoes/Post",
-                type: "POST",
-                data: {
-                    values: JSON.stringify(formData),
-                    tipoAdelanto: tipoAdelanto
-                },
-                success: function (response) {
-                    // Manejar la respuesta del servidor si es necesario
-                    console.log("Guardado exitoso");
-                },
-                error: function (xhr, status, error) {
-                    // Manejar el error si ocurre
-                    console.error(error);
-                }
-            });
+            //// Enviar los valores al controlador
+            //$.ajax({
+            //    url: "/api/Pagoes/Post",
+            //    type: "POST",
+            //    data: {
+            //        values: JSON.stringify(formData),
+            //        tipoAdelanto: tipoAdelanto
+            //    },
+            //    success: function (response) {
+            //        // Manejar la respuesta del servidor si es necesario
+            //        console.log("Guardado exitoso");
+            //    },
+            //    error: function (xhr, status, error) {
+            //        // Manejar el error si ocurre
+                    
+            //        console.error(error);
+                    
+            //    }
+            //});
         }
      
 </script>
 
-@*@(Html.DevExtreme().Form<SPP.Models.Entity.Pago>()
-    .Items(items => {
-
-        items.AddSimpleFor(m => m.IdPago);
-
-        items.AddSimpleFor(m => m.IdTipoAdelanto)
-            .Editor(e => e
-                .Lookup()
-                .DataSource(ds => ds.WebApi().Controller("Pagoes").LoadAction("TipoAdelantosLookup").Key("Value"))
-                .ValueExpr("Value")
-                .DisplayExpr("Text")
-            );
-
-        items.AddSimpleFor(m => m.IdProveedor)
-            .Editor(e => e
-                .Lookup()
-                .DataSource(ds => ds.WebApi().Controller("Pagoes").LoadAction("ProveedoresLookup").Key("Value"))
-                .ValueExpr("Value")
-                .DisplayExpr("Text")
-            );
-
-        items.AddSimpleFor(m => m.FechaSolicitud);
-
-        items.AddSimpleFor(m => m.IdTipoMoneda)
-            .Editor(e => e
-                .Lookup()
-                .DataSource(ds => ds.WebApi().Controller("Pagoes").LoadAction("TipoMonedasLookup").Key("Value"))
-                .ValueExpr("Value")
-                .DisplayExpr("Text")
-            );
-
-        items.AddSimpleFor(m => m.Importe);
-
-        items.AddSimpleFor(m => m.Concepto);
-
-        items.AddSimpleFor(m => m.LoginSolicitante)
-            .Editor(e => e
-                .Lookup()
-                .DataSource(ds => ds.WebApi().Controller("Pagoes").LoadAction("UsuariosLookup").Key("Value"))
-                .ValueExpr("Value")
-                .DisplayExpr("Text")
-            );
-
-        items.AddSimpleFor(m => m.LoginAprobador)
-            .Editor(e => e
-                .Lookup()
-                .DataSource(ds => ds.WebApi().Controller("Pagoes").LoadAction("AprobadorAreasLookup").Key("Value"))
-                .ValueExpr("Value")
-                .DisplayExpr("Text")
-            );
-
-        items.AddSimpleFor(m => m.ReferenciaOC);
-
-        items.AddSimpleFor(m => m.ProformaCotizacion);
-
-        items.AddSimpleFor(m => m.Factura);
-
-        items.AddSimpleFor(m => m.IdTipoPago)
-            .Editor(e => e
-                .Lookup()
-                .DataSource(ds => ds.WebApi().Controller("Pagoes").LoadAction("TipoPagosLookup").Key("Value"))
-                .ValueExpr("Value")
-                .DisplayExpr("Text")
-            );
-
-        items.AddSimpleFor(m => m.Observaciones);
-
-        items.AddSimpleFor(m => m.FechaAprobacion);
-
-        items.AddSimpleFor(m => m.IdEstado)
-            .Editor(e => e
-                .Lookup()
-                .DataSource(ds => ds.WebApi().Controller("Pagoes").LoadAction("EstadosLookup").Key("Value"))
-                .ValueExpr("Value")
-                .DisplayExpr("Text")
-            );
-
-        items.AddSimpleFor(m => m.InformacionContable);
-
-        items.AddSimpleFor(m => m.CuentaBancaria);
-
-        items.AddSimpleFor(m => m.BeneficiarioDni);
-
-        items.AddSimpleFor(m => m.IdBanco)
-            .Editor(e => e
-                .Lookup()
-                .DataSource(ds => ds.WebApi().Controller("Pagoes").LoadAction("BancosLookup").Key("Value"))
-                .ValueExpr("Value")
-                .DisplayExpr("Text")
-            );
-
-        items.AddSimpleFor(m => m.IdTipoCuenta)
-            .Editor(e => e
-                .Lookup()
-                .DataSource(ds => ds.WebApi().Controller("Pagoes").LoadAction("TipoCuentasLookup").Key("Value"))
-                .ValueExpr("Value")
-                .DisplayExpr("Text")
-            );
-    })
-)*@

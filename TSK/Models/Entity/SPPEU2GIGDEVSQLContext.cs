@@ -402,10 +402,9 @@ namespace SPP.Models.Entity
 
 
                 entity.Property(e => e.Concepto)
+                    .IsRequired(false)
                     .HasMaxLength(50)
-                    .IsUnicode(false)
-                    .HasColumnName("CONCEPTO")
-                    .IsFixedLength();
+                    .HasColumnName("CONCEPTO");
 
                 entity.Property(e => e.LoginSolicitante)
                     .HasMaxLength(50)
@@ -420,40 +419,35 @@ namespace SPP.Models.Entity
                     .IsFixedLength();
 
                 entity.Property(e => e.ReferenciaOC)
+                    .IsRequired(false)
                     .HasMaxLength(50)
-                    .IsUnicode(false)
-                    .HasColumnName("REFERENCIAOC")
-                    .IsFixedLength();
+                    .HasColumnName("REFERENCIAOC");
 
                 entity.Property(e => e.ProformaCotizacion)
+                   .IsRequired(false)
                    .HasMaxLength(50)
-                   .IsUnicode(false)
-                   .HasColumnName("PROFORMACOTIZACION")
-                   .IsFixedLength();
+                   .HasColumnName("PROFORMACOTIZACION");
+                   
 
                 entity.Property(e => e.Factura)
+                   .IsRequired(false)
                    .HasMaxLength(50)
-                   .IsUnicode(false)
-                   .HasColumnName("FACTURA")
-                   .IsFixedLength();
+                   .HasColumnName("FACTURA");
 
                 entity.Property(e => e.IdTipoPago)
+                   .IsRequired(false)
                    .HasMaxLength(50)
-                   .IsUnicode(false)
-                   .HasColumnName("IDTIPOPAGO")
-                   .IsFixedLength();
+                   .HasColumnName("IDTIPOPAGO");
 
                 entity.Property(e => e.Observaciones)
+                   .IsRequired(false)
                    .HasMaxLength(50)
-                   .IsUnicode(false)
-                   .HasColumnName("OBSERVACIONES")
-                   .IsFixedLength();
+                   .HasColumnName("OBSERVACIONES");
 
                 entity.Property(e => e.FechaAprobacion)
+                   .IsRequired(false)
                    .HasMaxLength(50)
-                   .IsUnicode(false)
-                   .HasColumnName("FECHAAPROBACION")
-                   .IsFixedLength();
+                   .HasColumnName("FECHAAPROBACION");
 
                 entity.Property(e => e.IdEstado)
                    .HasMaxLength(50)
@@ -462,33 +456,32 @@ namespace SPP.Models.Entity
                    .IsFixedLength();
 
                 entity.Property(e => e.InformacionContable)
+                  .IsRequired(false)
                   .HasMaxLength(50)
-                  .IsUnicode(false)
-                  .HasColumnName("INFORMACIONCONTABLE")
-                  .IsFixedLength();
+                  .HasColumnName("INFORMACIONCONTABLE");
 
                 entity.Property(e => e.IdBanco)
-                   .IsRequired()
+                   .IsRequired(false)
                    .HasMaxLength(50)
                    .HasColumnName("IDBANCO");
 
                 entity.Property(e => e.IdTipoCuenta)
-                   .IsRequired()
+                   .IsRequired(false)
                    .HasMaxLength(50)
                    .HasColumnName("IDTIPOCUENTA");
 
                 entity.Property(e => e.IdTipoPago)
-                   .IsRequired()
+                   .IsRequired(false)
                    .HasMaxLength(50)
                    .HasColumnName("IDTIPOPAGO");
 
                 entity.Property(e => e.BeneficiarioNombre)
-                 .IsRequired()
+                 .IsRequired(false)
                  .HasMaxLength(50)
                  .HasColumnName("BENEFICIARIONOMBRE");
 
                 entity.Property(e => e.BeneficiarioDni)
-                   .IsRequired()
+                   .IsRequired(false)
                    .HasMaxLength(50)
                    .HasColumnName("BENEFICIARIODNI");
 
