@@ -27,10 +27,10 @@ namespace SPP.Models.Entity
         public string Observaciones { get; set; }
         public DateTime FechaAprobacion { get; set; }
         public int IdEstado { get; set; }
-        public string InformacionContable { get; set; }
+        public string? InformacionContable { get; set; }
         public string CuentaBancaria { get; set; }
         public string BeneficiarioNombre { get; set; }
-        public string BeneficiarioDni { get; set; }
+        public string? BeneficiarioDni { get; set; }
         public int IdBanco { get; set; }
         public int IdTipoCuenta { get; set; }
 

@@ -103,7 +103,7 @@ namespace SPP.Models.Entity
 
                 entity.Property(e => e.IdTipoCuenta).HasColumnName("IDTIPOCUENTA");
 
-                entity.Property(e => e.IdTipoCuenta)
+                entity.Property(e => e.TipoCuenta)
                     .IsRequired()
                     .HasMaxLength(50)
                     .HasColumnName("TIPOCUENTA");
@@ -397,10 +397,9 @@ namespace SPP.Models.Entity
                     .IsFixedLength();
 
                 entity.Property(e => e.Importe)
-                    .HasMaxLength(50)
-                    .IsUnicode(false)
                     .HasColumnName("IMPORTE")
-                    .IsFixedLength();
+                    .HasColumnType("float");
+
 
                 entity.Property(e => e.Concepto)
                     .HasMaxLength(50)

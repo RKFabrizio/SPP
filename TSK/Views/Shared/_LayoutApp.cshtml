@@ -211,7 +211,7 @@
                                     </div>
                                 </li>
                             }
-                            @if (User.IsInRole("Supervisor") || (User.IsInRole("Administrador")))
+                            @if (User.IsInRole("Supervisor") || (User.IsInRole("Administrador") || (User.IsInRole("Usuario") )))
                             {
                                 <li class="nav-item @ViewBag.adelantopago">
                                     <a asp-controller="Pago" asp-action="AdelantoPago" class="nav-link">
