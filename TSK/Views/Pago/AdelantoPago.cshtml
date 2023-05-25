@@ -97,55 +97,64 @@
 
 @using (Html.DevExtreme().NamedTemplate("TAB1"))
 {
-    <div class="container">
-        @(Html.DevExtreme().Form<SPP.Models.Entity.Pago>()
-            .ColCount(2)
-            .Items(items =>
-            {
 
-                items.AddSimpleFor(m => m.IdProveedor)
-                .Label(l => l.Text("Nombre de Proveedor y/o Beneficiario:"))
-                .Editor(e => e.SelectBox()
-                .DataSource(d => d.Mvc()
-                .Controller("Pagoes")
-                .LoadAction("ProveedoresLookup"))
-                .DisplayExpr("Text")
-                .ValueExpr("Value")
-                .SearchEnabled(true)
-                ).ColSpan(2);
+    @using (Html.BeginForm("Post", "Pagoes", FormMethod.Post))
+    {
 
-                items.AddSimpleFor(m => m.FechaSolicitud)
-                .ColSpan(2)
-                .Label(l => l.Text("Fecha y Hora:"))
-                .Editor(e => e.DateBox());
+        //  @Html.HiddenFor(m => m.IdUsuario)
+        <div class="container">
 
-                items.AddSimpleFor(m => m.IdTipoMoneda)
-                .Label(l => l.Text("Moneda:"))
-                .Editor(e => e.SelectBox()
-                .DataSource(d => d.Mvc()
-                .Controller("Pagoes")
-                .LoadAction("TipoMonedasLookup"))
-                .DisplayExpr("Text")
-                .ValueExpr("Value")
+            @(
+                Html.DevExtreme().Form<SPP.Models.Entity.Pago>()
 
-                );
-                items.AddSimpleFor(m => m.Importe)
-                .Editor(e => e.NumberBox().ID("importeEditor"));
+                .ColCount(2)
+                .Items(items =>
+                {
 
-                items.AddSimpleFor(m => m.Concepto).ColSpan(2)
-                .Editor(e => e.TextArea().Height("50px"));
+                    items.AddSimpleFor(m => m.IdProveedor)
+                    .Label(l => l.Text("Nombre de Proveedor y/o Beneficiario:"))
+                    .Editor(e => e.SelectBox()
+                    .DataSource(d => d.Mvc()
+                    .Controller("Pagoes")
+                    .LoadAction("ProveedoresLookup"))
+                    .DisplayExpr("Text")
+                    .ValueExpr("Value")
+                    .SearchEnabled(true)
+                    ).ColSpan(2);
 
-                items.AddSimpleFor(m => m.Observaciones).ColSpan(2)
-                .Editor(e => e.TextArea().Height("50px"));
+                    items.AddSimpleFor(m => m.FechaSolicitud)
+                    .ColSpan(2)
+                    .Label(l => l.Text("Fecha y Hora:"))
+                    .Editor(e => e.DateBox());
 
-                items.AddSimpleFor(m => m.LoginSolicitante)
+                    items.AddSimpleFor(m => m.IdTipoMoneda)
+                    .Label(l => l.Text("Moneda:"))
+                    .Editor(e => e.SelectBox()
+                    .DataSource(d => d.Mvc()
+                    .Controller("Pagoes")
+                    .LoadAction("TipoMonedasLookup"))
+                    .DisplayExpr("Text")
+                    .ValueExpr("Value")
+
+                    );
+
+                    items.AddSimpleFor(m => m.Importe)
+                    .Editor(e => e.NumberBox().ID("importeEditor"));
+
+                    items.AddSimpleFor(m => m.Concepto).ColSpan(2)
+                    .Editor(e => e.TextArea().Height("50px"));
+
+                    items.AddSimpleFor(m => m.Observaciones).ColSpan(2)
+                    .Editor(e => e.TextArea().Height("50px"));
+
+                   @* items.AddSimpleFor(m => m.LoginSolicitante) // NO LO TOMA
+                    .Label(l => l.Text("Solicitante:"))
+                    .Editor(e => e.TextBox()
+                    .Value(JsonConvert.DeserializeObject<Usuario>(User?.FindFirst("UsuarioInfo")?.Value)?.Nombre)
+                    .ReadOnly(true));*@
+
+                       items.AddSimpleFor(m => m.LoginSolicitante)
                 .Label(l => l.Text("Solicitante:"))
-                .Editor(e => e.TextBox()
-                .Value(JsonConvert.DeserializeObject<Usuario>(User?.FindFirst("UsuarioInfo")?.Value)?.Nombre)
-                .ReadOnly(true));
-
-                items.AddSimpleFor(m => m.LoginAprobador)
-                .Label(l => l.Text("Aprobador (Monto max. Aprobación):"))
                 .Editor(e => e.SelectBox()
                 .DataSource(d => d.Mvc()
                 .Controller("Pagoes")
@@ -153,112 +162,123 @@
                 .DisplayExpr("Text")
                 .ValueExpr("Value")
                 );
-            })
-            )
 
+                    items.AddSimpleFor(m => m.LoginAprobador) // LO TOMA
+                    .Label(l => l.Text("Aprobador (Monto max. Aprobación):"))
+                    .Editor(e => e.SelectBox()
+                    .DataSource(d => d.Mvc()
+                    .Controller("Pagoes")
+                    .LoadAction("AprobadorAreasLookup"))
+                    .DisplayExpr("Text")
+                    .ValueExpr("Value")
+                    );
 
-        @(Html.DevExtreme().Button()
-            .Text("Guardar")
-            .ID("submitButton1")
-            .Width(100)
-            .OnClick("function() { saveForm(1); }") // Llamar a la función saveForm con el valor 1
-            )
-    </div>
+                    items.AddButton()
+                    .HorizontalAlignment(HorizontalAlignment.Left)
+                    .ButtonOptions(b => b.Text("Guardar")
+                    .Type(ButtonType.Success)
+                    .UseSubmitBehavior(true)
+                    );
+                })
+                )
+        </div>
+    }
 }
 
 @using (Html.DevExtreme().NamedTemplate("TAB2"))
 {
     <div class="container">
-        @(Html.DevExtreme().Form<SPP.Models.Entity.Pago>()
+        @(
+        Html.DevExtreme().Form<SPP.Models.Entity.Pago>()
 
-            .ColCount(2)
-            .Items(items =>
-            {
-
-                items.AddSimpleFor(m => m.IdProveedor)
-                .Label(l => l.Text("Nombre de Proveedor y/o Beneficiario:"))
-                .Editor(e => e.SelectBox()
-                .DataSource(d => d.Mvc()
-                .Controller("Pagoes")
-                .LoadAction("ProveedoresLookup"))
-                .DisplayExpr("Text")
-                .ValueExpr("Value")
-                .SearchEnabled(true)
-                ).ColSpan(2);
-
-                items.AddSimpleFor(m => m.FechaSolicitud)
-                .ColSpan(2)
-                .Label(l => l.Text("Fecha y Hora:"))
-                .Editor(e => e.DateBox());
-
-                items.AddSimpleFor(m => m.IdTipoMoneda)
-                .Label(l => l.Text("Moneda:"))
-                .Editor(e => e.SelectBox()
-                .DataSource(d => d.Mvc()
-                .Controller("Pagoes")
-                .LoadAction("TipoMonedasLookup"))
-                .DisplayExpr("Text")
-                .ValueExpr("Value")
-
-                );
-                items.AddSimpleFor(m => m.Importe)
-                .Editor(e => e.NumberBox().ID("importeEditor"));
-
-                items.AddSimpleFor(m => m.Concepto).ColSpan(2)
-                .Editor(e => e.TextArea().Height("50px"));
-
-                items.AddGroup().Caption("Datos de Pago").Items(paymentDataItems =>
+                .ColCount(2)
+                .Items(items =>
                 {
-                    items.AddSimpleFor(m => m.IdTipoPago)
-                .Label(l => l.Text("Tipo de Pago:"))
-                .Editor(e => e.SelectBox()
-                .DataSource(d => d.Mvc()
-                .Controller("Pagoes")
-                .LoadAction("TipoPagosLookup"))
-                .DisplayExpr("Text")
-                .ValueExpr("Value")
 
-                ).ColSpan(2);
+                    items.AddSimpleFor(m => m.IdProveedor)
+                    .Label(l => l.Text("Nombre de Proveedor y/o Beneficiario:"))
+                    .Editor(e => e.SelectBox()
+                    .DataSource(d => d.Mvc()
+                    .Controller("Pagoes")
+                    .LoadAction("ProveedoresLookup"))
+                    .DisplayExpr("Text")
+                    .ValueExpr("Value")
+                    .SearchEnabled(true)
+                    ).ColSpan(2);
 
-                items.AddSimpleFor(m => m.BeneficiarioNombre);
-                items.AddSimpleFor(m => m.BeneficiarioDni);
+                    items.AddSimpleFor(m => m.FechaSolicitud)
+                    .ColSpan(2)
+                    .Label(l => l.Text("Fecha y Hora:"))
+                    .Editor(e => e.DateBox());
 
-                    items.AddSimpleFor(m => m.IdBanco)
-                .Label(l => l.Text("Nombre de Banco:"))
-                .Editor(e => e.SelectBox()
-                .DataSource(d => d.Mvc()
-                .Controller("Pagoes")
-                .LoadAction("BancosLookup"))
-                .DisplayExpr("Text")
-                .ValueExpr("Value")
+                    items.AddSimpleFor(m => m.IdTipoMoneda)
+                    .Label(l => l.Text("Moneda:"))
+                    .Editor(e => e.SelectBox()
+                    .DataSource(d => d.Mvc()
+                    .Controller("Pagoes")
+                    .LoadAction("TipoMonedasLookup"))
+                    .DisplayExpr("Text")
+                    .ValueExpr("Value")
 
-                );
+                    );
+                    items.AddSimpleFor(m => m.Importe)
+                    .Editor(e => e.NumberBox().ID("importeEditor"));
 
-                    items.AddSimpleFor(m => m.IdTipoCuenta)
-                .Label(l => l.Text("Tipo cuenta:"))
-                .Editor(e => e.SelectBox()
-                .DataSource(d => d.Mvc()
-                .Controller("Pagoes")
-                .LoadAction("TipoCuentasLookup"))
-                .DisplayExpr("Text")
-                .ValueExpr("Value")
-                );
+                    items.AddSimpleFor(m => m.Concepto).ColSpan(2)
+                    .Editor(e => e.TextArea().Height("50px"));
 
-                    items.AddSimpleFor(m => m.CuentaBancaria).ColSpan(2);
+                    items.AddGroup().Caption("Datos de Pago").Items(paymentDataItems =>
+                    {
+                        items.AddSimpleFor(m => m.IdTipoPago)
+                    .Label(l => l.Text("Tipo de Pago:"))
+                    .Editor(e => e.SelectBox()
+                    .DataSource(d => d.Mvc()
+                    .Controller("Pagoes")
+                    .LoadAction("TipoPagosLookup"))
+                    .DisplayExpr("Text")
+                    .ValueExpr("Value")
 
-                }).ColSpan(2);
+                    ).ColSpan(2);
 
-                items.AddSimpleFor(m => m.Observaciones).ColSpan(2)
-                .Editor(e => e.TextArea().Height("50px"));
+                        items.AddSimpleFor(m => m.BeneficiarioNombre);
+                        items.AddSimpleFor(m => m.BeneficiarioDni);
 
-                items.AddSimpleFor(m => m.LoginSolicitante)
+                        items.AddSimpleFor(m => m.IdBanco)
+                    .Label(l => l.Text("Nombre de Banco:"))
+                    .Editor(e => e.SelectBox()
+                    .DataSource(d => d.Mvc()
+                    .Controller("Pagoes")
+                    .LoadAction("BancosLookup"))
+                    .DisplayExpr("Text")
+                    .ValueExpr("Value")
+
+                    );
+
+                        items.AddSimpleFor(m => m.IdTipoCuenta)
+                    .Label(l => l.Text("Tipo cuenta:"))
+                    .Editor(e => e.SelectBox()
+                    .DataSource(d => d.Mvc()
+                    .Controller("Pagoes")
+                    .LoadAction("TipoCuentasLookup"))
+                    .DisplayExpr("Text")
+                    .ValueExpr("Value")
+                    );
+
+                        items.AddSimpleFor(m => m.CuentaBancaria).ColSpan(2);
+
+                    }).ColSpan(2);
+
+                    items.AddSimpleFor(m => m.Observaciones).ColSpan(2)
+                    .Editor(e => e.TextArea().Height("50px"));
+
+                    @*  items.AddSimpleFor(m => m.LoginSolicitante)
                 .Label(l => l.Text("Solicitante:"))
                 .Editor(e => e.TextBox()
                 .Value(JsonConvert.DeserializeObject<Usuario>(User?.FindFirst("UsuarioInfo")?.Value)?.Nombre)
-                .ReadOnly(true));
+                .ReadOnly(true));*@
 
-                items.AddSimpleFor(m => m.LoginAprobador)
-                .Label(l => l.Text("Aprobador (Monto max. Aprobación):"))
+                 items.AddSimpleFor(m => m.LoginSolicitante)
+                .Label(l => l.Text("Solicitante:"))
                 .Editor(e => e.SelectBox()
                 .DataSource(d => d.Mvc()
                 .Controller("Pagoes")
@@ -266,95 +286,25 @@
                 .DisplayExpr("Text")
                 .ValueExpr("Value")
                 );
+
+                items.AddSimpleFor(m => m.LoginAprobador)
+                .Label(l => l.Text("Aprobador (Monto max. Aprobación):"))
+                .Editor(e => e.SelectBox()
+                .DataSource(d => d.Mvc()
+                .Controller("Pagoes")
+                .LoadAction("AprobadorAreasLookup"))
+                .DisplayExpr("Text")
+                .ValueExpr("Value")
+                );
             })
             )
 
 
-            @(Html.DevExtreme().Button()
-            .Text("Guardar")
-            .ID("submitButton2")
-            .Width(100)
-            .OnClick("saveform")
-            )
-
     </div>
 }
 
-
-
 <script>
-    $(function() {
-        // Obtenemos el campo "Importe"
-        var importe = $('#Importe');
-
-        // Añadimos un evento para detectar cambios en el campo
-        importe.change(function() {
-            // Enviamos el formulario al controlador
-            $('#form').submit();
-        });
-    });
-
-    $(function() {
-    $("#submitButton1").dxButton({
-        onClick: function() {
-            // Obteniendo la instancia del formulario
-            var formInstance = $("#formID").dxForm("instance");
-
-            // Validando el formulario
-            var validationResult = formInstance.validate();
-
-            if(validationResult.isValid) {
-                // Envía los datos del formulario aquí o realiza cualquier acción que necesites
-                var formData = formInstance.option('formData');
-                // Envía formData a tu servidor
-            }
-        }
-    });
-
-        $(function () {
-            $("#submitButton2").dxButton({
-                onClick: function () {
-                    // Obteniendo la instancia del formulario
-                    var formInstance = $("#formID").dxForm("instance");
-
-                    // Validando el formulario
-                    var validationResult = formInstance.validate();
-
-                    if (validationResult.isValid) {
-                        // Envía los datos del formulario aquí o realiza cualquier acción que necesites
-                        var formData = formInstance.option('formData');
-                        // Envía formData a tu servidor
-                    }
-                }
-            });
-});
-
-
-        function saveForm(){
-            // Obtener los valores del formulario
-            console.log("Hola");
-            //var formData = $("#formID").dxForm("option", "formData");
-
-            //// Enviar los valores al controlador
-            //$.ajax({
-            //    url: "/api/Pagoes/Post",
-            //    type: "POST",
-            //    data: {
-            //        values: JSON.stringify(formData),
-            //        tipoAdelanto: tipoAdelanto
-            //    },
-            //    success: function (response) {
-            //        // Manejar la respuesta del servidor si es necesario
-            //        console.log("Guardado exitoso");
-            //    },
-            //    error: function (xhr, status, error) {
-            //        // Manejar el error si ocurre
-                    
-            //        console.error(error);
-                    
-            //    }
-            //});
-        }
+   
      
 </script>
 

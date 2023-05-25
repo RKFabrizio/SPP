@@ -4,5 +4,126 @@
     Layout = "~/Views/Shared/_LayoutApp.cshtml";
 }
 
-<h1>PendienteAprobar</h1>
+<style>
+    .user-icon-container {
+        display: flex;
+        align-items: center;
+    }
 
+        .user-icon-container .icon-tabler {
+            margin-right: 10px;
+            width: 50px;
+            height: 50px;
+        }
+
+        .user-icon-container .page-title {
+            margin-left: -4px;
+        }
+
+    .page-title {
+        color: #a79a66;
+    }
+
+</style>
+
+@section PagePreTitle{
+
+    <div class="col">
+        <!-- Page pre-title -->
+        <div class="user-icon-container">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user-circle" viewBox="0 0 24 24" stroke-width="1" stroke="#a79a66" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                <circle cx="12" cy="12" r="9" />
+                <circle cx="12" cy="10" r="3" />
+                <path d="M6.168 18.849a4 4 0 0 1 3.832 -2.849h4a4 4 0 0 1 3.834 2.855" />
+            </svg>
+            <h2 class="page-title">
+                Pendientes de Aprobación
+            </h2>
+        </div>
+    </div>
+}
+
+@section PageActions{
+
+
+}
+
+@(Html.DevExtreme().DataGrid<SPP.Models.Entity.Pago>()
+    .DataSource(ds => ds.Mvc()
+        .Controller("PagoPendienteAprobacion")
+        .LoadAction("Get")
+        .Key("IdPago")
+    )
+    .RemoteOperations(true)
+    .Columns(columns => {
+
+        columns.AddFor(m => m.IdPago).Caption("Nro de Solicitud");
+
+        columns.AddFor(m => m.IdTipoAdelanto).Lookup(lookup => lookup
+            .DataSource(ds => ds.WebApi().Controller("PagoPendienteAprobacion").LoadAction("TipoAdelantosLookup").Key("Value"))
+            .ValueExpr("Value")
+            .DisplayExpr("Text")
+        ).Caption("Tipo de Solicitud");
+
+        columns.AddFor(m => m.IdProveedor).Lookup(lookup => lookup
+            .DataSource(ds => ds.WebApi().Controller("PagoPendienteAprobacion").LoadAction("ProveedoresLookup").Key("Value"))
+            .ValueExpr("Value")
+            .DisplayExpr("Text")
+        ).Caption("Proveedor");
+
+        columns.AddFor(m => m.IdTipoMoneda).Lookup(lookup => lookup
+            .DataSource(ds => ds.WebApi().Controller("PagoPendienteAprobacion").LoadAction("TipoMonedasLookup").Key("Value"))
+            .ValueExpr("Value")
+            .DisplayExpr("Text")
+        ).Caption("Tipo Moneda");
+
+        columns.AddFor(m => m.Importe);
+
+        columns.AddFor(m => m.Concepto);
+
+        columns.AddFor(m => m.LoginSolicitante).Lookup(lookup => lookup
+            .DataSource(ds => ds.WebApi().Controller("PagoPendienteAprobacion").LoadAction("UsuariosLookup").Key("Value"))
+            .ValueExpr("Value")
+            .DisplayExpr("Text")
+        ).Caption("Solicitante");
+
+        columns.AddFor(m => m.LoginAprobador).Lookup(lookup => lookup
+            .DataSource(ds => ds.WebApi().Controller("PagoPendienteAprobacion").LoadAction("AprobadorAreasLookup").Key("Value"))
+            .ValueExpr("Value")
+            .DisplayExpr("Text")
+        ).Caption("Aprobador");
+
+        columns.AddFor(m => m.IdEstado).Lookup(lookup => lookup
+            .DataSource(ds => ds.WebApi().Controller("PagoPendienteAprobacion").LoadAction("EstadosLookup").Key("Value"))
+                .ValueExpr("Value")
+                .DisplayExpr("Text")
+            ).Caption("Estado");
+        
+        columns.AddFor(m => m.IdTipoPago).Lookup(lookup => lookup
+            .DataSource(ds => ds.WebApi().Controller("PagoPendienteAprobacion").LoadAction("TipoPagosLookup").Key("Value"))
+            .ValueExpr("Value")
+            .DisplayExpr("Text")
+        ).HidingPriority(7).Caption("Tipo Pago");
+
+        columns.AddFor(m => m.Observaciones).HidingPriority(1);
+
+        columns.AddFor(m => m.InformacionContable).HidingPriority(2).Caption("Información Contable");
+
+        columns.AddFor(m => m.CuentaBancaria).HidingPriority(3).Caption("Cuenta Bancaria");
+
+        columns.AddFor(m => m.BeneficiarioNombre).HidingPriority(4).Caption("Beneficiario Nombre");
+
+        columns.AddFor(m => m.IdBanco).Lookup(lookup => lookup
+            .DataSource(ds => ds.WebApi().Controller("PagoPendienteAprobacion").LoadAction("BancosLookup").Key("Value"))
+            .ValueExpr("Value")
+            .DisplayExpr("Text")
+        ).HidingPriority(5).Caption("Banco");
+
+        columns.AddFor(m => m.IdTipoCuenta).Lookup(lookup => lookup
+            .DataSource(ds => ds.WebApi().Controller("PagoPendienteAprobacion").LoadAction("TipoCuentasLookup").Key("Value"))
+            .ValueExpr("Value")
+            .DisplayExpr("Text")
+        ).HidingPriority(6).Caption("Tipo Cuenta");
+    })
+)

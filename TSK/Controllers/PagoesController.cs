@@ -11,6 +11,8 @@ using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using SPP.Models.Entity;
+using NuGet.Protocol;
+
 
 namespace TSK.Controllers
 {
@@ -19,12 +21,17 @@ namespace TSK.Controllers
     {
         private SPPEU2GIGDEVSQLContext _context;
 
+        public int monto = 0;
+
         public PagoesController(SPPEU2GIGDEVSQLContext context) {
             _context = context;
         }
 
+
+
         [HttpGet]
         public async Task<IActionResult> Get(DataSourceLoadOptions loadOptions) {
+
             var pagos = _context.Pagos.Select(i => new {
                 i.IdPago,
                 i.IdTipoAdelanto,
@@ -60,14 +67,16 @@ namespace TSK.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Post(string values) {
-            var model = new Pago();
-            var valuesDict = JsonConvert.DeserializeObject<IDictionary>(values);
-            PopulateModel(model, valuesDict);
+        public async Task<IActionResult> Post(Pago model)
+        {
+            // Realiza las operaciones necesarias con el objeto "model"
 
-            if(!TryValidateModel(model))
+            Console.WriteLine(model.ToJson());
+            // Valida el modelo
+            if (!TryValidateModel(model))
                 return BadRequest(GetFullErrorMessage(ModelState));
 
+            // Agrega el modelo a la base de datos
             var result = _context.Pagos.Add(model);
             await _context.SaveChangesAsync();
 
@@ -133,26 +142,49 @@ namespace TSK.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> UsuariosLookup(DataSourceLoadOptions loadOptions) {
-            var lookup = from i in _context.Usuarios
-                         orderby i.Nombre
-                         select new {
-                             Value = i.IdUsuario,
-                             Text = i.Nombre
-                         };
-            return Json(await DataSourceLoader.LoadAsync(lookup, loadOptions));
+        public async Task<IActionResult> UsuariosLookup(DataSourceLoadOptions loadOptions)
+        {
+            // Obtener la información del usuario actual
+            string usuarioInfoJson = HttpContext.Request.Cookies["UsuarioInfo"];
+            if (!string.IsNullOrEmpty(usuarioInfoJson))
+            {
+                Usuario usuarioActual = JsonConvert.DeserializeObject<Usuario>(usuarioInfoJson);
+                int idUsuario = usuarioActual.IdUsuario;  // Aquí obtenemos el IdUsuario
+
+                var lookup = from i in _context.Usuarios
+                             where i.IdUsuario == idUsuario  // Filtrar por IdUsuario
+                             orderby i.Nombre
+                             select new
+                             {
+                                 Value = i.IdUsuario,
+                                 Text = i.Nombre
+                             };
+                return Json(await DataSourceLoader.LoadAsync(lookup, loadOptions));
+            }
+            else
+            {
+                // Si no hay información del usuario en la cookie, puedes manejarlo de la manera que prefieras.
+                // Por ejemplo, podrías redirigir al usuario a la página de inicio de sesión.
+                return RedirectToAction("Login", "Acceso");
+            }
         }
 
         [HttpGet]
-        public async Task<IActionResult> AprobadorAreasLookup(DataSourceLoadOptions loadOptions) {
+        public async Task<IActionResult> AprobadorAreasLookup(DataSourceLoadOptions loadOptions)
+        {
             var lookup = from i in _context.AprobadorAreas
-                         orderby i.IdArea
-                         select new {
-                             Value = i.IdAprobador,
-                             Text = i.IdArea
+                         join u in _context.Usuarios on i.IdUsuario equals u.IdUsuario
+                         group i by new { i.IdUsuario, u.Nombre, u.Apellido } into g
+                         select new
+                         {
+                             Value = g.First().IdAprobador,
+                             Text = g.Key.Nombre + g.Key.Apellido
                          };
+
             return Json(await DataSourceLoader.LoadAsync(lookup, loadOptions));
         }
+
+
 
         [HttpGet]
         public async Task<IActionResult> TipoPagosLookup(DataSourceLoadOptions loadOptions) {

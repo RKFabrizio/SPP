@@ -28,12 +28,11 @@ namespace TSK.Controllers
             if (usuario != null && usuario.Habilitado)
             {
                 var claims = new List<Claim>
-                {
-                    new Claim(ClaimTypes.Name, usuario.Nombre),
-                    new Claim("Usuario", usuario.Login),
-                    new Claim("NOMBREPERFIL", usuario.Perfiles[0])
-
-                };
+        {
+            new Claim(ClaimTypes.Name, usuario.Nombre),
+            new Claim("Usuario", usuario.Login),
+            new Claim("NOMBREPERFIL", usuario.Perfiles[0])
+        };
 
                 foreach (string per in usuario.Perfiles)
                 {
@@ -47,6 +46,10 @@ namespace TSK.Controllers
 
                 await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, claimsPrincipal);
 
+                // Aquí es donde se guarda la información del usuario en una cookie
+                string usuarioInfoJson = JsonConvert.SerializeObject(usuario);
+                var cookieOptions = new CookieOptions() { IsEssential = true };
+                HttpContext.Response.Cookies.Append("UsuarioInfo", usuarioInfoJson, cookieOptions);
 
                 return RedirectToAction("Bienvenida", "Inicio");
             }
