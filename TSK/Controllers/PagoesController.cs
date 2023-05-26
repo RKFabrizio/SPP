@@ -193,21 +193,21 @@ namespace TSK.Controllers
         {
             var lookup = from i in _context.AprobadorAreas
                          join u in _context.Usuarios on i.IdUsuario equals u.IdUsuario
-                         group i by new { i.IdUsuario, u.Nombre, u.Apellido } into g
+                         group new { i, u } by i.IdUsuario into g
                          select new
                          {
-                             Value = g.First().IdAprobador,
-                             Text = g.Key.Nombre + g.Key.Apellido
+                             Value = g.First().i.IdAprobador,
+                             Text = g.First().u.Nombre + " " + g.First().u.Apellido
                          };
 
             return Json(await DataSourceLoader.LoadAsync(lookup, loadOptions));
         }
 
 
-
         [HttpGet]
         public async Task<IActionResult> TipoPagosLookup(DataSourceLoadOptions loadOptions) {
             var lookup = from i in _context.TipoPagos
+                         where i.IdTipoPago != 0
                          orderby i.TipoPago
                          select new {
                              Value = i.IdTipoPago,
@@ -230,6 +230,7 @@ namespace TSK.Controllers
         [HttpGet]
         public async Task<IActionResult> BancosLookup(DataSourceLoadOptions loadOptions) {
             var lookup = from i in _context.Bancos
+                         where i.IdBanco != 0
                          orderby i.NombreBanco
                          select new {
                              Value = i.IdBanco,
@@ -241,6 +242,7 @@ namespace TSK.Controllers
         [HttpGet]
         public async Task<IActionResult> TipoCuentasLookup(DataSourceLoadOptions loadOptions) {
             var lookup = from i in _context.TipoCuentas
+                         where i.IdTipoCuenta != 0
                          orderby i.TipoCuenta
                          select new {
                              Value = i.IdTipoCuenta,

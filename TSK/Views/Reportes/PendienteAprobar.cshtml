@@ -126,4 +126,21 @@
             .DisplayExpr("Text")
         ).HidingPriority(6).Caption("Tipo Cuenta");
     })
+     .ShowBorders(true)
+            .AllowColumnReordering(true)
+            .RowAlternationEnabled(false)
+            .ShowColumnLines(true)
+            .ShowRowLines(true)
+            .Paging(paging => paging.PageSize(20))
+            .FilterRow(f => f.Visible(true))
+            .Pager(pager =>
+            {
+                pager.ShowPageSizeSelector(true);
+                pager.AllowedPageSizes(new[] { 20, 50, 100 });
+                pager.ShowInfo(true);
+            })
+            .SearchPanel(s => s
+                .Visible(true)
+                .HighlightCaseSensitive(true)
+            )
 )

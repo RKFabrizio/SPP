@@ -117,6 +117,8 @@
 
         columns.AddFor(m => m.BeneficiarioNombre).HidingPriority(4).Caption("Beneficiario Nombre");
 
+        columns.AddFor(m => m.BeneficiarioDni).HidingPriority(8).Caption("Beneficiario Dni");
+
         columns.AddFor(m => m.IdBanco).Lookup(lookup => lookup
             .DataSource(ds => ds.WebApi().Controller("PagoMiSolicitud").LoadAction("BancosLookup").Key("Value"))
             .ValueExpr("Value")

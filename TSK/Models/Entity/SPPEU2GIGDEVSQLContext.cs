@@ -486,7 +486,7 @@ namespace SPP.Models.Entity
                    .HasColumnName("BENEFICIARIODNI");
 
                 entity.Property(e => e.CuentaBancaria)
-                  .IsRequired()
+                  .IsRequired(false)
                   .HasMaxLength(50)
                   .HasColumnName("CUENTABANCARIA");
 

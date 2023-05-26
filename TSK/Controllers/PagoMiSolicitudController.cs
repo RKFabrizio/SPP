@@ -34,7 +34,7 @@ namespace TSK.Controllers
                 int idUsuario = usuario.IdUsuario;  // Aquí obtenemos el IdUsuario
 
                 var pagos = _context.Pagos
-                    .Where(p => p.LoginSolicitante == idUsuario)  // Filtrar por LoginSolicitante
+                    .Where(p => p.LoginSolicitante == idUsuario && ( p.IdEstado == 2 || p.IdEstado == 3 ))  // Filtrar por LoginSolicitante
                     .Select(i => new {
                         i.IdPago,
                         i.IdTipoAdelanto,
