@@ -11,6 +11,8 @@ namespace SPP.Models.Entity
             EnvioCorreos = new HashSet<EnvioCorreo>();
 
         }
+
+        [Display(Name = "Número de Solicitud")]
         public int IdPago { get; set; }
         public int IdTipoAdelanto { get; set; }
         public int IdProveedor { get; set; }

@@ -154,24 +154,21 @@
                     items.AddSimpleFor(m => m.Concepto).ColSpan(2)
                     .Editor(e => e.TextArea().Height("50px"));
 
+                    items.AddSimpleFor(m => m.InformacionContable).ColSpan(2)
+                    .Editor(e => e.TextArea().Height("50px"));
+
                     items.AddSimpleFor(m => m.Observaciones).ColSpan(2)
                     .Editor(e => e.TextArea().Height("50px"));
 
-                   @* items.AddSimpleFor(m => m.LoginSolicitante) // NO LO TOMA
-                    .Label(l => l.Text("Solicitante:"))
-                    .Editor(e => e.TextBox()
-                    .Value(JsonConvert.DeserializeObject<Usuario>(User?.FindFirst("UsuarioInfo")?.Value)?.Nombre)
-                    .ReadOnly(true));*@
-
                        items.AddSimpleFor(m => m.LoginSolicitante)
-                .Label(l => l.Text("Solicitante:"))
-                .Editor(e => e.SelectBox()
-                .DataSource(d => d.Mvc()
-                .Controller("Pagoes")
-                .LoadAction("UsuariosLookup"))
-                .DisplayExpr("Text")
-                .ValueExpr("Value")
-                );
+                    .Label(l => l.Text("Solicitante:"))
+                    .Editor(e => e.SelectBox()
+                    .DataSource(d => d.Mvc()
+                    .Controller("Pagoes")
+                    .LoadAction("UsuariosLookup"))
+                    .DisplayExpr("Text")
+                    .ValueExpr("Value")
+                    );
 
                     items.AddSimpleFor(m => m.LoginAprobador) // LO TOMA
                     .Label(l => l.Text("Aprobador (Monto max. Aprobación):"))
@@ -195,16 +192,19 @@
     }
 }
 
-@using (Html.DevExtreme().NamedTemplate("TAB2"))
+
+    @using (Html.BeginForm("Post", "Pagoes", FormMethod.Post))
 {
-    <div class="container">
-        @(
-        Html.DevExtreme().Form<SPP.Models.Entity.Pago>()
+    @using (Html.DevExtreme().NamedTemplate("TAB2"))
+    {
+        <div class="container">
+            @(
+                Html.DevExtreme().Form<SPP.Models.Entity.Pago>()
 
                 .ColCount(2)
                 .Items(items =>
                 {
-                     items.AddSimpleFor(m => m.IdTipoAdelanto)
+                    items.AddSimpleFor(m => m.IdTipoAdelanto)
                     .Label(l => l.Text("Tipo de Solicitud:"))
                     .Editor(e => e.SelectBox()
                     .DataSource(d => d.Mvc()
@@ -240,11 +240,15 @@
                     .ValueExpr("Value")
 
                     );
+
                     items.AddSimpleFor(m => m.Importe)
-                    .Editor(e => e.NumberBox().ID("importeEditor"));
+                    .Editor(e => e.NumberBox().ID("importeEditor")
+                   @* .OnValueChanged("onImporteValueChanged")*@);
 
                     items.AddSimpleFor(m => m.Concepto).ColSpan(2)
                     .Editor(e => e.TextArea().Height("50px"));
+
+
 
                     items.AddGroup().Caption("Datos de Pago").Items(paymentDataItems =>
                     {
@@ -283,47 +287,73 @@
                     .ValueExpr("Value")
                     );
 
-                        items.AddSimpleFor(m => m.CuentaBancaria).ColSpan(2);
+                     items.AddSimpleFor(m => m.CuentaBancaria).ColSpan(2);
 
                     }).ColSpan(2);
+
+                    items.AddSimpleFor(m => m.InformacionContable).ColSpan(2)
+                    .Editor(e => e.TextArea().Height("50px"));
 
                     items.AddSimpleFor(m => m.Observaciones).ColSpan(2)
                     .Editor(e => e.TextArea().Height("50px"));
 
-                    @*  items.AddSimpleFor(m => m.LoginSolicitante)
-                .Label(l => l.Text("Solicitante:"))
-                .Editor(e => e.TextBox()
-                .Value(JsonConvert.DeserializeObject<Usuario>(User?.FindFirst("UsuarioInfo")?.Value)?.Nombre)
-                .ReadOnly(true));*@
+                    items.AddSimpleFor(m => m.LoginSolicitante)
+                    .Label(l => l.Text("Solicitante:"))
+                    .Editor(e => e.SelectBox()
+                    .DataSource(d => d.Mvc()
+                    .Controller("Pagoes")
+                    .LoadAction("UsuariosLookup"))
+                    .DisplayExpr("Text")
+                    .ValueExpr("Value")
+                    );
 
-                 items.AddSimpleFor(m => m.LoginSolicitante)
-                .Label(l => l.Text("Solicitante:"))
-                .Editor(e => e.SelectBox()
-                .DataSource(d => d.Mvc()
-                .Controller("Pagoes")
-                .LoadAction("UsuariosLookup"))
-                .DisplayExpr("Text")
-                .ValueExpr("Value")
-                );
-
-                items.AddSimpleFor(m => m.LoginAprobador)
-                .Label(l => l.Text("Aprobador (Monto max. Aprobación):"))
-                .Editor(e => e.SelectBox()
-                .DataSource(d => d.Mvc()
-                .Controller("Pagoes")
-                .LoadAction("AprobadorAreasLookup"))
-                .DisplayExpr("Text")
-                .ValueExpr("Value")
-                );
-            })
-            )
+                    items.AddSimpleFor(m => m.LoginAprobador)
+                    .Label(l => l.Text("Aprobador (Monto max. Aprobación):"))
+                    .Editor(e => e.SelectBox().ID("loginAprobadorBox")
+                    .DataSource(d => d.Mvc()
+                    .Controller("Pagoes")
+                    .LoadAction("AprobadorAreasLookup"))
+                    .DisplayExpr("Text")
+                    .ValueExpr("Value")
+                    );
+                })
+                )
 
 
-    </div>
+        </div>
+    }
 }
 
+
 <script>
-   
+    $(function () {
+        // Inicializar el cuadro de texto del importe
+        $("#importeTextBox").dxTextBox({
+            onValueChanged: function (e) {
+                // Cuando el valor del importe cambia, actualizar el filtro del dataSource del SelectBox
+                var selectBox = $("#aprobadorSelectBox").dxSelectBox("instance");
+                selectBox.getDataSource().filter(["MontoMaximo", ">=", e.value]);
+                selectBox.getDataSource().load();
+            }
+        });
+
+        // Inicializar el SelectBox del aprobador
+        $("#aprobadorSelectBox").dxSelectBox({
+            dataSource: new DevExpress.data.DataSource({
+                store: new DevExpress.data.ODataStore({
+                    url: "/Pagoes/AprobadorAreasLookup",
+                    key: "IdAprobador"
+                }),
+
+                filter: ["MontoMaximo", ">=", $("#importeTextBox").dxTextBox("instance").option("value")],
+                paginate: true,
+                pageSize: 10
+            }),
+            valueExpr: "IdAprobador",
+            displayExpr: "Nombre"
+        });
+    });
+
      
 </script>
 

@@ -189,8 +189,9 @@ namespace TSK.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> AprobadorAreasLookup(DataSourceLoadOptions loadOptions)
+        public async Task<IActionResult> AprobadorAreasLookup(DataSourceLoadOptions loadOptions, decimal? importe)
         {
+            System.Console.WriteLine(importe);
             var lookup = from i in _context.AprobadorAreas
                          join u in _context.Usuarios on i.IdUsuario equals u.IdUsuario
                          group new { i, u } by i.IdUsuario into g
@@ -202,6 +203,7 @@ namespace TSK.Controllers
 
             return Json(await DataSourceLoader.LoadAsync(lookup, loadOptions));
         }
+
 
 
         [HttpGet]

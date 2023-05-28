@@ -45,8 +45,12 @@
 }
 
 @section PageActions{
-
-
+    @(Html.DevExtreme().CheckBox()
+            .ID("filterCheckbox")
+            .Text("Filtrar por país")
+            .Value(true)
+            .OnValueChanged("filterCheckboxValueChanged")
+        )
 }
 
 
@@ -79,7 +83,12 @@
             .DisplayExpr("Text")
         ).Caption("Tipo Moneda");
 
-        columns.AddFor(m => m.Importe);
+        columns.AddFor(m => m.Importe)
+        .DataField("Importe")
+        .DataType(GridColumnDataType.Number)
+        .Format("{0:F2}")
+        .Caption("Importe");
+
 
         columns.AddFor(m => m.Concepto);
 
@@ -147,4 +156,13 @@
                 .Visible(true)
                 .HighlightCaseSensitive(true)
             )
+
 )
+
+
+<script>
+    function filterCheckboxValueChanged(e) {
+        var dataGrid = $("#gridContainer").dxDataGrid("instance");
+        dataGrid.refresh();
+    }
+</script>
