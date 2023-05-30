@@ -58,25 +58,23 @@
     .RemoteOperations(true)
     .Columns(columns =>
     {
-
-        columns.AddFor(m => m.IdAprobador);
-
         columns.AddFor(m => m.IdArea).Lookup(lookup => lookup
-            .DataSource(ds => ds.WebApi().Controller("Aprobador_Area").LoadAction("UsuariosLookup").Key("Value"))
-            .ValueExpr("Value")
-            .DisplayExpr("Text")
-        );
-
-        columns.AddFor(m => m.IdUsuario).Lookup(lookup => lookup
             .DataSource(ds => ds.WebApi().Controller("Aprobador_Area").LoadAction("AreasLookup").Key("Value"))
             .ValueExpr("Value")
             .DisplayExpr("Text")
-        );
+        ).GroupIndex(0).Caption("Area");
+
+        columns.AddFor(m => m.IdUsuario).Lookup(lookup => lookup
+            .DataSource(ds => ds.WebApi().Controller("Aprobador_Area").LoadAction("UsuariosLookup").Key("Value"))
+            .ValueExpr("Value")
+            .DisplayExpr("Text")
+        ).Caption("Usuario");
     })
     .ShowBorders(true)
             .AllowColumnReordering(true)
             .RowAlternationEnabled(false)
             .ShowColumnLines(true)
+            .Grouping(g => g.AutoExpandAll(false))
             .ShowRowLines(true)
             .Paging(paging => paging.PageSize(20))
             .FilterRow(f => f.Visible(true))

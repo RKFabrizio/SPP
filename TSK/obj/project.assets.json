@@ -13633,18 +13633,18 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\fabri\\OneDrive\\Escritorio\\GitMain\\TSK\\TSK.csproj",
+      "projectUniqueName": "C:\\Users\\fabri\\OneDrive\\Escritorio\\GitMainx2\\TSK\\TSK.csproj",
       "projectName": "TSK",
-      "projectPath": "C:\\Users\\fabri\\OneDrive\\Escritorio\\GitMain\\TSK\\TSK.csproj",
+      "projectPath": "C:\\Users\\fabri\\OneDrive\\Escritorio\\GitMainx2\\TSK\\TSK.csproj",
       "packagesPath": "C:\\Users\\fabri\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\fabri\\OneDrive\\Escritorio\\GitMain\\TSK\\obj\\",
+      "outputPath": "C:\\Users\\fabri\\OneDrive\\Escritorio\\GitMainx2\\TSK\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files\\DevExpress 22.1\\Components\\Offline Packages",
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
       ],
       "configFilePaths": [
-        "C:\\Users\\fabri\\OneDrive\\Escritorio\\GitMain\\NuGet.Config",
+        "C:\\Users\\fabri\\OneDrive\\Escritorio\\GitMainx2\\NuGet.Config",
         "C:\\Users\\fabri\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\DevExpress 22.1.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",

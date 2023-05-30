@@ -75,6 +75,7 @@
             .RowAlternationEnabled(false)
             .ShowColumnLines(true)
             .ShowRowLines(true)
+                        .Grouping(g => g.AutoExpandAll(false))
             .Paging(paging => paging.PageSize(20))
             .FilterRow(f => f.Visible(true))
             .Pager(pager =>

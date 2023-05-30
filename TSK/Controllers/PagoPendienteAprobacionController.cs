@@ -149,18 +149,21 @@ namespace TSK.Controllers
                          orderby i.Nombre
                          select new {
                              Value = i.IdUsuario,
-                             Text = i.Nombre
+                             Text = i.Nombre + " " + i.Apellido
                          };
             return Json(await DataSourceLoader.LoadAsync(lookup, loadOptions));
         }
 
         [HttpGet]
-        public async Task<IActionResult> AprobadorAreasLookup(DataSourceLoadOptions loadOptions) {
+        public async Task<IActionResult> AprobadorAreasLookup(DataSourceLoadOptions loadOptions)
+        {
             var lookup = from i in _context.AprobadorAreas
-                         orderby i.IdArea
-                         select new {
+                         join u in _context.Usuarios on i.IdUsuario equals u.IdUsuario
+                         orderby i.IdUsuario
+                         select new
+                         {
                              Value = i.IdAprobador,
-                             Text = i.IdArea
+                             Text = u.Nombre + " " + u.Apellido// Aquí estamos seleccionando el nombre del usuario
                          };
             return Json(await DataSourceLoader.LoadAsync(lookup, loadOptions));
         }

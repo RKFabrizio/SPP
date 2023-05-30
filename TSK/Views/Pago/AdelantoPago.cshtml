@@ -105,51 +105,109 @@
         <div class="container">
 
             @(
-                Html.DevExtreme().Form<SPP.Models.Entity.Pago>()
+        Html.DevExtreme().Form<SPP.Models.Entity.Pago>()
 
-                .ColCount(2)
-                .Items(items =>
-                {
-                    items.AddSimpleFor(m => m.IdTipoAdelanto)
-                    .Label(l => l.Text("Tipo de Solicitud:"))
-                    .Editor(e => e.SelectBox()
-                    .DataSource(d => d.Mvc()
-                    .Controller("Pagoes")
-                    .LoadAction("TipoAdelantos1Lookup"))
-                    .DisplayExpr("Text")
-                    .ValueExpr("Value")
+                    .ColCount(2)
+                    .Items(items =>
+                    {
+                        items.AddSimpleFor(m => m.IdTipoAdelanto)
+                        .Label(l => l.Text("Tipo de Solicitud:"))
+                        .Editor(e => e.SelectBox()
+                        .DataSource(d => d.Mvc()
+                        .Controller("Pagoes")
+                        .LoadAction("TipoAdelantos1Lookup"))
+                        .DisplayExpr("Text")
+                        .ValueExpr("Value")
 
-                    ).ColSpan(2);
+                        ).ColSpan(2);
 
-                    items.AddSimpleFor(m => m.IdProveedor)
-                    .Label(l => l.Text("Nombre de Proveedor y/o Beneficiario:"))
-                    .Editor(e => e.SelectBox()
-                    .DataSource(d => d.Mvc()
-                    .Controller("Pagoes")
-                    .LoadAction("ProveedoresLookup"))
-                    .DisplayExpr("Text")
-                    .ValueExpr("Value")
-                    .SearchEnabled(true)
-                    ).ColSpan(2);
+                        items.AddSimpleFor(m => m.IdProveedor)
+                        .Label(l => l.Text("Nombre de Proveedor y/o Beneficiario:"))
+                        .Editor(e => e.SelectBox()
+                        .DataSource(d => d.Mvc()
+                        .Controller("Pagoes")
+                        .LoadAction("ProveedoresLookup"))
+                        .DisplayExpr("Text")
+                        .ValueExpr("Value")
+                        .SearchEnabled(true)
+                        ).ColSpan(2);
 
-                    items.AddSimpleFor(m => m.FechaSolicitud)
-                    .ColSpan(2)
-                    .Label(l => l.Text("Fecha y Hora:"))
-                    .Editor(e => e.DateBox());
+                        items.AddSimpleFor(m => m.FechaSolicitud)
+                        .ColSpan(2)
+                        .Label(l => l.Text("Fecha y Hora:"))
+                        .Editor(e => e.DateBox());
 
-                    items.AddSimpleFor(m => m.IdTipoMoneda)
-                    .Label(l => l.Text("Moneda:"))
-                    .Editor(e => e.SelectBox()
-                    .DataSource(d => d.Mvc()
-                    .Controller("Pagoes")
-                    .LoadAction("TipoMonedasLookup"))
-                    .DisplayExpr("Text")
-                    .ValueExpr("Value")
+                        items.AddSimpleFor(m => m.Importe)
+                        .Editor(e => e.NumberBox().ID("importeEditor"));
 
-                    );
+                        items.AddSimpleFor(m => m.IdTipoMoneda)
+                        .Label(l => l.Text("Moneda:"))
+                        .Editor(e => e.SelectBox()
+                        .DataSource(d => d.Mvc()
+                        .Controller("Pagoes")
+                        .LoadAction("TipoMonedasLookup"))
+                        .DisplayExpr("Text")
+                        .ValueExpr("Value")
 
-                    items.AddSimpleFor(m => m.Importe)
-                    .Editor(e => e.NumberBox().ID("importeEditor"));
+                        );
+
+                        items.AddButton()
+                        .HorizontalAlignment(HorizontalAlignment.Left)
+                        .ButtonOptions(b => b.Text("Enviar Importe")
+                        .Type(ButtonType.Default)
+                        .UseSubmitBehavior(true)
+                        ).ColSpan(2);
+
+                        items.AddSimple()
+                    .Label(l => l.Text("ReferenciaOC:"))
+                    .Template(
+                    @<text>
+                        @(
+                    Html.DevExtreme().FileUploader()
+                        .ID("fileUploaderRef")
+                        .Name("ReferenciaOC")
+                        .AllowedFileExtensions(new[] { ".txt", ".doc", ".docx", ".pdf" })
+                        .UploadMode(FileUploadMode.UseForm)
+                        .UploadUrl(Url.Action("UploadRef", "FileManagment"))
+                        .ShowFileList(true)
+                        .Multiple(true)
+                        )
+                        </text>
+                        ).ColSpan(2);
+
+                        items.AddSimple()
+                    .Label(l => l.Text("Proformacotizacion:"))
+                    .Template(
+                    @<text>
+                        @(
+                    Html.DevExtreme().FileUploader()
+                        .ID("fileUploaderProforma")
+                        .Name("Proformacotizacion")
+                        .AllowedFileExtensions(new[] { ".txt", ".doc", ".docx", ".pdf" })
+                        .UploadMode(FileUploadMode.UseForm)
+                        .UploadUrl(Url.Action("UploadProforma", "FileManagment"))
+                        .ShowFileList(true)
+                        .Multiple(true)
+                        )
+                        </text>
+                        ).ColSpan(2);
+
+                        items.AddSimple()
+                    .Label(l => l.Text("Factura:"))
+                    .Template(
+                    @<text>
+                        @(
+                    Html.DevExtreme().FileUploader()
+                        .ID("fileUploaderFactura")
+                        .Name("Factura")
+                        .AllowedFileExtensions(new[] { ".txt", ".doc", ".docx", ".pdf" })
+                        .UploadMode(FileUploadMode.UseForm)
+                        .UploadUrl(Url.Action("UploadFactura", "FileManagment"))
+                        .ShowFileList(true)
+                        .Multiple(true)
+                        )
+                        </text>
+                        ).ColSpan(2); 
 
                     items.AddSimpleFor(m => m.Concepto).ColSpan(2)
                     .Editor(e => e.TextArea().Height("50px"));
@@ -353,6 +411,25 @@
             displayExpr: "Nombre"
         });
     });
+
+
+    $(document).ready(function() {
+    $('#id_del_boton').click(function() {
+        var importe = $('#id_del_campo_importe').val();
+
+        $.ajax({
+            url: '/Pagoes/AprobadorAreasLookup',
+            type: 'GET',
+            data: { importe: importe },
+            success: function(response) {
+                // Haz algo con la respuesta aquí, si es necesario
+            },
+            error: function(error) {
+                // Maneja cualquier error aquí
+            }
+        });
+    });
+});
 
      
 </script>

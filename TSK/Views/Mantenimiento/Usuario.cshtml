@@ -49,7 +49,16 @@
 
 }
 
+<div style="text-align: right;">
+    @(Html.DevExtreme().CheckBox()
+        .Text("Mostrar todos los usuarios")
+        .ElementAttr(new { style = "margin-right: 15px; font-size: 15px; margin-bottom: 10px; margin-top:10px; font-weight:bold;" })
+        .OnValueChanged("toggleFilter")
+        )
+</div>
+
 @(Html.DevExtreme().DataGrid<SPP.Models.Entity.Usuario>()
+    .ID("grid1")
     .DataSource(ds => ds.Mvc()
         .Controller("Usuarios")
         .LoadAction("Get")
@@ -58,6 +67,7 @@
         .Key("IdUsuario")
     )
     .RemoteOperations(true)
+    .OnContentReady("applyDefaultFilter")
     .Columns(columns => {
 
         columns.AddFor(m => m.Login).Caption("Username").Width(200);
@@ -98,6 +108,7 @@
             .RowAlternationEnabled(false)
             .ShowColumnLines(true)
             .ShowRowLines(true)
+                        .Grouping(g => g.AutoExpandAll(false))
             .Paging(paging => paging.PageSize(20))
             .FilterRow(f => f.Visible(true))
             .Pager(pager =>
@@ -147,3 +158,31 @@
 
 
 )
+
+
+<script>
+    var defaultFilterApplied = false;
+
+    function applyDefaultFilter() {
+        if (!defaultFilterApplied) {
+            var grid = $("#grid1").dxDataGrid("instance");
+            grid.filter([
+                ["Habilitado", "=", true]
+            ]);
+            defaultFilterApplied = true;
+        }
+    }
+
+    function toggleFilter(e) {
+        var grid = $("#grid1").dxDataGrid("instance");
+
+        if (e.value) {
+            grid.clearFilter();
+        } else {
+            grid.filter([
+                ["Habilitado", "=", true]
+            ]);
+        }
+    }
+
+</script>

@@ -58,29 +58,32 @@
     .RemoteOperations(true)
     .Columns(columns => {
 
-        columns.AddFor(m => m.IdPago).Caption("Nro de Solicitud");
+        columns.AddFor(m => m.IdPago).Caption("Nro de Solicitud").Width(120);
 
         columns.AddFor(m => m.IdTipoAdelanto).Lookup(lookup => lookup
             .DataSource(ds => ds.WebApi().Controller("PagoPendienteAprobacion").LoadAction("TipoAdelantosLookup").Key("Value"))
             .ValueExpr("Value")
             .DisplayExpr("Text")
-        ).Caption("Tipo de Solicitud");
+        ).Caption("Tipo de Solicitud").Width(125);
 
         columns.AddFor(m => m.IdProveedor).Lookup(lookup => lookup
             .DataSource(ds => ds.WebApi().Controller("PagoPendienteAprobacion").LoadAction("ProveedoresLookup").Key("Value"))
             .ValueExpr("Value")
             .DisplayExpr("Text")
-        ).Caption("Proveedor");
+        ).Caption("Proveedor").Width(250);
 
         columns.AddFor(m => m.IdTipoMoneda).Lookup(lookup => lookup
             .DataSource(ds => ds.WebApi().Controller("PagoPendienteAprobacion").LoadAction("TipoMonedasLookup").Key("Value"))
             .ValueExpr("Value")
             .DisplayExpr("Text")
-        ).Caption("Tipo Moneda");
+        ).Caption("Moneda").Width(80);
 
-        columns.AddFor(m => m.Importe);
+        columns.AddFor(m => m.Importe).Caption("Importe").DataType(GridColumnDataType.Number).Format(c => c
+            .Type(Format.FixedPoint)
+            .Precision(2)
+        ).Width(120);
 
-        columns.AddFor(m => m.Concepto);
+        columns.AddFor(m => m.Concepto).Width(200);
 
         columns.AddFor(m => m.LoginSolicitante).Lookup(lookup => lookup
             .DataSource(ds => ds.WebApi().Controller("PagoPendienteAprobacion").LoadAction("UsuariosLookup").Key("Value"))
@@ -104,7 +107,7 @@
             .DataSource(ds => ds.WebApi().Controller("PagoPendienteAprobacion").LoadAction("TipoPagosLookup").Key("Value"))
             .ValueExpr("Value")
             .DisplayExpr("Text")
-        ).HidingPriority(7).Caption("Tipo Pago");
+        ).HidingPriority(8).Caption("Tipo Pago");
 
         columns.AddFor(m => m.Observaciones).HidingPriority(1);
 

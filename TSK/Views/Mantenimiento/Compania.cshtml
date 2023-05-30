@@ -59,10 +59,31 @@
     .RemoteOperations(true)
     .Columns(columns => {
 
-        columns.AddFor(m => m.IdCompania);
+        columns.AddFor(m => m.NombreCompania).Caption("Nombre de la Compañia");
 
-        columns.AddFor(m => m.NombreCompania);
-
-        columns.AddFor(m => m.IdPais);
+        columns.AddFor(m => m.IdPais).Lookup(lookup => lookup
+           .DataSource(ds => ds.WebApi().Controller("Companias").LoadAction("PaisesLookup").Key("Value"))
+           .ValueExpr("Value")
+           .DisplayExpr("Text")
+        ).Caption("País");
     })
+
+    .ShowBorders(true)
+    .AllowColumnReordering(true)
+    .RowAlternationEnabled(false)
+    .ShowColumnLines(true)
+    .ShowRowLines(true)
+                .Grouping(g => g.AutoExpandAll(false))
+    .Paging(paging => paging.PageSize(20))
+    .FilterRow(f => f.Visible(true))
+    .Pager(pager =>
+    {
+        pager.ShowPageSizeSelector(true);
+        pager.AllowedPageSizes(new[] { 20, 50, 100 });
+        pager.ShowInfo(true);
+    })
+    .SearchPanel(s => s
+        .Visible(true)
+        .HighlightCaseSensitive(true)
+    )
 )

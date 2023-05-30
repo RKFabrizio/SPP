@@ -31,7 +31,8 @@ namespace TSK.Controllers
         {
             new Claim(ClaimTypes.Name, usuario.Nombre),
             new Claim("Usuario", usuario.Login),
-            new Claim("NOMBREPERFIL", usuario.Perfiles[0])
+            new Claim("NOMBREPERFIL", usuario.Perfiles[0]),
+            new Claim("IdCompania", usuario.IdCompania.ToString())
         };
 
                 foreach (string per in usuario.Perfiles)

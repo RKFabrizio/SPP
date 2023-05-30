@@ -22,12 +22,11 @@ namespace TSK.Controllers
         public PagoAdminController(SPPEU2GIGDEVSQLContext context) {
             _context = context;
         }
-
         [HttpGet]
         public async Task<IActionResult> Get(DataSourceLoadOptions loadOptions)
         {
             var pagos = _context.Pagos
-                                .OrderByDescending(i => i.IdPago) 
+                                .OrderByDescending(i => i.IdPago)  // Ordenar por IdPago de manera descendente
                                 .Select(i => new {
                                     i.IdPago,
                                     i.IdTipoAdelanto,
@@ -52,12 +51,6 @@ namespace TSK.Controllers
                                     i.IdBanco,
                                     i.IdTipoCuenta
                                 });
-
-            // If underlying data is a large SQL table, specify PrimaryKey and PaginateViaPrimaryKey.
-            // This can make SQL execution plans more efficient.
-            // For more detailed information, please refer to this discussion: https://github.com/DevExpress/DevExtreme.AspNet.Data/issues/336.
-            // loadOptions.PrimaryKey = new[] { "IdPago" };
-            // loadOptions.PaginateViaPrimaryKey = true;
 
             return Json(await DataSourceLoader.LoadAsync(pagos, loadOptions));
         }
