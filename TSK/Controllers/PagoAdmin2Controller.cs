@@ -23,70 +23,61 @@ namespace TSK.Controllers
             _context = context;
         }
 
+
         [HttpGet]
         public async Task<IActionResult> Get(DataSourceLoadOptions loadOptions)
         {
+            // Obtener la información del usuario actual
             string usuarioInfoJson = HttpContext.Request.Cookies["UsuarioInfo"];
             if (!string.IsNullOrEmpty(usuarioInfoJson))
             {
                 Usuario usuario = JsonConvert.DeserializeObject<Usuario>(usuarioInfoJson);
-                int idCompania1 = usuario.IdCompania;  // Aquí obtenemos el IdCompania del usuario
+                int idUsuario = usuario.IdUsuario;  // Aquí obtenemos el IdUsuario
+                int? idPais1 = usuario.IdPais;  // Aquí obtenemos el IdPais
 
-                // Obtén el IdPais de la compañía del usuario actual
-                var idPaisActual = _context.Companias
-                    .Where(c => c.IdCompania == idCompania1)
-                    .Select(c => c.IdPais)
-                    .SingleOrDefault();
-
-                Console.WriteLine(idPaisActual);
-
-                // Obtén todos los pagos donde el IdPais del solicitante es igual al IdPais del usuario actual
                 var pagos = _context.Pagos
-                    .Join(
-                        _context.Usuarios,  // la tabla con la que unir
-                        pago => pago.LoginSolicitante,  // la clave externa en la tabla de pagos
-                        usuario => usuario.IdUsuario,  // la clave principal en la tabla de usuarios
-                        (pago, usuario) => new { Pago = pago, Usuario = usuario }  // los resultados de la unión
-                    )
-                    .Join(
-                        _context.Companias,
-                        result => result.Usuario.IdCompania,  // la clave externa en los resultados de la unión anterior
-                        compania => compania.IdCompania,  // la clave principal en la tabla de compañías
-                        (result, compania) => new { Pago = result.Pago, Usuario = result.Usuario, Compania = compania }  // los resultados de la unión
-                    )
-                    .Where(result => result.Compania.IdPais == idPaisActual)
-                    .Select(result => new {
-                        result.Pago.IdPago,
-                        result.Pago.IdTipoAdelanto,
-                        result.Pago.IdProveedor,
-                        result.Pago.FechaSolicitud,
-                        result.Pago.IdTipoMoneda,
-                        result.Pago.Importe,
-                        result.Pago.Concepto,
-                        result.Pago.LoginSolicitante,
-                        result.Pago.LoginAprobador,
-                        result.Pago.ReferenciaOC,
-                        result.Pago.ProformaCotizacion,
-                        result.Pago.Factura,
-                        result.Pago.IdTipoPago,
-                        result.Pago.Observaciones,
-                        result.Pago.FechaAprobacion,
-                        result.Pago.IdEstado,
-                        result.Pago.InformacionContable,
-                        result.Pago.CuentaBancaria,
-                        result.Pago.BeneficiarioNombre,
-                        result.Pago.BeneficiarioDni,
-                        result.Pago.IdBanco,
-                        result.Pago.IdTipoCuenta
+                    .Join(_context.Usuarios,  // Tabla a la que nos unimos
+                          p => p.LoginSolicitante,  // Propiedad en la tabla principal (Pagos)
+                          u => u.IdUsuario,  // Propiedad en la tabla de unión (Usuarios)
+                          (p, u) => new { Pago = p, Usuario = u })  // Resultado de la unión
+                    .Where(pu => pu.Usuario.IdPais == idPais1 )  // Filtrar por LoginSolicitante y IdPais
+                    .Select(i => new {
+                        i.Pago.IdPago,
+                        i.Pago.IdTipoAdelanto,
+                        i.Pago.IdProveedor,
+                        i.Pago.FechaSolicitud,
+                        i.Pago.IdTipoMoneda,
+                        i.Pago.Importe,
+                        i.Pago.Concepto,
+                        i.Pago.LoginSolicitante,
+                        i.Pago.LoginAprobador,
+                        i.Pago.ReferenciaOC,
+                        i.Pago.ProformaCotizacion,
+                        i.Pago.Factura,
+                        i.Pago.IdTipoPago,
+                        i.Pago.Observaciones,
+                        i.Pago.FechaAprobacion,
+                        i.Pago.IdEstado,
+                        i.Pago.InformacionContable,
+                        i.Pago.CuentaBancaria,
+                        i.Pago.BeneficiarioNombre,
+                        i.Pago.BeneficiarioDni,
+                        i.Pago.IdBanco,
+                        i.Pago.IdTipoCuenta
                     });
 
                 return Json(await DataSourceLoader.LoadAsync(pagos, loadOptions));
             }
             else
             {
+                // Si no hay información del usuario en la cookie, puedes manejarlo de la manera que prefieras.
+                // Por ejemplo, podrías redirigir al usuario a la página de inicio de sesión.
                 return RedirectToAction("Login", "Acceso");
             }
         }
+
+
+
 
 
         [HttpPost]

@@ -25,7 +25,9 @@ namespace TSK.Controllers
 
         [HttpGet]
         public async Task<IActionResult> Get(DataSourceLoadOptions loadOptions) {
-            var aprobadorareas = _context.AprobadorAreas.Select(i => new {
+            var aprobadorareas = _context.AprobadorAreas
+                .Where(i => i.IdArea != 0)
+                .Select(i => new {
                 i.IdAprobador,
                 i.IdArea,
                 i.IdUsuario
@@ -86,7 +88,7 @@ namespace TSK.Controllers
                          orderby i.Nombre
                          select new {
                              Value = i.IdUsuario,
-                             Text = i.Nombre
+                             Text = i.Nombre +  "  " + i.Apellido
                          };
             return Json(await DataSourceLoader.LoadAsync(lookup, loadOptions));
         }

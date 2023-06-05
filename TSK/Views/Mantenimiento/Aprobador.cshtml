@@ -48,16 +48,23 @@
 
 
 }
+ 
+
+ 
+
+
+
 
 @(Html.DevExtreme().DataGrid<SPP.Models.Entity.Aprobador_Area>()
     .DataSource(ds => ds.Mvc()
         .Controller("Aprobador_Area")
         .LoadAction("Get")
+        .InsertAction("Post")
         .Key("IdAprobador")
     )
     .RemoteOperations(true)
-    .Columns(columns =>
-    {
+    .Columns(columns => {
+
         columns.AddFor(m => m.IdArea).Lookup(lookup => lookup
             .DataSource(ds => ds.WebApi().Controller("Aprobador_Area").LoadAction("AreasLookup").Key("Value"))
             .ValueExpr("Value")
@@ -88,14 +95,15 @@
                 .Visible(true)
                 .HighlightCaseSensitive(true)
             )
-            .Editing(e => e.Mode(GridEditMode.Popup)
+     .Editing(e => e.Mode(GridEditMode.Popup)
                     .AllowUpdating(true)
+                    .AllowAdding(true)
                     .UseIcons(true)
                     .Popup(p => p
-                        .Title("Usuario")
+                        .Title("Aprobador - Usuario")
                         .ShowTitle(true)
                         .Width("70%")
-                        .Height(300)
+                        .Height(200)
                     )
 
                     .Form(f => f.Items(items =>
@@ -105,16 +113,11 @@
                             .ColSpan(2)
                             .Items(groupItems =>
                             {
-                                groupItems.AddSimpleFor(m => m.IdUsuario);
                                 groupItems.AddSimpleFor(m => m.IdArea);
+                                groupItems.AddSimpleFor(m => m.IdUsuario);
+
                             });
                     }))
 
                 )
 )
-
- 
-
-
-
-

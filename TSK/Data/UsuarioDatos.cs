@@ -38,6 +38,7 @@ namespace SPP.Data
                             Habilitado = dr["HABILITADO"] == DBNull.Value ? false : Convert.ToBoolean(dr["HABILITADO"]),
                             Companias = new string[] { dr["NOMBRECOMPANIA"].ToString() },
                             Token = dr["TOKEN"].ToString(),
+                            IdPais = dr["IDPAIS"] == DBNull.Value ? 0 : Convert.ToInt32(dr["IDPAIS"]),
                         });
 
                     }

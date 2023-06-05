@@ -37,7 +37,8 @@ namespace TSK.Controllers
                 i.IdArea,
                 i.Habilitado,
                 i.Token,
-                i.IdCompania
+                i.IdCompania,
+                i.IdPais
             });
 
             // If underlying data is a large SQL table, specify PrimaryKey and PaginateViaPrimaryKey.
@@ -135,14 +136,13 @@ namespace TSK.Controllers
             string HABILITADO = nameof(Usuario.Habilitado);
             string TOKEN = nameof(Usuario.Token);
             string ID_COMPANIA = nameof(Usuario.IdCompania);
+            string ID_PAIS = nameof(Usuario.IdPais);
 
-            if (values.Contains(ID_USUARIO) && values[ID_USUARIO] != DBNull.Value)
-            {
+            if(values.Contains(ID_USUARIO)) {
                 model.IdUsuario = Convert.ToInt32(values[ID_USUARIO]);
             }
 
-
-            if (values.Contains(NOMBRE)) {
+            if(values.Contains(NOMBRE)) {
                 model.Nombre = Convert.ToString(values[NOMBRE]);
             }
 
@@ -170,26 +170,32 @@ namespace TSK.Controllers
                 model.IdPerfil = Convert.ToInt32(values[ID_PERFIL]);
             }
 
-            if (values.Contains(ID_AREA) && values[ID_AREA] != DBNull.Value)
-            {
-                model.IdArea = Convert.ToInt32(values[ID_AREA]);
-            }
-            else
-            {
-                model.IdArea = null;
+            if(values.Contains(ID_AREA)) {
+                model.IdArea = values[ID_AREA] != null ? Convert.ToInt32(values[ID_AREA]) : (int?)null;
             }
 
-
-            if (values.Contains(HABILITADO)) {
+            if(values.Contains(HABILITADO)) {
                 model.Habilitado = Convert.ToBoolean(values[HABILITADO]);
             }
 
-            if(values.Contains(TOKEN)) {
+            if (values.Contains(TOKEN) && values[TOKEN] != null && values[TOKEN] != DBNull.Value)
+            {
                 model.Token = Convert.ToString(values[TOKEN]);
             }
+            else
+            {
+                model.Token = null;
+            }
 
-            if(values.Contains(ID_COMPANIA)) {
+
+
+
+            if (values.Contains(ID_COMPANIA)) {
                 model.IdCompania = Convert.ToInt32(values[ID_COMPANIA]);
+            }
+
+            if(values.Contains(ID_PAIS)) {
+                model.IdPais = values[ID_PAIS] != null ? Convert.ToInt32(values[ID_PAIS]) : (int?)null;
             }
         }
 

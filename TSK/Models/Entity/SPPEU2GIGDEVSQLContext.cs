@@ -215,7 +215,6 @@ namespace SPP.Models.Entity
                 entity.ToTable("USUARIO");
 
                 entity.Property(e => e.IdUsuario)
-                    .HasMaxLength(50)
                     .HasColumnName("IDUSUARIO");
 
                 entity.Property(e => e.Nombre)
@@ -251,9 +250,14 @@ namespace SPP.Models.Entity
                 entity.Property(e => e.Habilitado).HasColumnName("HABILITADO");
 
                 entity.Property(e => e.Token)
-                    .HasMaxLength(250)
-                    .IsUnicode(false)
-                    .HasColumnName("TOKEN");
+                   .IsRequired(false)
+                   .HasMaxLength(50)
+                   .HasColumnName("TOKEN");
+
+
+                entity.Property(e => e.IdPais)
+                   .IsRequired(false)
+                   .HasColumnName("IDPAIS");
 
                 entity.HasOne(d => d.PerfilDisNavigation)
                     .WithMany(p => p.Usuarios)

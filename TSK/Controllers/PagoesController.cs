@@ -12,6 +12,11 @@ using System.Linq;
 using System.Threading.Tasks;
 using SPP.Models.Entity;
 using NuGet.Protocol;
+using System.Net.Mail;
+using System.Web;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using Newtonsoft.Json.Linq;
+using System.Net;
 
 
 namespace TSK.Controllers
@@ -21,7 +26,6 @@ namespace TSK.Controllers
     {
         private SPPEU2GIGDEVSQLContext _context;
 
-        public int monto = 0;
 
         public PagoesController(SPPEU2GIGDEVSQLContext context) {
             _context = context;
@@ -76,9 +80,42 @@ namespace TSK.Controllers
             if (!TryValidateModel(model))
                 return BadRequest(GetFullErrorMessage(ModelState));
 
+
             // Agrega el modelo a la base de datos
             var result = _context.Pagos.Add(model);
+
+
             await _context.SaveChangesAsync();
+            string correo_emisor = "leedryk@gmail.com";
+            string clave_emisor = "xxrlviitjlpqytrj";
+
+            MailAddress receptor = new("fabriziosebastianbusiness@gmail.com");
+            MailAddress emisor = new("leedryk@gmail.com");
+
+            MailMessage email = new MailMessage(emisor, receptor);
+            email.Subject = "Pruebas para SPP";
+
+            string body = "<h1>Bienvenido a nuestra página</h1>";
+            body += "<p>Para activar su cuenta, haga clic en el botón de abajo:</p>";
+            body += "<a href='http://localhost:8000/' style='background-color: blue; color: white; padding: 10px 20px; text-align: center; text-decoration: none; display: inline-block;'>Activar cuenta</a>";
+            body += $"<p>IdTipoAdelanto: {model.IdTipoAdelanto}</p>";
+            body += $"<p>IdProveedor: {model.IdProveedor}</p>";
+            body += $"<p>FechaSolicitud: {model.IdPago}</p>";
+            body += $"<p>Importe: {model.Importe}</p>";
+
+            email.Body = body;
+            email.IsBodyHtml = true;  // Indicate that the email body is HTML
+
+            SmtpClient smtp = new();
+            smtp.Host = "smtp.gmail.com";
+            smtp.Port = 587;
+            smtp.Credentials = new NetworkCredential(correo_emisor, clave_emisor);
+            smtp.DeliveryMethod = SmtpDeliveryMethod.Network;
+            smtp.EnableSsl = true;
+
+            smtp.Send(email);
+
+
 
             return Json(new { result.Entity.IdPago });
         }
@@ -189,8 +226,9 @@ namespace TSK.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> AprobadorAreasLookup(DataSourceLoadOptions loadOptions, decimal? importe)
+        public async Task<IActionResult> AprobadorAreasLookup([FromQuery] DataSourceLoadOptions loadOptions, [FromQuery] int importe)
         {
+            Console.WriteLine("HOLAAA" + importe);
             System.Console.WriteLine(importe);
             var lookup = from i in _context.AprobadorAreas
                          join u in _context.Usuarios on i.IdUsuario equals u.IdUsuario

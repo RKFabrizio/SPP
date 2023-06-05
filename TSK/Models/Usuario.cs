@@ -28,6 +28,7 @@ namespace SPP.Models
 
         public string Token { get; set; }
 
+        public int IdPais { get; set; }
 
         public string[] Perfiles { get; set; }
         public string[] Companias { get; set; }

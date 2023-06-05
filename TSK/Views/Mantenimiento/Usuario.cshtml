@@ -49,13 +49,7 @@
 
 }
 
-<div style="text-align: right;">
-    @(Html.DevExtreme().CheckBox()
-        .Text("Mostrar todos los usuarios")
-        .ElementAttr(new { style = "margin-right: 15px; font-size: 15px; margin-bottom: 10px; margin-top:10px; font-weight:bold;" })
-        .OnValueChanged("toggleFilter")
-        )
-</div>
+
 
 @(Html.DevExtreme().DataGrid<SPP.Models.Entity.Usuario>()
     .ID("grid1")
@@ -101,6 +95,7 @@
         ).Caption("Compañia").Visible(false);
 
         columns.AddFor(m => m.Habilitado).Caption("Estado").Width(200);
+        
 
     })
     .ShowBorders(true)
@@ -108,7 +103,7 @@
             .RowAlternationEnabled(false)
             .ShowColumnLines(true)
             .ShowRowLines(true)
-                        .Grouping(g => g.AutoExpandAll(false))
+                       .Grouping(g => g.AutoExpandAll(false))
             .Paging(paging => paging.PageSize(20))
             .FilterRow(f => f.Visible(true))
             .Pager(pager =>
@@ -129,7 +124,7 @@
                         .Title("Usuario")
                         .ShowTitle(true)
                         .Width("70%")
-                        .Height(430)
+                        .Height(450)
                     )
 
                     .Form(f => f.Items(items =>
@@ -161,28 +156,20 @@
 
 
 <script>
-    var defaultFilterApplied = false;
 
-    function applyDefaultFilter() {
-        if (!defaultFilterApplied) {
-            var grid = $("#grid1").dxDataGrid("instance");
-            grid.filter([
-                ["Habilitado", "=", true]
-            ]);
-            defaultFilterApplied = true;
-        }
+    function applyDefaultFilter(e) {
+    e.component.filter(['Habilitado', '=', true]);
     }
 
     function toggleFilter(e) {
-        var grid = $("#grid1").dxDataGrid("instance");
+        let grid = $("#grid1").dxDataGrid("instance");
 
         if (e.value) {
             grid.clearFilter();
         } else {
-            grid.filter([
-                ["Habilitado", "=", true]
-            ]);
+            grid.filter(["Habilitado", "=", true]);
         }
     }
+
 
 </script>
