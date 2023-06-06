@@ -98,14 +98,14 @@
 @using (Html.DevExtreme().NamedTemplate("TAB1"))
 {
 
-    @using (Html.BeginForm("Post", "Pagoes", FormMethod.Post))
+    @using(Html.BeginForm("Post", "Pagoes", FormMethod.Post, new { enctype = "multipart/form-data" }))
     {
 
         //  @Html.HiddenFor(m => m.IdUsuario)
    
         <div class="container">
 
-            @(
+        @(
         Html.DevExtreme().Form<SPP.Models.Entity.Pago>()
                             .ColCount(2)
                             .Items(items =>
@@ -135,108 +135,100 @@
                                 items.AddSimpleFor(m => m.FechaSolicitud)
                                 .ColSpan(2)
                                 .Label(l => l.Text("Fecha y Hora:"))
-                                .Editor(e => e.DateBox());
-
-                            items.AddSimpleFor(m => m.Importe);
-
-                            items.AddSimpleFor(m => m.IdTipoMoneda)
-                            .Label(l => l.Text("Moneda:"))
-                            .Editor(e => e.SelectBox()
-                            .DataSource(d => d.Mvc()
-                            .Controller("Pagoes")
-                            .LoadAction("TipoMonedasLookup"))
-                            .DisplayExpr("Text")
-                            .ValueExpr("Value")
-
-                            );
-
-                        items.AddSimple()
-                    .Label(l => l.Text("ReferenciaOC:"))
-                    .Template(
-                    @<text>
-                        @(
-                    Html.DevExtreme().FileUploader()
-                        .ID("fileUploaderRef")
-                        .Name("ReferenciaOC")
-                        .AllowedFileExtensions(new[] { ".txt", ".doc", ".docx", ".pdf" })
-                        .UploadMode(FileUploadMode.UseForm)
-                        .UploadUrl(Url.Action("UploadRef", "FileManagment"))
-                        .ShowFileList(true)
-                        .Multiple(true)
-                        )
-                        </text>
-                        ).ColSpan(2);
-
-                        items.AddSimple()
-                    .Label(l => l.Text("Proformacotizacion:"))
-                    .Template(
-                    @<text>
-                        @(
-                    Html.DevExtreme().FileUploader()
-                        .ID("fileUploaderProforma")
-                        .Name("Proformacotizacion")
-                        .AllowedFileExtensions(new[] { ".txt", ".doc", ".docx", ".pdf" })
-                        .UploadMode(FileUploadMode.UseForm)
-                        .UploadUrl(Url.Action("UploadProforma", "FileManagment"))
-                        .ShowFileList(true)
-                        .Multiple(true)
-                        )
-                        </text>
-                        ).ColSpan(2);
-
-                        items.AddSimple()
-                    .Label(l => l.Text("Factura:"))
-                    .Template(
-                    @<text>
-                        @(
-                    Html.DevExtreme().FileUploader()
-                        .ID("fileUploaderFactura")
-                        .Name("Factura")
-                        .AllowedFileExtensions(new[] { ".txt", ".doc", ".docx", ".pdf" })
-                        .UploadMode(FileUploadMode.UseForm)
-                        .UploadUrl(Url.Action("UploadFactura", "FileManagment"))
-                        .ShowFileList(true)
-                        .Multiple(true)
-                        )
-                        </text>
-                        ).ColSpan(2); 
-
-                    items.AddSimpleFor(m => m.Concepto).ColSpan(2)
-                    .Editor(e => e.TextArea().Height("50px"));
-
-                    items.AddSimpleFor(m => m.InformacionContable).ColSpan(2)
-                    .Editor(e => e.TextArea().Height("50px"));
-
-                    items.AddSimpleFor(m => m.Observaciones).ColSpan(2)
-                    .Editor(e => e.TextArea().Height("50px"));
-
-                       items.AddSimpleFor(m => m.LoginSolicitante)
-                    .Label(l => l.Text("Solicitante:"))
-                    .Editor(e => e.SelectBox()
-                    .DataSource(d => d.Mvc()
-                    .Controller("Pagoes")
-                    .LoadAction("UsuariosLookup"))
-                    .DisplayExpr("Text")
-                    .ValueExpr("Value")
-                    );
-
-                        items.AddSimpleFor(m => m.LoginAprobador)
-                    .Label(l => l.Text("Aprobador (Monto max. Aprobación):"))
-                    .Editor(e => e.SelectBox()
-                    .DataSource(d=> d.Mvc()
-                    .Controller("Pagoes")
-                    .LoadAction("AprobadorAreasLookup"))
-                    .DisplayExpr("Text")
-                    .ValueExpr("Value")
-                    );
+                                .Editor(e => e.DateBox()
+                                .Value(DateTime.Now)
+                                .Disabled(true));
 
 
-                    items.AddButton()
-                    .HorizontalAlignment(HorizontalAlignment.Left)
-                    .ButtonOptions(b => b.Text("Guardar")
-                    .Type(ButtonType.Default)
-                    .UseSubmitBehavior(true)
-                    );
+                                items.AddSimpleFor(m => m.Importe);
+
+                                items.AddSimpleFor(m => m.IdTipoMoneda)
+                                .Label(l => l.Text("Moneda:"))
+                                .Editor(e => e.SelectBox()
+                                .DataSource(d => d.Mvc()
+                                .Controller("Pagoes")
+                                .LoadAction("TipoMonedasLookup"))
+                                .DisplayExpr("Text")
+                                .ValueExpr("Value")
+
+                                );
+
+                                items.AddSimple()
+                                .Label(l => l.Text("ReferenciaOC:"))
+                                .Template(
+                                @<text>
+                                    @(
+                                Html.DevExtreme().FileUploader()
+                                    .ID("fileUploaderRef")
+                                    .Name("ReferenciaOC")
+                                    .AllowedFileExtensions(new[] { ".txt", ".doc", ".docx", ".pdf" })
+                                    .UploadMode(FileUploadMode.UseForm)
+                                    .UploadUrl(Url.Action("UploadRef", "FileManagment"))
+                                    .ShowFileList(true)
+                                    .Multiple(true)
+                                    )
+                                    </text>
+                                    ).ColSpan(2);
+
+                                items.AddSimple()
+                                .Label(l => l.Text("Proformacotizacion:"))
+                                .Template(
+                                @<text>
+                                    @(
+                                Html.DevExtreme().FileUploader()
+                                    .ID("fileUploaderProforma")
+                                    .Name("Proformacotizacion")
+                                    .AllowedFileExtensions(new[] { ".txt", ".doc", ".docx", ".pdf" })
+                                    .UploadMode(FileUploadMode.UseForm)
+                                    .UploadUrl(Url.Action("UploadProforma", "FileManagment"))
+                                    .ShowFileList(true)
+                                    .Multiple(true)
+                                    )
+                                    </text>
+                                    ).ColSpan(2);
+
+                                items.AddSimple()
+                                .Label(l => l.Text("Factura:"))
+                                .Template(
+                                @<text>
+                                    @(
+                                Html.DevExtreme().FileUploader()
+                                    .ID("fileUploaderFactura")
+                                    .Name("Factura")
+                                    .AllowedFileExtensions(new[] { ".txt", ".doc", ".docx", ".pdf" })
+                                    .UploadMode(FileUploadMode.UseForm)
+                                    .UploadUrl(Url.Action("UploadFactura", "FileManagment"))
+                                    .ShowFileList(true)
+                                    .Multiple(true)
+                                    )
+                                    </text>
+                                    ).ColSpan(2); 
+
+                                    items.AddSimpleFor(m => m.Concepto).ColSpan(2)
+                                    .Editor(e => e.TextArea().Height("50px"));
+
+                                    items.AddSimpleFor(m => m.InformacionContable).ColSpan(2)
+                                    .Editor(e => e.TextArea().Height("50px"));
+
+                                    items.AddSimpleFor(m => m.Observaciones).ColSpan(2)
+                                    .Editor(e => e.TextArea().Height("50px"));
+
+                                       items.AddSimpleFor(m => m.LoginSolicitante)
+                                    .Label(l => l.Text("Solicitante:"))
+                                    .Editor(e => e.SelectBox()
+                                    .DataSource(d => d.Mvc()
+                                    .Controller("Pagoes")
+                                    .LoadAction("UsuariosLookup"))
+                                    .DisplayExpr("Text")
+                                    .ValueExpr("Value")
+                                    ).ColSpan(2);
+
+                                    items.AddButton()
+                                    .HorizontalAlignment(HorizontalAlignment.Center)
+                                    .ButtonOptions(b => b.Text("Guardar")
+                                    .Type(ButtonType.Default)
+                                    .UseSubmitBehavior(true)
+                                    ).ColSpan(2);
                 })
                 )
         </div>
@@ -246,8 +238,44 @@
 
 
 <script>
-  
-     
-</script>
 
+    $(document).ready(function () {
+        $('form').on('submit', function (e) {
+            e.preventDefault();
+
+            var form = $(this);
+            var url = form.attr('action');
+
+            // Desactivar el botón de envío
+            form.find(':submit').prop('disabled', true);
+
+            $.ajax({
+                type: 'POST',
+                url: url,
+                data: form.serialize(),
+                success: function (response) {
+                    // Aquí, "response" es el objeto JSON que devuelve tu controlador
+                    // En lugar de la alerta, mostramos el Toast
+                    DevExpress.ui.notify('Tu solicitud fue enviada exitosamente\nNro de Solicitud: ' + response.IdPago, 'success', 6000);
+
+                    // Reactivar el botón de envío
+                    form.find(':submit').prop('disabled', false);
+
+                    // Limpiar el formulario
+                    form[0].reset();
+                },
+                error: function () {
+                    // También puedes mostrar un Toast para los errores
+                    DevExpress.ui.notify('Hubo un error al enviar la solicitud.', 'error', 6000);
+
+                    // Reactivar el botón de envío
+                    form.find(':submit').prop('disabled', false);
+                }
+            });
+        });
+    });
+
+
+
+</script>
 

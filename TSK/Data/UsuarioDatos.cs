@@ -34,7 +34,7 @@ namespace SPP.Data
                             Correo = dr["CORREO"].ToString(),
                             MontoAprobacion = dr["MONTOAPROBACION"] == DBNull.Value ? 0 : Convert.ToInt32(dr["MONTOAPROBACION"]),
                             Perfiles = new string[] { dr["NOMBREPERFIL"].ToString() },
-                            Areas = new string[] { dr["NOMBREAREA"].ToString() },
+                            IdArea = dr["IDAREA"] == DBNull.Value ? 0 : Convert.ToInt32(dr["IDAREA"]),
                             Habilitado = dr["HABILITADO"] == DBNull.Value ? false : Convert.ToBoolean(dr["HABILITADO"]),
                             Companias = new string[] { dr["NOMBRECOMPANIA"].ToString() },
                             Token = dr["TOKEN"].ToString(),

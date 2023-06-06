@@ -17,6 +17,8 @@ using System.Web;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Newtonsoft.Json.Linq;
 using System.Net;
+using Microsoft.AspNetCore.Hosting;
+
 
 
 namespace TSK.Controllers
@@ -25,9 +27,12 @@ namespace TSK.Controllers
     public class PagoesController : Controller
     {
         private SPPEU2GIGDEVSQLContext _context;
+        private readonly IWebHostEnvironment _webHostEnvironment;
 
 
-        public PagoesController(SPPEU2GIGDEVSQLContext context) {
+        public PagoesController(IWebHostEnvironment webHostEnvironment, SPPEU2GIGDEVSQLContext context)
+        {
+            _webHostEnvironment = webHostEnvironment;
             _context = context;
         }
 
@@ -71,54 +76,148 @@ namespace TSK.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Post(Pago model)
+        public async Task<IActionResult> Post(Pago model, List<IFormFile> ReferenciaOC, List<IFormFile> Proformacotizacion, List<IFormFile> Factura)
         {
-            // Realiza las operaciones necesarias con el objeto "model"
 
-            Console.WriteLine(model.ToJson());
-            // Valida el modelo
-            if (!TryValidateModel(model))
-                return BadRequest(GetFullErrorMessage(ModelState));
+            // Guardar archivos PDF en una carpeta
+            string folderPath = Path.Combine(_webHostEnvironment.ContentRootPath, "Media");
 
+
+            if (!Directory.Exists(folderPath))
+            {
+                Directory.CreateDirectory(folderPath);
+            }
+
+
+            foreach (var file in ReferenciaOC)
+            {
+                string fileName = file.FileName;
+                string filePath = Path.Combine(folderPath, fileName);
+
+                using (var fileStream = new FileStream(filePath, FileMode.Create))
+                {
+                    await file.CopyToAsync(fileStream);
+                }
+
+                Console.WriteLine($"Archivo ReferenciaOC guardado: {filePath}");
+            }
+
+            foreach (var file in Proformacotizacion)
+            {
+                string fileName = file.FileName;
+                string filePath = Path.Combine(folderPath, fileName);
+
+                using (var fileStream = new FileStream(filePath, FileMode.Create))
+                {
+                    await file.CopyToAsync(fileStream);
+                }
+
+                Console.WriteLine($"Archivo Proformacotizacion guardado: {filePath}");
+            }
+
+            foreach (var file in Factura)
+            {
+                string fileName = file.FileName;
+                string filePath = Path.Combine(folderPath, fileName);
+
+                using (var fileStream = new FileStream(filePath, FileMode.Create))
+                {
+                    await file.CopyToAsync(fileStream);
+                }
+
+                Console.WriteLine($"Archivo Factura guardado: {filePath}");
+            }
+
+            if (model.LoginAprobador == 0)
+            {
+                model.LoginAprobador = 12;  // Valor por defecto
+            }
+
+            //// Realiza las operaciones necesarias con el objeto "model"
+            //Console.WriteLine(model.ToJson());
+
+            //// Valida el modelo
+            //if (!TryValidateModel(model))
+            //    return BadRequest(GetFullErrorMessage(ModelState));
+
+            //// Asigna la fecha y hora actuales a FechaSolicitud
+            //model.FechaSolicitud = DateTime.Now;
+
+            //string usuarioInfoJson = HttpContext.Request.Cookies["UsuarioInfo"];
+            //if (!string.IsNullOrEmpty(usuarioInfoJson))
+            //{
+            //    Usuario usuario = JsonConvert.DeserializeObject<Usuario>(usuarioInfoJson);
+            //    int? AreaUsuario = usuario.IdArea;
+
+            //    // Crea una consulta de unión para combinar la información de las tablas AprobadorArea y Usuarios
+            //    var aprobadoresArea = _context.AprobadorAreas
+            //        .Join(_context.Usuarios,
+            //            aprobador => aprobador.IdUsuario,
+            //            usuario => usuario.IdUsuario,
+            //            (aprobador, usuario) => new { Aprobador = aprobador, Usuario = usuario })
+            //        .Where(aprobadorUsuario => aprobadorUsuario.Aprobador.IdArea == AreaUsuario)
+            //        .ToList();
+
+            //    // Filtra la lista de aprobadores para encontrar el que tiene la mayor capacidad de aprobación
+            //    // que aún sea igual o menor al importe. Si no se encuentra ninguno, usa el IdAprobador = 49.
+            //    var aprobador = aprobadoresArea
+            //    .Where(aprobadorUsuario => aprobadorUsuario.Usuario.MontoAprobacion >= model.Importe)
+            //    .OrderBy(aprobadorUsuario => aprobadorUsuario.Usuario.MontoAprobacion)
+            //    .FirstOrDefault();
+
+
+            //    if (aprobador != null)
+            //    {
+            //        model.LoginAprobador = aprobador.Aprobador.IdUsuario;
+            //    }
+            //    else
+            //    {
+            //        model.LoginAprobador = 49; // Asigna el valor 49 si no se encuentra un aprobador adecuado.
+            //    }
+
+            //}
 
             // Agrega el modelo a la base de datos
             var result = _context.Pagos.Add(model);
 
+            //await _context.SaveChangesAsync();
+            //string correo_emisor = "leedryk@gmail.com";
+            //string clave_emisor = "xxrlviitjlpqytrj";
 
-            await _context.SaveChangesAsync();
-            string correo_emisor = "leedryk@gmail.com";
-            string clave_emisor = "xxrlviitjlpqytrj";
+            //MailAddress receptor = new("fabriziosebastianbusiness@gmail.com");
+            //MailAddress emisor = new("leedryk@gmail.com");
 
-            MailAddress receptor = new("fabriziosebastianbusiness@gmail.com");
-            MailAddress emisor = new("leedryk@gmail.com");
+            //MailMessage email = new MailMessage(emisor, receptor);
+            //email.Subject = "Pruebas para SPP";
 
-            MailMessage email = new MailMessage(emisor, receptor);
-            email.Subject = "Pruebas para SPP";
+            //string body = @"
+            //<div style='background-color: #F1F0E9; padding: 20px; width: 715px; text-align: center;'>
+            //<h2 style='font-weight: bold; font-size: 22px; color: #000000;'>SOLICITUD DE PAGO DE PROVEEDORES</h2>
+            //<div style='text-align: left; width: 666px; background: #F1F0E9; border: 2px solid #DDDAD2; padding: 10px;'>
+            //    <label style='font-size: 15px; color: #000000;'>Número de Solicitud:</label>
+            //    <br/>
+            //    <div style='border: 1px solid #A79A66; width: 301px; height: 20px;'>"
+            //        + model.IdPago +
+            //    @"</div>
+            //    </div>
+            //</div>";
 
-            string body = "<h1>Bienvenido a nuestra página</h1>";
-            body += "<p>Para activar su cuenta, haga clic en el botón de abajo:</p>";
-            body += "<a href='http://localhost:8000/' style='background-color: blue; color: white; padding: 10px 20px; text-align: center; text-decoration: none; display: inline-block;'>Activar cuenta</a>";
-            body += $"<p>IdTipoAdelanto: {model.IdTipoAdelanto}</p>";
-            body += $"<p>IdProveedor: {model.IdProveedor}</p>";
-            body += $"<p>FechaSolicitud: {model.IdPago}</p>";
-            body += $"<p>Importe: {model.Importe}</p>";
+            //email.Body = body;
+            //email.IsBodyHtml = true;  // Indicate that the email body is HTML
 
-            email.Body = body;
-            email.IsBodyHtml = true;  // Indicate that the email body is HTML
+            //SmtpClient smtp = new();
+            //smtp.Host = "smtp.gmail.com";
+            //smtp.Port = 587;
+            //smtp.Credentials = new NetworkCredential(correo_emisor, clave_emisor);
+            //smtp.DeliveryMethod = SmtpDeliveryMethod.Network;
+            //smtp.EnableSsl = true;
 
-            SmtpClient smtp = new();
-            smtp.Host = "smtp.gmail.com";
-            smtp.Port = 587;
-            smtp.Credentials = new NetworkCredential(correo_emisor, clave_emisor);
-            smtp.DeliveryMethod = SmtpDeliveryMethod.Network;
-            smtp.EnableSsl = true;
+            //smtp.Send(email);
 
-            smtp.Send(email);
-
-
-
+            //return Json(new { IdPago = result.Entity.IdPago });
             return Json(new { result.Entity.IdPago });
         }
+
 
         [HttpPut]
         public async Task<IActionResult> Put(int key, string values) {
@@ -241,6 +340,7 @@ namespace TSK.Controllers
 
             return Json(await DataSourceLoader.LoadAsync(lookup, loadOptions));
         }
+
 
 
 
