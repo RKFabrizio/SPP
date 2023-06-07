@@ -57,7 +57,7 @@
 
 @(Html.DevExtreme().DataGrid<SPP.Models.Entity.Aprobador_Area>()
     .DataSource(ds => ds.Mvc()
-        .Controller("Aprobador_Area")
+        .Controller("Aprobador_Area1")
         .LoadAction("Get")
         .InsertAction("Post")
         .Key("IdAprobador")
@@ -66,13 +66,13 @@
     .Columns(columns => {
 
         columns.AddFor(m => m.IdArea).Lookup(lookup => lookup
-            .DataSource(ds => ds.WebApi().Controller("Aprobador_Area").LoadAction("AreasLookup").Key("Value"))
+            .DataSource(ds => ds.WebApi().Controller("Aprobador_Area1").LoadAction("AreasLookup").Key("Value"))
             .ValueExpr("Value")
             .DisplayExpr("Text")
         ).GroupIndex(0).Caption("Area");
 
         columns.AddFor(m => m.IdUsuario).Lookup(lookup => lookup
-            .DataSource(ds => ds.WebApi().Controller("Aprobador_Area").LoadAction("UsuariosLookup").Key("Value"))
+            .DataSource(ds => ds.WebApi().Controller("Aprobador_Area1").LoadAction("UsuariosLookup").Key("Value"))
             .ValueExpr("Value")
             .DisplayExpr("Text")
         ).Caption("Usuario");

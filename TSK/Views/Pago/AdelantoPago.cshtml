@@ -98,11 +98,9 @@
 @using (Html.DevExtreme().NamedTemplate("TAB1"))
 {
 
-    @using(Html.BeginForm("Post", "Pagoes", FormMethod.Post, new { enctype = "multipart/form-data" }))
+    @using (Html.BeginForm("Post", "Pagoes", FormMethod.Post, new { enctype = "multipart/form-data" }))
     {
 
-        //  @Html.HiddenFor(m => m.IdUsuario)
-   
         <div class="container">
 
         @(
@@ -153,58 +151,58 @@
 
                                 );
 
-                                items.AddSimple()
-                                .Label(l => l.Text("ReferenciaOC:"))
-                                .Template(
-                                @<text>
-                                    @(
-                                Html.DevExtreme().FileUploader()
-                                    .ID("fileUploaderRef")
-                                    .Name("ReferenciaOC")
-                                    .AllowedFileExtensions(new[] { ".txt", ".doc", ".docx", ".pdf" })
-                                    .UploadMode(FileUploadMode.UseForm)
-                                    .UploadUrl(Url.Action("UploadRef", "FileManagment"))
-                                    .ShowFileList(true)
-                                    .Multiple(true)
-                                    )
-                                    </text>
+                                        items.AddSimple()
+                                    .Label(l => l.Text("ReferenciaOC:"))
+                                    .Template(
+                                    @<text>
+                                        @(
+                            Html.DevExtreme().FileUploader()
+                            .ID("fileUploaderRef")
+                            .Name("ReferenciaOC")
+                            .AllowedFileExtensions(new[] { ".txt", ".doc", ".docx", ".pdf" })
+                            .UploadMode(FileUploadMode.UseForm)
+                            .UploadUrl(Url.Action("UploadRef", "FileManagment"))
+                            .ShowFileList(true)
+                            .Multiple(true)
+                            )
+                                        </text>
                                     ).ColSpan(2);
 
-                                items.AddSimple()
-                                .Label(l => l.Text("Proformacotizacion:"))
-                                .Template(
-                                @<text>
-                                    @(
-                                Html.DevExtreme().FileUploader()
-                                    .ID("fileUploaderProforma")
-                                    .Name("Proformacotizacion")
-                                    .AllowedFileExtensions(new[] { ".txt", ".doc", ".docx", ".pdf" })
-                                    .UploadMode(FileUploadMode.UseForm)
-                                    .UploadUrl(Url.Action("UploadProforma", "FileManagment"))
-                                    .ShowFileList(true)
-                                    .Multiple(true)
-                                    )
-                                    </text>
+                                        items.AddSimple()
+                                    .Label(l => l.Text("Proformacotizacion:"))
+                                    .Template(
+                                    @<text>
+                                        @(
+                            Html.DevExtreme().FileUploader()
+                            .ID("fileUploaderProforma")
+                            .Name("Proformacotizacion")
+                            .AllowedFileExtensions(new[] { ".txt", ".doc", ".docx", ".pdf" })
+                            .UploadMode(FileUploadMode.UseForm)
+                            .UploadUrl(Url.Action("UploadProforma", "FileManagment"))
+                            .ShowFileList(true)
+                            .Multiple(true)
+                            )
+                                        </text>
                                     ).ColSpan(2);
 
-                                items.AddSimple()
-                                .Label(l => l.Text("Factura:"))
-                                .Template(
-                                @<text>
-                                    @(
-                                Html.DevExtreme().FileUploader()
-                                    .ID("fileUploaderFactura")
-                                    .Name("Factura")
-                                    .AllowedFileExtensions(new[] { ".txt", ".doc", ".docx", ".pdf" })
-                                    .UploadMode(FileUploadMode.UseForm)
-                                    .UploadUrl(Url.Action("UploadFactura", "FileManagment"))
-                                    .ShowFileList(true)
-                                    .Multiple(true)
-                                    )
-                                    </text>
-                                    ).ColSpan(2); 
+                                        items.AddSimple()
+                                    .Label(l => l.Text("Factura:"))
+                                    .Template(
+                                    @<text>
+                                        @(
+                            Html.DevExtreme().FileUploader()
+                            .ID("fileUploaderFactura")
+                            .Name("Factura")
+                            .AllowedFileExtensions(new[] { ".txt", ".doc", ".docx", ".pdf" })
+                            .UploadMode(FileUploadMode.UseForm)
+                            .UploadUrl(Url.Action("UploadFactura", "FileManagment"))
+                            .ShowFileList(true)
+                            .Multiple(true)
+                            )
+                                        </text>
+                ).ColSpan(2);
 
-                                    items.AddSimpleFor(m => m.Concepto).ColSpan(2)
+                        items.AddSimpleFor(m => m.Concepto).ColSpan(2)
                                     .Editor(e => e.TextArea().Height("50px"));
 
                                     items.AddSimpleFor(m => m.InformacionContable).ColSpan(2)
@@ -249,10 +247,14 @@
             // Desactivar el botón de envío
             form.find(':submit').prop('disabled', true);
 
+            var formData = new FormData(form[0]); // Construir objeto FormData
+
             $.ajax({
                 type: 'POST',
                 url: url,
-                data: form.serialize(),
+                data: formData,
+                processData: false, // Importante: desactivar la serialización automática de datos
+                contentType: false, // Importante: desactivar el encabezado Content-Type
                 success: function (response) {
                     // Aquí, "response" es el objeto JSON que devuelve tu controlador
                     // En lugar de la alerta, mostramos el Toast
@@ -274,6 +276,7 @@
             });
         });
     });
+
 
 
 

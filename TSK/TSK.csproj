@@ -44,7 +44,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Media\" />
+    <Folder Include="Mediaa\" />
   </ItemGroup>
   <ProjectExtensions>
     <VisualStudio>

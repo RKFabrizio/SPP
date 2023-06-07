@@ -12,7 +12,7 @@ namespace TSK.Controllers
     public class FileManagmentController : Controller
     {
 
-        private string _filesDirectory = @"C:\Users\esteb\Desktop\New folder\SPP\TSK\wwwroot\media\"; // Asegúrate de reemplazar este valor con el directorio de archivos en tu servidor.
+        private string _filesDirectory = @"C:\Users\esteb\Desktop\New folder\SPP\TSK\Mediaa\"; // Asegúrate de reemplazar este valor con el directorio de archivos en tu servidor.
 
         public ActionResult FileManagment()
         {
@@ -20,65 +20,68 @@ namespace TSK.Controllers
         }
 
         [HttpPost]
-        public ActionResult UploadRef(List<IFormFile> ReferenciaOC)
+        public async Task<IActionResult> UploadRef(List<IFormFile> ReferenciaOC)
         {
-            System.Console.WriteLine("Test111111111111111111111111111111111111111111");
             foreach (var file in ReferenciaOC)
             {
-                var filePath = Path.Combine(_filesDirectory, file.FileName);
-                using (var stream = new FileStream(filePath, FileMode.Create))
+                if (file.Length > 0)
                 {
-                    file.CopyTo(stream);
+                    string fileName = file.FileName;
+                    string filePath = Path.Combine("ruta_del_directorio_de_guardado", fileName); // Especifica la ruta donde deseas guardar los archivos adjuntos
+                    using (var stream = new FileStream(filePath, FileMode.Create))
+                    {
+                        await file.CopyToAsync(stream);
+                    }
                 }
             }
 
-            return Json(new { success = true });
+            // Realiza cualquier otra operación necesaria
+
+            return Ok();
         }
 
-
-
         [HttpPost]
-        public ActionResult UploadProforma(List<IFormFile> Proformacotizacion)
+        public async Task<IActionResult> UploadProforma(List<IFormFile> Proformacotizacion)
         {
             foreach (var file in Proformacotizacion)
             {
-                var filePath = Path.Combine(_filesDirectory, file.FileName);
-                using (var stream = new FileStream(filePath, FileMode.Create))
+                if (file.Length > 0)
                 {
-                    file.CopyTo(stream);
+                    string fileName = file.FileName;
+                    string filePath = Path.Combine("ruta_del_directorio_de_guardado", fileName); // Especifica la ruta donde deseas guardar los archivos adjuntos
+                    using (var stream = new FileStream(filePath, FileMode.Create))
+                    {
+                        await file.CopyToAsync(stream);
+                    }
                 }
             }
 
-            return Json(new { success = true });
+            // Realiza cualquier otra operación necesaria
+
+            return Ok();
         }
 
         [HttpPost]
-        public ActionResult UploadFactura(List<IFormFile> Factura)
+        public async Task<IActionResult> UploadFactura(List<IFormFile> Factura)
         {
             foreach (var file in Factura)
             {
-                var filePath = Path.Combine(_filesDirectory, file.FileName);
-                using (var stream = new FileStream(filePath, FileMode.Create))
+                if (file.Length > 0)
                 {
-                    file.CopyTo(stream);
+                    string fileName = file.FileName;
+                    string filePath = Path.Combine("ruta_del_directorio_de_guardado", fileName); // Especifica la ruta donde deseas guardar los archivos adjuntos
+                    using (var stream = new FileStream(filePath, FileMode.Create))
+                    {
+                        await file.CopyToAsync(stream);
+                    }
                 }
             }
 
-            return Json(new { success = true });
+            // Realiza cualquier otra operación necesaria
+
+            return Ok();
         }
 
-        [HttpPost]
-        public ActionResult DeleteFile(string fileName)
-        {
-            var filePath = Path.Combine(_filesDirectory, fileName);
-
-            if (System.IO.File.Exists(filePath))
-            {
-                System.IO.File.Delete(filePath);
-            }
-
-            return Json(new { success = true });
-        }
     }
 
 }

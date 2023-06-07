@@ -79,15 +79,14 @@ namespace TSK.Controllers
         public async Task<IActionResult> Post(Pago model, List<IFormFile> ReferenciaOC, List<IFormFile> Proformacotizacion, List<IFormFile> Factura)
         {
 
-            // Guardar archivos PDF en una carpeta
-            string folderPath = Path.Combine(_webHostEnvironment.ContentRootPath, "Media");
+
+            string folderPath = Path.Combine(_webHostEnvironment.ContentRootPath, "Mediaa");
 
 
             if (!Directory.Exists(folderPath))
             {
                 Directory.CreateDirectory(folderPath);
             }
-
 
             foreach (var file in ReferenciaOC)
             {
@@ -96,10 +95,11 @@ namespace TSK.Controllers
 
                 using (var fileStream = new FileStream(filePath, FileMode.Create))
                 {
-                    await file.CopyToAsync(fileStream);
+                    file.CopyTo(fileStream);
                 }
 
                 Console.WriteLine($"Archivo ReferenciaOC guardado: {filePath}");
+                model.ReferenciaOC = fileName;
             }
 
             foreach (var file in Proformacotizacion)
@@ -109,10 +109,11 @@ namespace TSK.Controllers
 
                 using (var fileStream = new FileStream(filePath, FileMode.Create))
                 {
-                    await file.CopyToAsync(fileStream);
+                    file.CopyTo(fileStream);
                 }
 
                 Console.WriteLine($"Archivo Proformacotizacion guardado: {filePath}");
+                model.ProformaCotizacion = fileName;
             }
 
             foreach (var file in Factura)
@@ -122,100 +123,116 @@ namespace TSK.Controllers
 
                 using (var fileStream = new FileStream(filePath, FileMode.Create))
                 {
-                    await file.CopyToAsync(fileStream);
+                    file.CopyTo(fileStream);
                 }
 
                 Console.WriteLine($"Archivo Factura guardado: {filePath}");
+                model.Factura = fileName;
             }
+
 
             if (model.LoginAprobador == 0)
             {
                 model.LoginAprobador = 12;  // Valor por defecto
             }
 
-            //// Realiza las operaciones necesarias con el objeto "model"
-            //Console.WriteLine(model.ToJson());
+            // Realiza las operaciones necesarias con el objeto "model"
+            Console.WriteLine(model.ToJson());
 
-            //// Valida el modelo
-            //if (!TryValidateModel(model))
-            //    return BadRequest(GetFullErrorMessage(ModelState));
+            // Valida el modelo
+            if (!TryValidateModel(model))
+                return BadRequest(GetFullErrorMessage(ModelState));
 
-            //// Asigna la fecha y hora actuales a FechaSolicitud
-            //model.FechaSolicitud = DateTime.Now;
+            // Asigna la fecha y hora actuales a FechaSolicitud
+            model.FechaSolicitud = DateTime.Now;
 
-            //string usuarioInfoJson = HttpContext.Request.Cookies["UsuarioInfo"];
-            //if (!string.IsNullOrEmpty(usuarioInfoJson))
-            //{
-            //    Usuario usuario = JsonConvert.DeserializeObject<Usuario>(usuarioInfoJson);
-            //    int? AreaUsuario = usuario.IdArea;
+            string usuarioInfoJson = HttpContext.Request.Cookies["UsuarioInfo"];
+            if (!string.IsNullOrEmpty(usuarioInfoJson))
+            {
+                Usuario usuario = JsonConvert.DeserializeObject<Usuario>(usuarioInfoJson);
+                int? AreaUsuario = usuario.IdArea;
 
-            //    // Crea una consulta de unión para combinar la información de las tablas AprobadorArea y Usuarios
-            //    var aprobadoresArea = _context.AprobadorAreas
-            //        .Join(_context.Usuarios,
-            //            aprobador => aprobador.IdUsuario,
-            //            usuario => usuario.IdUsuario,
-            //            (aprobador, usuario) => new { Aprobador = aprobador, Usuario = usuario })
-            //        .Where(aprobadorUsuario => aprobadorUsuario.Aprobador.IdArea == AreaUsuario)
-            //        .ToList();
+                // Crea una consulta de unión para combinar la información de las tablas AprobadorArea y Usuarios
+                var aprobadoresArea = _context.AprobadorAreas
+                    .Join(_context.Usuarios,
+                        aprobador => aprobador.IdUsuario,
+                        usuario => usuario.IdUsuario,
+                        (aprobador, usuario) => new { Aprobador = aprobador, Usuario = usuario })
+                    .Where(aprobadorUsuario => aprobadorUsuario.Aprobador.IdArea == AreaUsuario)
+                    .ToList();
 
-            //    // Filtra la lista de aprobadores para encontrar el que tiene la mayor capacidad de aprobación
-            //    // que aún sea igual o menor al importe. Si no se encuentra ninguno, usa el IdAprobador = 49.
-            //    var aprobador = aprobadoresArea
-            //    .Where(aprobadorUsuario => aprobadorUsuario.Usuario.MontoAprobacion >= model.Importe)
-            //    .OrderBy(aprobadorUsuario => aprobadorUsuario.Usuario.MontoAprobacion)
-            //    .FirstOrDefault();
+                // Filtra la lista de aprobadores para encontrar el que tiene la mayor capacidad de aprobación
+                // que aún sea igual o menor al importe. Si no se encuentra ninguno, usa el IdAprobador = 49.
+                var aprobador = aprobadoresArea
+                .Where(aprobadorUsuario => aprobadorUsuario.Usuario.MontoAprobacion >= model.Importe)
+                .OrderBy(aprobadorUsuario => aprobadorUsuario.Usuario.MontoAprobacion)
+                .FirstOrDefault();
 
 
-            //    if (aprobador != null)
-            //    {
-            //        model.LoginAprobador = aprobador.Aprobador.IdUsuario;
-            //    }
-            //    else
-            //    {
-            //        model.LoginAprobador = 49; // Asigna el valor 49 si no se encuentra un aprobador adecuado.
-            //    }
+                if (aprobador != null)
+                {
+                    model.LoginAprobador = aprobador.Aprobador.IdUsuario;
+                }
+                else
+                {
+                    model.LoginAprobador = 49; // Asigna el valor 49 si no se encuentra un aprobador adecuado.
+                }
 
-            //}
+            }
+
+            // Obtiene el ID del usuario aprobador
+            var aprobadorId = model.LoginAprobador;
+
+            // Busca al usuario aprobador en la base de datos
+            var aprobador1 = await _context.Usuarios.FindAsync(aprobadorId);
+
+            // Si el usuario aprobador no se encuentra en la base de datos, devuelve un error
+            if (aprobador1 == null)
+            {
+                return NotFound($"No se pudo encontrar un usuario con el ID {aprobadorId}");
+            }
+
+            // Obtiene el correo electrónico del usuario aprobador
+            var correoAprobador = aprobador1.Correo;
 
             // Agrega el modelo a la base de datos
             var result = _context.Pagos.Add(model);
 
-            //await _context.SaveChangesAsync();
-            //string correo_emisor = "leedryk@gmail.com";
-            //string clave_emisor = "xxrlviitjlpqytrj";
+            await _context.SaveChangesAsync();
+            string correo_emisor = "leedryk@gmail.com";
+            string clave_emisor = "xxrlviitjlpqytrj";
 
-            //MailAddress receptor = new("fabriziosebastianbusiness@gmail.com");
-            //MailAddress emisor = new("leedryk@gmail.com");
+            MailAddress receptor = new(correoAprobador);
+            MailAddress emisor = new("leedryk@gmail.com");
 
-            //MailMessage email = new MailMessage(emisor, receptor);
-            //email.Subject = "Pruebas para SPP";
+            MailMessage email = new MailMessage(emisor, receptor);
+            email.Subject = "Pruebas para SPP";
 
-            //string body = @"
-            //<div style='background-color: #F1F0E9; padding: 20px; width: 715px; text-align: center;'>
-            //<h2 style='font-weight: bold; font-size: 22px; color: #000000;'>SOLICITUD DE PAGO DE PROVEEDORES</h2>
-            //<div style='text-align: left; width: 666px; background: #F1F0E9; border: 2px solid #DDDAD2; padding: 10px;'>
-            //    <label style='font-size: 15px; color: #000000;'>Número de Solicitud:</label>
-            //    <br/>
-            //    <div style='border: 1px solid #A79A66; width: 301px; height: 20px;'>"
-            //        + model.IdPago +
-            //    @"</div>
-            //    </div>
-            //</div>";
+            string body = @"
+            <div style='background-color: #F1F0E9; padding: 20px; width: 715px; text-align: center;'>
+            <h2 style='font-weight: bold; font-size: 22px; color: #000000;'>SOLICITUD DE PAGO DE PROVEEDORES</h2>
+            <div style='text-align: left; width: 666px; background: #F1F0E9; border: 2px solid #DDDAD2; padding: 10px;'>
+                <label style='font-size: 15px; color: #000000;'>Número de Solicitud:</label>
+                <br/>
+                <div style='border: 1px solid #A79A66; width: 301px; height: 20px;'>"
+                    + model.IdPago +
+                @"</div>
+                </div>
+            </div>";
 
-            //email.Body = body;
-            //email.IsBodyHtml = true;  // Indicate that the email body is HTML
+            email.Body = body;
+            email.IsBodyHtml = true;  // Indicate that the email body is HTML
 
-            //SmtpClient smtp = new();
-            //smtp.Host = "smtp.gmail.com";
-            //smtp.Port = 587;
-            //smtp.Credentials = new NetworkCredential(correo_emisor, clave_emisor);
-            //smtp.DeliveryMethod = SmtpDeliveryMethod.Network;
-            //smtp.EnableSsl = true;
+            SmtpClient smtp = new();
+            smtp.Host = "smtp.gmail.com";
+            smtp.Port = 587;
+            smtp.Credentials = new NetworkCredential(correo_emisor, clave_emisor);
+            smtp.DeliveryMethod = SmtpDeliveryMethod.Network;
+            smtp.EnableSsl = true;
 
-            //smtp.Send(email);
+            smtp.Send(email);
 
-            //return Json(new { IdPago = result.Entity.IdPago });
-            return Json(new { result.Entity.IdPago });
+            return Json(new { IdPago = result.Entity.IdPago });
         }
 
 

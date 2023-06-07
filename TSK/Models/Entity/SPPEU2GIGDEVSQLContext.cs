@@ -61,6 +61,10 @@ namespace SPP.Models.Entity
                 entity.Property(e => e.IdUsuario)
                      .HasColumnName("ID_USUARIO");
 
+                entity.Property(e => e.Correo)
+                    .IsRequired()
+                    .HasMaxLength(100)
+                    .HasColumnName("CORREO");
 
                 entity.HasOne(d => d.IdAreaNavigation)
                     .WithMany(p => p.AprobadorAreas)
