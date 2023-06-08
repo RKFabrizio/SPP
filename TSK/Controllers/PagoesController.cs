@@ -18,8 +18,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Newtonsoft.Json.Linq;
 using System.Net;
 using Microsoft.AspNetCore.Hosting;
-
-
+using DevExpress.Data.Mask.Internal;
 
 namespace TSK.Controllers
 {
@@ -78,7 +77,300 @@ namespace TSK.Controllers
         [HttpPost]
         public async Task<IActionResult> Post(Pago model, List<IFormFile> ReferenciaOC, List<IFormFile> Proformacotizacion, List<IFormFile> Factura)
         {
+            // Obtiene el NombreProveedor usando el IdProveedor
+            var proveedor = await _context.Proveedores.FirstOrDefaultAsync(p => p.IdProveedor == model.IdProveedor);
+            // Obtiene el Usuario - Nombre
+            string usuarioInfoJson = HttpContext.Request.Cookies["UsuarioInfo"];
+            string solicitante = string.Empty; // Declaración de la variable en un nivel superior.
 
+            if (!string.IsNullOrEmpty(usuarioInfoJson))
+            {
+                Usuario usuario = JsonConvert.DeserializeObject<Usuario>(usuarioInfoJson);
+                solicitante = usuario.Nombre + " " + usuario.Apellido;
+            }
+            //Obtener variables de datos
+            var adelanto = await _context.TipoAdelantos.FirstOrDefaultAsync(p => p.IdTipoAdelanto == model.IdTipoAdelanto);
+            var moneda = await _context.TipoMonedas.FirstOrDefaultAsync(p => p.IdTipoMoneda == model.IdTipoMoneda);
+
+
+            string folderPath = Path.Combine(_webHostEnvironment.ContentRootPath, "Mediaa");
+
+
+            if (!Directory.Exists(folderPath))
+            {
+                Directory.CreateDirectory(folderPath);
+            }
+            string lastReferenciaOCFilePath = null;
+            foreach (var file in ReferenciaOC)
+            {
+                string fileName = file.FileName;
+                string filePath = Path.Combine(folderPath, fileName);
+
+                using (var fileStream = new FileStream(filePath, FileMode.Create))
+                {
+                    file.CopyTo(fileStream);
+                }
+
+                Console.WriteLine($"Archivo ReferenciaOC guardado: {filePath}");
+                model.ReferenciaOC = fileName;
+                lastReferenciaOCFilePath = filePath;
+            }
+            string lastProformacotizacionFilePath = null;
+            foreach (var file in Proformacotizacion)
+            {
+                string fileName = file.FileName;
+                string filePath = Path.Combine(folderPath, fileName);
+
+                using (var fileStream = new FileStream(filePath, FileMode.Create))
+                {
+                    file.CopyTo(fileStream);
+                }
+
+                Console.WriteLine($"Archivo Proformacotizacion guardado: {filePath}");
+                model.ProformaCotizacion = fileName;
+                lastProformacotizacionFilePath = filePath;
+            }
+
+            string lastFacturaFilePath = null;
+            foreach (var file in Factura)
+            {
+                string fileName = file.FileName;
+                string filePath = Path.Combine(folderPath, fileName);
+
+                using (var fileStream = new FileStream(filePath, FileMode.Create))
+                {
+                    file.CopyTo(fileStream);
+                }
+
+                Console.WriteLine($"Archivo Factura guardado: {filePath}");
+                model.Factura = fileName;
+                lastFacturaFilePath = filePath;
+            }
+
+
+            if (model.LoginAprobador == 0)
+            {
+                model.LoginAprobador = 12;  // Valor por defecto
+            }
+
+            // Realiza las operaciones necesarias con el objeto "model"
+            Console.WriteLine(model.ToJson());
+
+            // Valida el modelo
+            if (!TryValidateModel(model))
+                return BadRequest(GetFullErrorMessage(ModelState));
+
+            // Asigna la fecha y hora actuales a FechaSolicitud
+            model.FechaSolicitud = DateTime.Now;
+
+            if (!string.IsNullOrEmpty(usuarioInfoJson))
+            {
+                Usuario usuario = JsonConvert.DeserializeObject<Usuario>(usuarioInfoJson);
+                int? AreaUsuario = usuario.IdArea;
+
+                // Crea una consulta de unión para combinar la información de las tablas AprobadorArea y Usuarios
+                var aprobadoresArea = _context.AprobadorAreas
+                    .Join(_context.Usuarios,
+                        aprobador => aprobador.IdUsuario,
+                        usuario => usuario.IdUsuario,
+                        (aprobador, usuario) => new { Aprobador = aprobador, Usuario = usuario })
+                    .Where(aprobadorUsuario => aprobadorUsuario.Aprobador.IdArea == AreaUsuario)
+                    .ToList();
+
+                // Filtra la lista de aprobadores para encontrar el que tiene la mayor capacidad de aprobación
+                // que aún sea igual o menor al importe. Si no se encuentra ninguno, usa el IdAprobador = 49.
+                var aprobador = aprobadoresArea
+                .Where(aprobadorUsuario => aprobadorUsuario.Usuario.MontoAprobacion >= model.Importe)
+                .OrderBy(aprobadorUsuario => aprobadorUsuario.Usuario.MontoAprobacion)
+                .FirstOrDefault();
+
+
+                if (aprobador != null)
+                {
+                    model.LoginAprobador = aprobador.Aprobador.IdUsuario;
+                }
+                else
+                {
+                    model.LoginAprobador = 49; // Asigna el valor 49 si no se encuentra un aprobador adecuado.
+                }
+
+            }
+
+            // Obtiene el ID del usuario aprobador
+            var aprobadorId = model.LoginAprobador;
+
+            // Busca al usuario aprobador en la base de datos
+            var aprobador1 = await _context.Usuarios.FindAsync(aprobadorId);
+
+            // Si el usuario aprobador no se encuentra en la base de datos, devuelve un error
+            if (aprobador1 == null)
+            {
+                return NotFound($"No se pudo encontrar un usuario con el ID {aprobadorId}");
+            }
+
+            // Obtiene el correo electrónico del usuario aprobador
+            var correoAprobador = aprobador1.Correo;
+
+            // Agrega el modelo a la base de datos
+            var result = _context.Pagos.Add(model);
+
+
+
+            await _context.SaveChangesAsync();
+            string correo_emisor = "leedryk@gmail.com";
+            string clave_emisor = "xxrlviitjlpqytrj";
+
+            MailAddress receptor = new(correoAprobador);
+            MailAddress emisor = new("leedryk@gmail.com");
+
+            MailMessage email = new MailMessage(emisor, receptor);
+            if (lastFacturaFilePath != null)
+            {
+                Attachment attachment = new Attachment(lastFacturaFilePath);
+                email.Attachments.Add(attachment);
+            }
+            if (lastReferenciaOCFilePath != null)
+            {
+                Attachment attachment = new Attachment(lastReferenciaOCFilePath);
+                email.Attachments.Add(attachment);
+            }
+            if (lastProformacotizacionFilePath != null)
+            {
+                Attachment attachment = new Attachment(lastProformacotizacionFilePath);
+                email.Attachments.Add(attachment);
+            }
+
+            email.Subject = "Pruebas para SPP";
+
+            string body = @"
+            <div style='background-color: #f1f0e9; padding: 20px; width: 715px; text-align: center;'>
+                <h2 style='font-weight: bold; font-size: 23px; color: #000000;'>Solicitud de pago de proveedores</h2>
+                <div style='text-align: left; width: 666px; background: #f1f0e9; border: 2px solid #dddad2; padding: 10px;'>
+                    <table>
+                        <tr>
+                            <td>
+                                <label style='font-size: 15px; color: #000000;'>Número de solicitud:</label>
+                                <br/>
+                                <div style='border: 1px solid #a79a66; width: 301px; height: 20px;'>"
+                                     + model.IdPago +
+                                 @"</div>
+                            </td>
+                            <td>
+                                <label style='font-size: 15px; color: #000000;'>Tipo de Solicitud:</label>
+                                <br/>
+                                <div style='border: 1px solid #a79a66; width: 301px; height: 20px;'>"
+                                     + adelanto.TipoAdelanto +
+                                 @"</div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan='2'>
+                                <label style='font-size: 15px; color: #000000;'>Nombre de Proveedor y/o Beneficiario:</label>
+                                <br/>
+                                <div style='border: 1px solid #a79a66; width: 500px; height: 20px;'>"
+                                     + proveedor.NombreProveedor +
+                                 @"</div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <label style='font-size: 15px; color: #000000;'>Fecha de Solicitud:</label>
+                                <br/>
+                                <div style='border: 1px solid #a79a66; width: 301px; height: 20px;'>"
+                                     + model.FechaSolicitud +
+                                 @"</div>
+                            </td>
+                                <td>
+                                <div style='display: inline-block; vertical-align: top;'>
+                                    <label style='font-size: 15px; color: #000000;'>Importe:</label>
+                                    <br/>
+                                    <div style='border: 1px solid #a79a66; width: 105px; height: 20px;'>"
+                                         + model.Importe + ".00" +
+                                     @"</div>
+                                </div>
+                                <div style='display: inline-block; vertical-align: top; margin-left: 20px;'>
+                                    <label style='font-size: 15px; color: #000000;'>Moneda:</label>
+                                    <br/>
+                                    <div style='border: 1px solid #a79a66; width: 105px; height: 20px;'>"
+                                         + moneda.TipoMoneda +
+                                     @"</div>
+                                </div>
+                            </td>
+
+                        </tr>
+                        <tr>
+                            <td colspan='2'>
+                                <label style='font-size: 15px; color: #000000;'>Concepto:</label>
+                                <br/>
+                                <div style='border: 1px solid #a79a66; width: 500px; height: 20px;'>"
+                                     + model.Concepto +
+                                 @"</div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan='2'>
+                                <label style='font-size: 15px; color: #000000;'>Observaciones:</label>
+                                <br/>
+                                <div style='border: 1px solid #a79a66; width: 500px; height: 20px;'>"
+                                     + model.Observaciones +
+                                 @"</div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan='2'>
+                                <label style='font-size: 15px; color: #000000;'>Solicitante:</label>
+                                <br/>
+                                <div style='border: 1px solid #a79a66; width: 301px; height: 20px;'>"
+                                    + solicitante +
+                                @"</div>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>";
+
+
+            email.Body = body;
+            email.IsBodyHtml = true;  // Indicate that the email body is HTML
+
+            SmtpClient smtp = new();
+            smtp.Host = "smtp.gmail.com";
+            smtp.Port = 587;
+            smtp.Credentials = new NetworkCredential(correo_emisor, clave_emisor);
+            smtp.DeliveryMethod = SmtpDeliveryMethod.Network;
+            smtp.EnableSsl = true;
+
+            smtp.Send(email);
+
+            return Json(new { IdPago = result.Entity.IdPago });
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Post2(Pago model, List<IFormFile> ReferenciaOC, List<IFormFile> Proformacotizacion, List<IFormFile> Factura)
+        {
+            // Obtiene el NombreProveedor usando el IdProveedor
+            var proveedor = await _context.Proveedores.FirstOrDefaultAsync(p => p.IdProveedor == model.IdProveedor);
+            if (proveedor != null)
+            {
+                model.BeneficiarioNombre = proveedor.NombreProveedor;
+            }
+            else
+            {
+                return BadRequest("No se pudo encontrar un proveedor con el ID especificado");
+            }
+
+            //Obtiene el Usuario - Nombre
+             string usuarioInfoJson = HttpContext.Request.Cookies["UsuarioInfo"];
+            if (!string.IsNullOrEmpty(usuarioInfoJson))
+            {
+                Usuario usuario = JsonConvert.DeserializeObject<Usuario>(usuarioInfoJson);
+                string solicitante = usuario.Nombre + " " + usuario.Apellido;
+            }
+            //Obtener variables de datos
+            var adelanto = await _context.TipoAdelantos.FirstOrDefaultAsync(p => p.IdTipoAdelanto == model.IdTipoAdelanto);
+            var moneda = await _context.TipoMonedas.FirstOrDefaultAsync(p => p.IdTipoMoneda == model.IdTipoMoneda);
+            
+            //------------------------------------------------------------------------
 
             string folderPath = Path.Combine(_webHostEnvironment.ContentRootPath, "Mediaa");
 
@@ -146,7 +438,6 @@ namespace TSK.Controllers
             // Asigna la fecha y hora actuales a FechaSolicitud
             model.FechaSolicitud = DateTime.Now;
 
-            string usuarioInfoJson = HttpContext.Request.Cookies["UsuarioInfo"];
             if (!string.IsNullOrEmpty(usuarioInfoJson))
             {
                 Usuario usuario = JsonConvert.DeserializeObject<Usuario>(usuarioInfoJson);
@@ -210,12 +501,12 @@ namespace TSK.Controllers
 
             string body = @"
             <div style='background-color: #F1F0E9; padding: 20px; width: 715px; text-align: center;'>
-            <h2 style='font-weight: bold; font-size: 22px; color: #000000;'>SOLICITUD DE PAGO DE PROVEEDORES</h2>
+            <h2 style='font-weight: bold; font-size: 23px; color: #000000;'>SOLICITUD DE PAGO DE PROVEEDORES</h2>
             <div style='text-align: left; width: 666px; background: #F1F0E9; border: 2px solid #DDDAD2; padding: 10px;'>
                 <label style='font-size: 15px; color: #000000;'>Número de Solicitud:</label>
                 <br/>
                 <div style='border: 1px solid #A79A66; width: 301px; height: 20px;'>"
-                    + model.IdPago +
+                    + proveedor +
                 @"</div>
                 </div>
             </div>";

@@ -98,13 +98,14 @@
 @using (Html.DevExtreme().NamedTemplate("TAB1"))
 {
 
-    @using (Html.BeginForm("Post", "Pagoes", FormMethod.Post, new { enctype = "multipart/form-data" }))
+    @using (Html.BeginForm("Post", "Pagoes", FormMethod.Post, new { id = "myForm1", @class = "myForm", enctype = "multipart/form-data" }))
     {
 
         <div class="container">
 
         @(
         Html.DevExtreme().Form<SPP.Models.Entity.Pago>()
+
                             .ColCount(2)
                             .Items(items =>
                             {
@@ -234,51 +235,229 @@
 }
 
 
+@using (Html.DevExtreme().NamedTemplate("TAB2"))
+    {
+    @using (Html.BeginForm("Post2", "Pagoes", FormMethod.Post, new { id = "myForm2", @class = "myForm", enctype = "multipart/form-data" }))
+        {
+        <div class="container">
+            @(
+                Html.DevExtreme().Form<SPP.Models.Entity.Pago>()
+
+                .ColCount(2)
+                .Items(items =>
+                {
+                        items.AddSimpleFor(m => m.IdTipoAdelanto)
+                    .Label(l => l.Text("Tipo de Solicitud:"))
+                    .Editor(e => e.SelectBox()
+                    .DataSource(d => d.Mvc()
+                    .Controller("Pagoes")
+                    .LoadAction("TipoAdelantos2Lookup"))
+                    .DisplayExpr("Text")
+                    .ValueExpr("Value")
+
+                    ).ColSpan(2);
+
+                        items.AddSimpleFor(m => m.IdProveedor)
+                    .Label(l => l.Text("Nombre de Proveedor y/o Beneficiario:"))
+                    .Editor(e => e.SelectBox()
+                    .DataSource(d => d.Mvc()
+                    .Controller("Pagoes")
+                    .LoadAction("ProveedoresLookup"))
+                    .DisplayExpr("Text")
+                    .ValueExpr("Value")
+                    .SearchEnabled(true)
+                    ).ColSpan(2);
+
+                        items.AddSimpleFor(m => m.FechaSolicitud)
+                    .ColSpan(2)
+                    .Label(l => l.Text("Fecha y Hora:"))
+                    .Editor(e => e.DateBox()
+                    .Value(DateTime.Now)
+                    .Disabled(true));
+
+
+                        items.AddSimpleFor(m => m.Importe);
+
+                        items.AddSimpleFor(m => m.IdTipoMoneda)
+                    .Label(l => l.Text("Moneda:"))
+                    .Editor(e => e.SelectBox()
+                    .DataSource(d => d.Mvc()
+                    .Controller("Pagoes")
+                    .LoadAction("TipoMonedasLookup"))
+                    .DisplayExpr("Text")
+                    .ValueExpr("Value")
+
+                    );
+
+                        items.AddSimple()
+                    .Label(l => l.Text("ReferenciaOC:"))
+                    .Template(
+                    @<text>
+                        @(
+                        Html.DevExtreme().FileUploader()
+                        .ID("fileUploaderRef1")
+                        .Name("ReferenciaOC")
+                        .AllowedFileExtensions(new[] { ".txt", ".doc", ".docx", ".pdf" })
+                        .UploadMode(FileUploadMode.UseForm)
+                        .UploadUrl(Url.Action("UploadRef", "FileManagment"))
+                        .ShowFileList(true)
+                        .Multiple(true)
+                        )
+                        </text>
+                    );
+
+                        items.AddSimple()
+                    .Label(l => l.Text("Proformacotizacion:"))
+                    .Template(
+                    @<text>
+                        @(
+                        Html.DevExtreme().FileUploader()
+                        .ID("fileUploaderProforma1")
+                        .Name("Proformacotizacion")
+                        .AllowedFileExtensions(new[] { ".txt", ".doc", ".docx", ".pdf" })
+                        .UploadMode(FileUploadMode.UseForm)
+                        .UploadUrl(Url.Action("UploadProforma", "FileManagment"))
+                        .ShowFileList(true)
+                        .Multiple(true)
+                        )
+                        </text>
+                    );
+
+                        items.AddSimple()
+                    .Label(l => l.Text("Factura:"))
+                    .Template(
+                    @<text>
+                        @(
+                        Html.DevExtreme().FileUploader()
+                        .ID("fileUploaderFactura1")
+                        .Name("Factura")
+                        .AllowedFileExtensions(new[] { ".txt", ".doc", ".docx", ".pdf" })
+                        .UploadMode(FileUploadMode.UseForm)
+                        .UploadUrl(Url.Action("UploadFactura", "FileManagment"))
+                        .ShowFileList(true)
+                        .Multiple(true)
+                        )
+                        </text>
+                ).ColSpan(2);
+
+                    items.AddSimpleFor(m => m.Concepto).ColSpan(2)
+                    .Editor(e => e.TextArea().Height("50px"));
+
+
+
+                    items.AddGroup().Caption("Datos de Pago").Items(paymentDataItems =>
+                    {
+                        items.AddSimpleFor(m => m.IdTipoPago)
+                    .Label(l => l.Text("Tipo de Pago:"))
+                    .Editor(e => e.SelectBox()
+                    .DataSource(d => d.Mvc()
+                    .Controller("Pagoes")
+                    .LoadAction("TipoPagosLookup"))
+                    .DisplayExpr("Text")
+                    .ValueExpr("Value")
+
+                    ).ColSpan(2);
+
+                    items.AddSimpleFor(m => m.BeneficiarioDni).ColSpan(2);
+
+                        items.AddSimpleFor(m => m.IdBanco)
+                    .Label(l => l.Text("Nombre de Banco:"))
+                    .Editor(e => e.SelectBox()
+                    .DataSource(d => d.Mvc()
+                    .Controller("Pagoes")
+                    .LoadAction("BancosLookup"))
+                    .DisplayExpr("Text")
+                    .ValueExpr("Value")
+
+                    );
+
+                        items.AddSimpleFor(m => m.IdTipoCuenta)
+                    .Label(l => l.Text("Tipo cuenta:"))
+                    .Editor(e => e.SelectBox()
+                    .DataSource(d => d.Mvc()
+                    .Controller("Pagoes")
+                    .LoadAction("TipoCuentasLookup"))
+                    .DisplayExpr("Text")
+                    .ValueExpr("Value")
+                    );
+
+                        items.AddSimpleFor(m => m.CuentaBancaria).ColSpan(2);
+
+                    }).ColSpan(2);
+
+                        items.AddSimpleFor(m => m.InformacionContable).ColSpan(2)
+                        .Editor(e => e.TextArea().Height("50px"));
+
+                                            items.AddSimpleFor(m => m.Observaciones).ColSpan(2)
+                        .Editor(e => e.TextArea().Height("50px"));
+
+                         items.AddSimpleFor(m => m.LoginSolicitante)
+                        .Label(l => l.Text("Solicitante:"))
+                        .Editor(e => e.SelectBox()
+                        .DataSource(d => d.Mvc()
+                        .Controller("Pagoes")
+                        .LoadAction("UsuariosLookup"))
+                        .DisplayExpr("Text")
+                        .ValueExpr("Value")
+                        ).ColSpan(2);
+
+                         items.AddButton()
+                        .HorizontalAlignment(HorizontalAlignment.Center)
+                        .ButtonOptions(b => b.Text("Guardar")
+                        .Type(ButtonType.Default)
+                        .UseSubmitBehavior(true)
+                        ).ColSpan(2);
+
+                })
+                )
+
+
+        </div>
+    }
+}
+
+
 
 <script>
 
-    $(document).ready(function () {
-        $('form').on('submit', function (e) {
-            e.preventDefault();
+    $(document).on('submit', '.myForm', function (e) {
 
-            var form = $(this);
-            var url = form.attr('action');
+        e.preventDefault();
 
-            // Desactivar el botón de envío
-            form.find(':submit').prop('disabled', true);
+        var form = $(this);
+        var url = form.attr('action');
 
-            var formData = new FormData(form[0]); // Construir objeto FormData
+        // Desactivar el botón de envío
+        form.find(':submit').prop('disabled', true);
 
-            $.ajax({
-                type: 'POST',
-                url: url,
-                data: formData,
-                processData: false, // Importante: desactivar la serialización automática de datos
-                contentType: false, // Importante: desactivar el encabezado Content-Type
-                success: function (response) {
-                    // Aquí, "response" es el objeto JSON que devuelve tu controlador
-                    // En lugar de la alerta, mostramos el Toast
-                    DevExpress.ui.notify('Tu solicitud fue enviada exitosamente\nNro de Solicitud: ' + response.IdPago, 'success', 6000);
+        var formData = new FormData(form[0]); // Construir objeto FormData
 
-                    // Reactivar el botón de envío
-                    form.find(':submit').prop('disabled', false);
+        $.ajax({
+            type: 'POST',
+            url: url,
+            data: formData,
+            processData: false, // Importante: desactivar la serialización automática de datos
+            contentType: false, // Importante: desactivar el encabezado Content-Type
+            success: function (response) {
+                // Aquí, "response" es el objeto JSON que devuelve tu controlador
+                // En lugar de la alerta, mostramos el Toast
+                DevExpress.ui.notify('Tu solicitud fue enviada exitosamente\nNro de Solicitud: ' + response.IdPago, 'success', 6000);
 
-                    // Limpiar el formulario
-                    form[0].reset();
-                },
-                error: function () {
-                    // También puedes mostrar un Toast para los errores
-                    DevExpress.ui.notify('Hubo un error al enviar la solicitud.', 'error', 6000);
+                // Reactivar el botón de envío
+                form.find(':submit').prop('disabled', false);
 
-                    // Reactivar el botón de envío
-                    form.find(':submit').prop('disabled', false);
-                }
-            });
+                // Limpiar el formulario
+                form[0].reset();
+            },
+            error: function () {
+                // También puedes mostrar un Toast para los errores
+                DevExpress.ui.notify('Hubo un error al enviar la solicitud.', 'error', 6000);
+
+                // Reactivar el botón de envío
+                form.find(':submit').prop('disabled', false);
+            }
         });
     });
-
-
-
-
 </script>
+
 

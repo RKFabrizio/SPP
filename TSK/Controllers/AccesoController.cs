@@ -25,6 +25,9 @@ namespace TSK.Controllers
         {
             var usuario = _UsuarioDatos.ValidarUsuario(_usuario.Login, _usuario.Contrasena);
 
+            Console.WriteLine(_usuario.Login);
+            Console.WriteLine(_usuario.Contrasena);
+
             if (usuario != null && usuario.Habilitado)
             {
                 var claims = new List<Claim>
