@@ -252,14 +252,14 @@ namespace TSK.Controllers
                                 <label style='font-size: 15px; color: #000000;'>Número de solicitud:</label>
                                 <br/>
                                 <div style='border: 1px solid #a79a66; width: 301px; height: 20px;'>"
-                                     + model.IdPago +
+                                      + model.IdPago +
                                  @"</div>
                             </td>
                             <td>
                                 <label style='font-size: 15px; color: #000000;'>Tipo de Solicitud:</label>
                                 <br/>
                                 <div style='border: 1px solid #a79a66; width: 301px; height: 20px;'>"
-                                     + adelanto.TipoAdelanto +
+                                      + adelanto.TipoAdelanto +
                                  @"</div>
                             </td>
                         </tr>
@@ -267,8 +267,8 @@ namespace TSK.Controllers
                             <td colspan='2'>
                                 <label style='font-size: 15px; color: #000000;'>Nombre de Proveedor y/o Beneficiario:</label>
                                 <br/>
-                                <div style='border: 1px solid #a79a66; width: 500px; height: 20px;'>"
-                                     + proveedor.NombreProveedor +
+                                <div style='border: 1px solid #a79a66; width: 602px; height: 20px;'>"
+                                      + proveedor.NombreProveedor +
                                  @"</div>
                             </td>
                         </tr>
@@ -276,18 +276,12 @@ namespace TSK.Controllers
                             <td>
                                 <label style='font-size: 15px; color: #000000;'>Fecha de Solicitud:</label>
                                 <br/>
-                                <div style='border: 1px solid #a79a66; width: 301px; height: 20px;'>"
-                                     + model.FechaSolicitud +
+                                <div style='border: 1px solid #a79a66; width: 392px; height: 20px;'>"
+                                      + model.FechaSolicitud +
                                  @"</div>
                             </td>
                                 <td>
-                                <div style='display: inline-block; vertical-align: top;'>
-                                    <label style='font-size: 15px; color: #000000;'>Importe:</label>
-                                    <br/>
-                                    <div style='border: 1px solid #a79a66; width: 105px; height: 20px;'>"
-                                         + model.Importe + ".00" +
-                                     @"</div>
-                                </div>
+
                                 <div style='display: inline-block; vertical-align: top; margin-left: 20px;'>
                                     <label style='font-size: 15px; color: #000000;'>Moneda:</label>
                                     <br/>
@@ -298,12 +292,19 @@ namespace TSK.Controllers
                             </td>
 
                         </tr>
+                             <div style='display: inline-block; vertical-align: top;'>
+                                <label style='font-size: 15px; color: #000000;'>Importe:</label>
+                                <br/>
+                                <div style='border: 1px solid #a79a66; width: 105px; height: 50px;'>"
+                                      + model.Importe.ToString("F2") +
+                                 @"</div>
+                                 </div>
                         <tr>
                             <td colspan='2'>
                                 <label style='font-size: 15px; color: #000000;'>Concepto:</label>
                                 <br/>
-                                <div style='border: 1px solid #a79a66; width: 500px; height: 20px;'>"
-                                     + model.Concepto +
+                                <div style='border: 1px solid #a79a66; width: 500px; height: 50px;'>"
+                                      +  model.Concepto +
                                  @"</div>
                             </td>
                         </tr>
@@ -311,8 +312,8 @@ namespace TSK.Controllers
                             <td colspan='2'>
                                 <label style='font-size: 15px; color: #000000;'>Observaciones:</label>
                                 <br/>
-                                <div style='border: 1px solid #a79a66; width: 500px; height: 20px;'>"
-                                     + model.Observaciones +
+                                <div style='border: 1px solid #a79a66; width: 500px; height: 50px;'>"
+                                      + model.Observaciones +
                                  @"</div>
                             </td>
                         </tr>
@@ -321,7 +322,7 @@ namespace TSK.Controllers
                                 <label style='font-size: 15px; color: #000000;'>Solicitante:</label>
                                 <br/>
                                 <div style='border: 1px solid #a79a66; width: 301px; height: 20px;'>"
-                                    + solicitante +
+                                     + solicitante +
                                 @"</div>
                             </td>
                         </tr>
@@ -698,6 +699,16 @@ namespace TSK.Controllers
                          };
             return Json(await DataSourceLoader.LoadAsync(lookup, loadOptions));
         }
+
+        [HttpGet]
+        public ActionResult OpenPdf()
+        {
+            Console.WriteLine("Que raro");
+            string filePath = "path to your pdf file";
+            var fileBytes = System.IO.File.ReadAllBytes(filePath);
+            return File(fileBytes, "application/pdf");
+        }
+
 
         private void PopulateModel(Pago model, IDictionary values) {
             string ID_PAGO = nameof(Pago.IdPago);

@@ -128,6 +128,17 @@
             .ValueExpr("Value")
             .DisplayExpr("Text")
         ).HidingPriority(6).Caption("Tipo Cuenta");
+
+         columns.Add()
+        .Caption("Referencia OC")
+        .CellTemplate(
+            @<text>
+                <a href="@Url.Action("DescargarPDF", "Pagoes", new { m => m.ReferenciaOC })" class='pdfLink'>Descargar PDF</a>
+            </text>
+        );
+
+       
+
     })
      .ShowBorders(true)
             .AllowColumnReordering(true)
@@ -147,3 +158,13 @@
                 .HighlightCaseSensitive(true)
             )
 )
+
+
+ 
+<script>
+    function cellClick(e) {
+        if (e.column.caption === "PDF File") {
+            window.location.href = '@Url.Action("OpenPdf", "Pagoes")';
+        }
+    }
+</script>
