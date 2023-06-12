@@ -149,7 +149,7 @@ namespace TSK.Controllers
                          select new
                          {
                              Value = i.IdAprobador,
-                             Text = u.Nombre // Aquí estamos seleccionando el nombre del usuario
+                             Text = u.Nombre + u.Apellido // Aquí estamos seleccionando el nombre del usuario
                          };
             return Json(await DataSourceLoader.LoadAsync(lookup, loadOptions));
         }

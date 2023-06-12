@@ -19,6 +19,7 @@ using Newtonsoft.Json.Linq;
 using System.Net;
 using Microsoft.AspNetCore.Hosting;
 using DevExpress.Data.Mask.Internal;
+using Microsoft.AspNetCore.Authorization;
 
 namespace TSK.Controllers
 {
@@ -241,7 +242,7 @@ namespace TSK.Controllers
             }
 
             email.Subject = "Pruebas para SPP";
-
+            string url = "http://localhost:8001/Pagoes/AprobarDes?idAprobador=" + model.LoginAprobador + "&idPago=" + model.IdPago + "&estado=3";
             string body = @"
             <div style='background-color: #f1f0e9; padding: 20px; width: 715px; text-align: center;'>
                 <h2 style='font-weight: bold; font-size: 23px; color: #000000;'>Solicitud de pago de proveedores</h2>
@@ -327,8 +328,17 @@ namespace TSK.Controllers
                             </td>
                         </tr>
                     </table>
+                    <div style='margin-top: 20px;'>
+                   <a href='http://localhost:8000/TokenUsuario/Aprobador' style='background-color: #000000; color: #ffffff; padding: 10px 20px; margin-right: 10px; border: none; cursor: pointer; text-decoration: none; display: inline-block;'>Aceptar</a>
+                   <a href='http://localhost:8000/TokenUsuario/Aprobador' style='background-color: #000000; color: #ffffff; padding: 10px 20px; border: none; cursor: pointer; text-decoration: none; display: inline-block;'>Rechazar</a>
+                    </div>
+
+  
+                    
                 </div>
             </div>";
+
+            
 
 
             email.Body = body;
@@ -552,6 +562,34 @@ namespace TSK.Controllers
             await _context.SaveChangesAsync();
         }
 
+        [AllowAnonymous]
+        public async Task<IActionResult> AprobarDes(int? id, int idAprobador, int idPago, int estado)
+        {
+            // Busca el pago en la base de datos
+            var pago = await _context.Pagos.FindAsync(idPago);
+
+            // Si el pago no se encuentra, devuelve un error
+            if (pago == null)
+            {
+                return NotFound($"No se pudo encontrar un pago con el ID {idPago}");
+            }
+
+            // Si el usuario actual no es el aprobador, devuelve un error
+            if (User.Identity.Name != idAprobador.ToString())
+            {
+                return Unauthorized();
+            }
+
+            // Actualiza el estado del pago
+            pago.IdEstado = estado;
+
+            // Guarda los cambios en la base de datos
+            await _context.SaveChangesAsync();
+
+            // Redirige al usuario a una página de confirmación
+            return RedirectToAction("Confirmacion", new { id = idPago });
+        }
+
 
         [HttpGet]
         public async Task<IActionResult> TipoAdelantos1Lookup(DataSourceLoadOptions loadOptions)
@@ -701,12 +739,13 @@ namespace TSK.Controllers
         }
 
         [HttpGet]
-        public ActionResult OpenPdf()
+        public ActionResult OpenPdf(string pago)
         {
-            Console.WriteLine("Que raro");
-            string filePath = "path to your pdf file";
+            Console.WriteLine("------------------" + pago);
+            string fileName = "Agile Development.txt"; // Reemplaza con el nombre real del archivo PDF
+            string filePath = Path.Combine(_webHostEnvironment.ContentRootPath, "Mediaa", fileName);
             var fileBytes = System.IO.File.ReadAllBytes(filePath);
-            return File(fileBytes, "application/pdf");
+            return File(fileBytes, "application/txt", fileName);
         }
 
 
