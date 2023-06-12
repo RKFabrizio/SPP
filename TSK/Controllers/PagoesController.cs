@@ -329,17 +329,14 @@ namespace TSK.Controllers
                         </tr>
                     </table>
                     <div style='margin-top: 20px;'>
-                   <a href='http://localhost:8000/TokenUsuario/Aprobador' style='background-color: #000000; color: #ffffff; padding: 10px 20px; margin-right: 10px; border: none; cursor: pointer; text-decoration: none; display: inline-block;'>Aceptar</a>
-                   <a href='http://localhost:8000/TokenUsuario/Aprobador' style='background-color: #000000; color: #ffffff; padding: 10px 20px; border: none; cursor: pointer; text-decoration: none; display: inline-block;'>Rechazar</a>
+                   <a href='http://localhost:8000/TokenUsuario/Aprobador/500fa' style='background-color: #000000; color: #ffffff; padding: 10px 20px; margin-right: 10px; border: none; cursor: pointer; text-decoration: none; display: inline-block;'>Aceptar</a>
+                   <a href='http://localhost:8000/TokenUsuario/Aprobador/500fa' style='background-color: #000000; color: #ffffff; padding: 10px 20px; border: none; cursor: pointer; text-decoration: none; display: inline-block;'>Rechazar</a>
                     </div>
 
   
                     
                 </div>
             </div>";
-
-            
-
 
             email.Body = body;
             email.IsBodyHtml = true;  // Indicate that the email body is HTML

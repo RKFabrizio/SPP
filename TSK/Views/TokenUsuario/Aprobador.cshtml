@@ -47,11 +47,7 @@
  
 
 @*
-     
- 
-
     
-
      columns.AddFor(m => m.BeneficiarioNombre).HidingPriority(4).Caption("Beneficiario Nombre");
 
      columns.AddFor(m => m.IdBanco).Lookup(lookup => lookup
@@ -71,6 +67,9 @@
                
 )
 *@
+<p>El parámetro pasado es: @ViewBag.parametro1</p>
+<p>El parámetro pasado es: @ViewBag.parametro2</p>
+
 @(Html.DevExtreme().DataGrid<SPP.Models.Entity.Pago>()
     .DataSource(ds => ds.Mvc()
         .Controller("PagoMiAprobador")
