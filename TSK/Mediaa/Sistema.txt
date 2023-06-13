@@ -1,0 +1,35 @@
+idTipoAdelanto - adelanto
+IdProveedor - proveedor
+IdTipoMoneda - moneda
+LoginSolicitante - solicitante
+
+
+IdTipoPago
+IdBanco
+IdTipoCuenta
+
+
+------------ Cheque -------------------
+IdPago		   adelanto.TipoAdelanto
+proveedor.NombreProveedor
+FechaSolicitud     importe  moneda.TipoMoneda
+Concepto
+Observaciones
+solicitante
+
+------------ Anticipo ------------------
+IdPago		   adelanto.TipoAdelanto
+proveedor.NombreProveedor
+FechaSolicitud     importe  moneda.TipoMoneda
+Concepto
+
+Observaciones
+solicitante
+
+
+
+----------------------------
+Adjunto: 
+lastReferenciaOCFilePath
+lastProformacotizacionFilePath
+lastFacturaFilePath

@@ -9,13 +9,22 @@ namespace TSK.Controllers
             return View();
         }
 
-        [HttpGet("TokenUsuario/Aprobador/{parametro1}/{parametro2}")]
-        public IActionResult Aprobador(string parametro1, string parametro2)
+        //[HttpGet("TokenUsuario/Aprobador/{parametro1}/{parametro2}")]
+        //public IActionResult Aprobador(string parametro1, string parametro2)
+        //{
+        //    ViewBag.aprobador = "active";
+        //    ViewBag.parametro1 = parametro1;
+        //    ViewBag.parametro2 = parametro2;
+        //    return View();
+        //}
+
+        [HttpGet]
+        public IActionResult Aprobador()
         {
             ViewBag.aprobador = "active";
-            ViewBag.parametro1 = parametro1;
-            ViewBag.parametro2 = parametro2;
             return View();
         }
+
+
     }
 }

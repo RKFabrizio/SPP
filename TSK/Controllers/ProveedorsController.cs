@@ -116,7 +116,7 @@ namespace TSK.Controllers
             }
 
             if(values.Contains(NOMBRE_PROVEEDOR)) {
-                model.NombreProveedor = Convert.ToString(values[NOMBRE_PROVEEDOR]);
+                model.NombreProveedor = Convert.ToString(values[NOMBRE_PROVEEDOR]).ToUpper();
             }
 
             if(values.Contains(ID_TIPO_DOC)) {

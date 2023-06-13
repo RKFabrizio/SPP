@@ -31,12 +31,13 @@
     <div class="col">
         <!-- Page pre-title -->
         <div class="user-icon-container">
-            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user-circle" viewBox="0 0 24 24" stroke-width="1" stroke="#a79a66" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-file-search" width="32" height="32" viewBox="0 0 24 24" stroke-width="1.5" stroke="#a79a66" fill="none" stroke-linecap="round" stroke-linejoin="round">
                 <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                <circle cx="12" cy="12" r="9" />
-                <circle cx="12" cy="10" r="3" />
-                <path d="M6.168 18.849a4 4 0 0 1 3.832 -2.849h4a4 4 0 0 1 3.834 2.855" />
-            </svg>
+                <path d="M14 3v4a1 1 0 0 0 1 1h4" />
+                <path d="M12 21h-5a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v4.5" />
+                <path d="M16.5 17.5m-2.5 0a2.5 2.5 0 1 0 5 0a2.5 2.5 0 1 0 -5 0" />
+                <path d="M18.5 19.5l2.5 2.5" />
+            </svg>  
             <h2 class="page-title">
                 Lista de Solicitudes
             </h2>
@@ -60,10 +61,10 @@
                         {
 
                             items.Add()
-                            .Title("Lista de Solicitudes Personalizado")
+                            .Title("Solicitudes de Compañia")
                             .Template(new TemplateName("TAB1"));
                             items.Add()
-                            .Title("Lista de Solicitudes por Defecto")
+                            .Title("Todas las solicitudes")
                             .Template(new TemplateName("TAB2"));
 
                         })
@@ -160,6 +161,23 @@
                 .DisplayExpr("Text")
             ).HidingPriority(6).Caption("Tipo Cuenta");
     })
+         .ShowBorders(true)
+                    .AllowColumnReordering(true)
+                    .RowAlternationEnabled(false)
+                    .ShowColumnLines(true)
+                    .ShowRowLines(true)
+                    .Paging(paging => paging.PageSize(20))
+                    .FilterRow(f => f.Visible(true))
+                    .Pager(pager =>
+                    {
+                        pager.ShowPageSizeSelector(true);
+                        pager.AllowedPageSizes(new[] { 20, 50, 100 });
+                        pager.ShowInfo(true);
+                    })
+                    .SearchPanel(s => s
+                        .Visible(true)
+                        .HighlightCaseSensitive(true)
+                    )
 )
 }
 
