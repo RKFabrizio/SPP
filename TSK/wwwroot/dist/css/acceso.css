@@ -79,7 +79,7 @@ html, body {
 
 
 .botton {
-    margin-top: 13%;
+    margin-top: 5%;
     background-color: #337199;
     color: white;
     height: 38px;
@@ -96,7 +96,7 @@ html, body {
 
 .info1 {
     position: absolute;
-    top: 64%;
+    top: 78%;
     left: 43%;
     transform: translate(-50%, -50%);
     text-align: center;

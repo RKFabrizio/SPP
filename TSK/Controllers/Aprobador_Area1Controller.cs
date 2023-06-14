@@ -42,12 +42,13 @@ namespace TSK.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Post(string values) {
+        public async Task<IActionResult> Post(string values)
+        {
             var model = new Aprobador_Area();
             var valuesDict = JsonConvert.DeserializeObject<IDictionary>(values);
             PopulateModel(model, valuesDict);
 
-            if(!TryValidateModel(model))
+            if (!TryValidateModel(model))
                 return BadRequest(GetFullErrorMessage(ModelState));
 
             var result = _context.AprobadorAreas.Add(model);
@@ -57,15 +58,16 @@ namespace TSK.Controllers
         }
 
         [HttpPut]
-        public async Task<IActionResult> Put(int key, string values) {
+        public async Task<IActionResult> Put(int key, string values)
+        {
             var model = await _context.AprobadorAreas.FirstOrDefaultAsync(item => item.IdAprobador == key);
-            if(model == null)
+            if (model == null)
                 return StatusCode(409, "Object not found");
 
             var valuesDict = JsonConvert.DeserializeObject<IDictionary>(values);
             PopulateModel(model, valuesDict);
 
-            if(!TryValidateModel(model))
+            if (!TryValidateModel(model))
                 return BadRequest(GetFullErrorMessage(ModelState));
 
             await _context.SaveChangesAsync();

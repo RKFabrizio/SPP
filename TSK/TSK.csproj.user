@@ -14,7 +14,7 @@
     <DevExtremeCreateAsPartial>False</DevExtremeCreateAsPartial>
     <DevExtremeUseLayout>True</DevExtremeUseLayout>
     <DevExtremeSelectedDataContextName>SPPEU2GIGDEVSQLContext %28SPP.Models.Entity%29</DevExtremeSelectedDataContextName>
-    <NameOfLastUsedPublishProfile>C:\Users\fabri\OneDrive\Escritorio\GitMain\TSK\Properties\PublishProfiles\FolderProfile9.pubxml</NameOfLastUsedPublishProfile>
+    <NameOfLastUsedPublishProfile>C:\Users\fabri\OneDrive\Escritorio\GitMain\TSK\Properties\PublishProfiles\FolderProfile10.pubxml</NameOfLastUsedPublishProfile>
     <WebStackScaffolding_ControllerDialogWidth>650.4</WebStackScaffolding_ControllerDialogWidth>
     <WebStackScaffolding_DbContextTypeFullName>TSK.Models.Entity.USAEU2GIGDEVSQLContext</WebStackScaffolding_DbContextTypeFullName>
     <WebStackScaffolding_IsAsyncSelected>False</WebStackScaffolding_IsAsyncSelected>

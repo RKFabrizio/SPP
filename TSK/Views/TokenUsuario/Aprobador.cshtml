@@ -45,29 +45,7 @@
 
  
 
-@*
-    
-     columns.AddFor(m => m.BeneficiarioNombre).HidingPriority(4).Caption("Beneficiario Nombre");
-
-     columns.AddFor(m => m.IdBanco).Lookup(lookup => lookup
-         .DataSource(ds => ds.WebApi().Controller("PagoMiAprobador").LoadAction("BancosLookup").Key("Value"))
-         .ValueExpr("Value")
-         .DisplayExpr("Text")
-     ).HidingPriority(5).Caption("Banco");
-
-     columns.AddFor(m => m.IdTipoCuenta).Lookup(lookup => lookup
-         .DataSource(ds => ds.WebApi().Controller("PagoMiAprobador").LoadAction("TipoCuentasLookup").Key("Value"))
-         .ValueExpr("Value")
-         .DisplayExpr("Text")
-     ).HidingPriority(6).Caption("Tipo Cuenta");
-
- })
  
-               
-)
-*@
-@*<p>El parámetro pasado es: @ViewBag.parametro1</p>
-<p>El parámetro pasado es: @ViewBag.parametro2</p>*@
 
 @(Html.DevExtreme().DataGrid<SPP.Models.Entity.Pago>()
     .DataSource(ds => ds.Mvc()
@@ -76,6 +54,7 @@
         .UpdateAction("Put")
         .Key("IdPago")
     )
+    .OnRowClick("onGridRowClick")
     .RemoteOperations(true)
     .Columns(columns => {
 
@@ -135,6 +114,49 @@
         columns.AddFor(m => m.InformacionContable).HidingPriority(2).Caption("Información Contable");
 
         columns.AddFor(m => m.CuentaBancaria).HidingPriority(3).Caption("Cuenta Bancaria");
+
+        columns.AddFor(m => m.BeneficiarioNombre).HidingPriority(4).Caption("Beneficiario Nombre");
+
+        columns.AddFor(m => m.IdBanco).Lookup(lookup => lookup
+            .DataSource(ds => ds.WebApi().Controller("PagoMiAprobador").LoadAction("BancosLookup").Key("Value"))
+            .ValueExpr("Value")
+            .DisplayExpr("Text")
+        ).HidingPriority(5).Caption("Banco");
+
+        columns.AddFor(m => m.IdTipoCuenta).Lookup(lookup => lookup
+            .DataSource(ds => ds.WebApi().Controller("PagoMiAprobador").LoadAction("TipoCuentasLookup").Key("Value"))
+            .ValueExpr("Value")
+            .DisplayExpr("Text")
+        ).HidingPriority(6).Caption("Tipo Cuenta");
+
+         columns.AddFor(m => m.ReferenciaOC)
+                      .HidingPriority(7)
+                      .Caption("ReferenciaOC")
+                      .CellTemplate(@<text>
+
+                          <a href="#" onclick="descargarPDF()">Descargar</a>
+
+                      </text>);
+
+        columns.AddFor(m => m.ProformaCotizacion)
+          .HidingPriority(9)
+          .Caption("ProformaCotizacion")
+          .CellTemplate(@<text>
+
+              <a href="#" onclick="descargarPDF1()">Descargar</a>
+
+          </text>);
+
+        columns.AddFor(m => m.Factura)
+          .HidingPriority(10)
+          .Caption("Factura")
+          .CellTemplate(@<text>
+
+              <a href="#" onclick="descargarPDF2()">Descargar</a>
+
+          </text>);
+
+
     })
      .ShowBorders(true)
         .AllowColumnReordering(true)
@@ -177,3 +199,112 @@
 
                 )
 )
+
+
+<script>
+    var rowData;
+    var rowData2;
+    var rowData3;
+
+    function onGridRowClick(e) {
+        rowData = e.data.ReferenciaOC;
+        rowData2 = e.data.ProformaCotizacion;
+        rowData3 = e.data.Factura;
+
+    }
+
+
+    function descargarPDF() {
+        $.ajax({
+            url: '@Url.Action("OpenPdf", "Pagoes")', // Reemplaza "TuControlador" con el nombre real de tu controlador
+            type: 'GET',
+            data: { pago: rowData },
+            success: function (result) {
+                var blob = new Blob([result], { type: 'application/txt' });
+
+                // Verificar el navegador y crear un enlace para descargar el archivo
+                if (window.navigator && window.navigator.msSaveOrOpenBlob) {
+                    // Para Internet Explorer o Microsoft Edge
+                    window.navigator.msSaveOrOpenBlob(blob, rowData);
+                } else {
+                    // Para otros navegadores
+                    var url = URL.createObjectURL(blob);
+                    var link = document.createElement('a');
+                    link.href = url;
+                    link.download = rowData; // Reemplaza con el nombre real del archivo
+                    link.click();
+
+                    // Liberar la URL del objeto después de la descarga
+                    URL.revokeObjectURL(url);
+                }
+            },
+            error: function (xhr, status, error) {
+                // Maneja el error de la llamada AJAX si es necesario
+                console.error(error);
+            }
+        });
+    }
+
+    function descargarPDF1() {
+        $.ajax({
+            url: '@Url.Action("OpenPdf1", "Pagoes")', // Reemplaza "TuControlador" con el nombre real de tu controlador
+            type: 'GET',
+            data: { pago: rowData2 },
+            success: function (result) {
+                var blob = new Blob([result], { type: 'application/txt' });
+
+                // Verificar el navegador y crear un enlace para descargar el archivo
+                if (window.navigator && window.navigator.msSaveOrOpenBlob) {
+                    // Para Internet Explorer o Microsoft Edge
+                    window.navigator.msSaveOrOpenBlob(blob, rowData2);
+                } else {
+                    // Para otros navegadores
+                    var url = URL.createObjectURL(blob);
+                    var link = document.createElement('a');
+                    link.href = url;
+                    link.download = rowData2; // Reemplaza con el nombre real del archivo
+                    link.click();
+
+                    // Liberar la URL del objeto después de la descarga
+                    URL.revokeObjectURL(url);
+                }
+            },
+            error: function (xhr, status, error) {
+                // Maneja el error de la llamada AJAX si es necesario
+                console.error(error);
+            }
+        });
+    }
+
+    function descargarPDF2() {
+        $.ajax({
+            url: '@Url.Action("OpenPdf2", "Pagoes")', // Reemplaza "TuControlador" con el nombre real de tu controlador
+            type: 'GET',
+            data: { pago: rowData3 },
+            success: function (result) {
+                var blob = new Blob([result], { type: 'application/txt' });
+
+                // Verificar el navegador y crear un enlace para descargar el archivo
+                if (window.navigator && window.navigator.msSaveOrOpenBlob) {
+                    // Para Internet Explorer o Microsoft Edge
+                    window.navigator.msSaveOrOpenBlob(blob, rowData3);
+                } else {
+                    // Para otros navegadores
+                    var url = URL.createObjectURL(blob);
+                    var link = document.createElement('a');
+                    link.href = url;
+                    link.download = rowData3; // Reemplaza con el nombre real del archivo
+                    link.click();
+
+                    // Liberar la URL del objeto después de la descarga
+                    URL.revokeObjectURL(url);
+                }
+            },
+            error: function (xhr, status, error) {
+                // Maneja el error de la llamada AJAX si es necesario
+                console.error(error);
+            }
+        });
+    }
+</script>
+

@@ -89,11 +89,9 @@ namespace TSK.Controllers
 
         [HttpPut]
         public async Task<IActionResult> Put(int key, string values)
-        {
-            try
-            {
-                System.Console.WriteLine("PORFAVOR ME MUERO");
-                var model = await _context.Pagos.FirstOrDefaultAsync(item => item.IdPago == key);
+        {             
+
+            var model = await _context.Pagos.FirstOrDefaultAsync(item => item.IdPago == key);
                 if (model == null)
                     return StatusCode(409, "Object not found");
 
@@ -103,14 +101,16 @@ namespace TSK.Controllers
                 if (!TryValidateModel(model))
                     return BadRequest(GetFullErrorMessage(ModelState));
 
-                await _context.SaveChangesAsync();
+                // Solo actualiza FechaAprobacion si IdEstado es 1
+                if (model.IdEstado == 1)
+                {
+                    model.FechaAprobacion = DateTime.Now;
+                }
+
+            await _context.SaveChangesAsync();
                 return Ok();
-            }
-            catch (Exception e)
-            {
-                // Aquí puedes registrar el error o devolverlo en la respuesta para ayudarte a depurar
-                return BadRequest(e.Message);
-            }
+            
+        
         }
 
 
@@ -175,11 +175,12 @@ namespace TSK.Controllers
                          orderby i.IdUsuario
                          select new
                          {
-                             Value = i.IdAprobador,
-                             Text = u.Nombre + u.Apellido // Aquí estamos seleccionando el nombre del usuario
+                             Value = i.IdUsuario,
+                             Text = u.Nombre + " " + u.Apellido // Aquí estamos seleccionando el nombre del usuario
                          };
             return Json(await DataSourceLoader.LoadAsync(lookup, loadOptions));
         }
+
 
         [HttpGet]
         public async Task<IActionResult> TipoPagosLookup(DataSourceLoadOptions loadOptions) {

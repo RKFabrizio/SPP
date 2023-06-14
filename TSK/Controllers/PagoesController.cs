@@ -188,7 +188,27 @@ namespace TSK.Controllers
 
                 if (aprobador != null)
                 {
-                    model.LoginAprobador = aprobador.Aprobador.IdUsuario;
+                    if (aprobador.Aprobador.IdUsuario != model.LoginSolicitante) // Verifica si el aprobador es diferente al solicitante
+                    {
+                        model.LoginAprobador = aprobador.Aprobador.IdUsuario;
+                    }
+                    else
+                    {
+                        // Busca el siguiente aprobador disponible que sea diferente al solicitante
+                        var siguienteAprobador = aprobadoresArea
+                            .Where(aprobadorUsuario => aprobadorUsuario.Usuario.MontoAprobacion >= model.Importe && aprobadorUsuario.Aprobador.IdUsuario != model.LoginSolicitante)
+                            .OrderBy(aprobadorUsuario => aprobadorUsuario.Usuario.MontoAprobacion)
+                            .FirstOrDefault();
+
+                        if (siguienteAprobador != null)
+                        {
+                            model.LoginAprobador = siguienteAprobador.Aprobador.IdUsuario;
+                        }
+                        else
+                        {
+                            model.LoginAprobador = 49; // Asigna el valor 49 si no se encuentra un aprobador adecuado.
+                        }
+                    }
                 }
                 else
                 {
@@ -218,11 +238,11 @@ namespace TSK.Controllers
 
 
             await _context.SaveChangesAsync();
-            string correo_emisor = "leedryk@gmail.com";
-            string clave_emisor = "xxrlviitjlpqytrj";
+            string correo_emisor = "aldovasquez@barrick.com";
+            string clave_emisor = "g01nT36reat2#";
 
             MailAddress receptor = new(correoAprobador);
-            MailAddress emisor = new("leedryk@gmail.com");
+            MailAddress emisor = new("aldovasquez@barrick.com");
 
             MailMessage email = new MailMessage(emisor, receptor);
             if (lastFacturaFilePath != null)
@@ -241,118 +261,117 @@ namespace TSK.Controllers
                 email.Attachments.Add(attachment);
             }
 
-            email.Subject = "Pruebas para SPP";
-            string url = "http://localhost:8001/Pagoes/AprobarDes?idAprobador=" + model.LoginAprobador + "&idPago=" + model.IdPago + "&estado=3";
+            email.Subject = "Sistema Pago de Proveedores";
             string body = @"
-            <div style='background-color: #f1f0e9; padding: 20px; width: 715px; text-align: center;'>
-                <h2 style='font-weight: bold; font-size: 23px; color: #000000;'>Solicitud de pago de proveedores</h2>
-                <div style='text-align: left; width: 666px; background: #f1f0e9; border: 2px solid #dddad2; padding: 10px;'>
-                    <table>
-                        <tr>
-                            <td>
-                                <label style='font-size: 15px; color: #000000;'>Número de solicitud:</label>
-                                <br/>
-                                <div style='border: 1px solid #a79a66; width: 301px; height: 20px;'>"
-                                      + model.IdPago +
-                                 @"</div>
-                            </td>
-                            <td>
-                                <label style='font-size: 15px; color: #000000;'>Tipo de Solicitud:</label>
-                                <br/>
-                                <div style='border: 1px solid #a79a66; width: 301px; height: 20px;'>"
-                                      + adelanto.TipoAdelanto +
-                                 @"</div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td colspan='2'>
-                                <label style='font-size: 15px; color: #000000;'>Nombre de Proveedor y/o Beneficiario:</label>
-                                <br/>
-                                <div style='border: 1px solid #a79a66; width: 602px; height: 20px;'>"
-                                      + proveedor.NombreProveedor +
-                                 @"</div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <label style='font-size: 15px; color: #000000;'>Fecha de Solicitud:</label>
-                                <br/>
-                                <div style='border: 1px solid #a79a66; width: 392px; height: 20px;'>"
-                                      + model.FechaSolicitud +
-                                 @"</div>
-                            </td>
-                                <td>
-
-                                <div style='display: inline-block; vertical-align: top; margin-left: 20px;'>
-                                    <label style='font-size: 15px; color: #000000;'>Moneda:</label>
-                                    <br/>
-                                    <div style='border: 1px solid #a79a66; width: 105px; height: 20px;'>"
-                                         + moneda.TipoMoneda +
-                                     @"</div>
-                                </div>
-                            </td>
-
+        <div style='background-color: #f1f0e9; padding: 20px; width: 850px; text-align: center;'>
+            <h2 style='font-weight: bold; font-size: 23px; color: #000000; margin-right: 50px;'>Solicitud de pago de proveedores</h2>
+            <div style='margin-top: 30px; margin-left: 30px; text-align: left; width: 750px; background: #f1f0e9; border: 2px solid #dddad2; padding: 10px;'>
+                <table>
+                    <tr>
                         <td>
-                             <div style='display: inline-block; vertical-align: top;'>
-                                <label style='font-size: 15px; color: #000000;'>Importe:</label>
-                                <br/>
-                                <div style='border: 1px solid #a79a66; width: 105px; height: 50px;'>"
-                                      + model.Importe.ToString("F2") +
-                                 @"</div>
-                                 </div>
-                             </td>
-                             </tr>
-                        <tr>
-                            <td colspan='2'>
-                                <label style='font-size: 15px; color: #000000;'>Concepto:</label>
-                                <br/>
-                                <div style='border: 1px solid #a79a66; width: 500px; height: 50px;'>"
-                                      +  model.Concepto +
-                                 @"</div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td colspan='2'>
-                                <label style='font-size: 15px; color: #000000;'>Observaciones:</label>
-                                <br/>
-                                <div style='border: 1px solid #a79a66; width: 500px; height: 50px;'>"
-                                      + model.Observaciones +
-                                 @"</div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td colspan='2'>
-                                <label style='font-size: 15px; color: #000000;'>Solicitante:</label>
-                                <br/>
-                                <div style='border: 1px solid #a79a66; width: 301px; height: 20px;'>"
-                                     + solicitante +
-                                @"</div>
-                            </td>
-                        </tr>
-                    </table>
-                    <div style='margin-top: 20px;'>
-                   <a href='http://localhost:8000/TokenUsuario/Aprobador' style='background-color: #000000; color: #ffffff; padding: 10px 20px; margin-right: 10px; border: none; cursor: pointer; text-decoration: none; display: inline-block;'>Editar Estado de Pago</a>
+                    <label style='margin-left: 50px; font-size: 15px; color: #000000;'>Número de solicitud:</label>
+                    <br/>
+                    <div style='margin-left: 50px; border: 1px solid #a79a66; width: 301px; height: 20px;'>
+                         " + model.IdPago + @"
                     </div>
-
-  
-                    
+                </td>
+                <td>
+                    <label style='font-size: 15px; color: #000000;'>Tipo de Solicitud:</label>
+                    <br/>
+                    <div style=' border: 1px solid #a79a66; width: 310px; height: 20px;'>
+                        "+ adelanto.TipoAdelanto + @"
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan='2'>
+                    <label style='margin-left: 50px; font-size: 15px; color: #000000;'>Nombre de Proveedor y/o Beneficiario:</label>
+                    <br/>
+                    <div style='margin-left: 50px; border: 1px solid #a79a66; width: 615px; height: 20px;'>
+                        "+ proveedor.NombreProveedor + @"
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label style='margin-left: 50px; display: inline-block; font-size: 15px; color: #000000;'>Fecha de Solicitud:</label>
+                    <br/>
+                    <div style='margin-left: 50px; border: 1px solid #a79a66; width: 300px; height: 20px;'>
+                          "+ model.FechaSolicitud + @"
+                    </div>
+                </td>
+                <td>
+                    <div style='display: inline-block; vertical-align: top; '>
+                        <label style='font-size: 15px; color: #000000;'>Importe:</label>
+                        <br/>
+                        <div style='border: 1px solid #a79a66; width: 310px; height: 20px;'>
+                             " + moneda.TipoMoneda + " " + model.Importe.ToString("F2") + " " + @"
+                        </div>
+ 
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan='2'>
+                    <label style='margin-left: 50px; font-size: 15px; color: #000000;'>Concepto:</label>
+                    <br/>
+                    <div style='margin-left: 50px; border: 1px solid #a79a66; width: 620px; height: 50px;'>
+                          "+ model.Concepto + @"
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan='2'>
+                    <label style='margin-left: 50px; font-size: 15px; color: #000000;'>Información Contable:</label>
+                    <br />
+                    <div style='margin-left: 50px; border: 1px solid #a79a66; width: 620px; height: 50px;'>
+                            "+ model.InformacionContable+ @"
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan='2'>
+                    <label style='margin-left: 50px; font-size: 15px; color: #000000;'>Observaciones:</label>
+                    <br/>
+                    <div style='margin-left: 50px; border: 1px solid #a79a66; width: 620px; height: 50px;'>
+                        " + model.Observaciones + @"
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan ='2'>
+                    <label style = 'margin-left: 50px; font-size: 15px; color: #000000;' > Solicitante:</label>
+                    <br />
+                    <div style = 'margin-left: 50px;; border: 1px solid #a79a66; width: 301px; height: 20px;'>
+                        "+ solicitante + @"
+                    </ div >
+                </td>
+            </tr>
+        </table>
+        <div style = 'margin-left: 250px; margin-top: 20px;' >
+            <a href = 'http://10.133.17.21/TokenUsuario/Aprobador' style = 'background-color: #000000; color: #ffffff; padding: 10px 20px; margin-right: 10px; border: none; cursor: pointer; text-decoration: none; display: inline-block;'> Editar Estado de Pago </a>
                 </div>
-            </div>";
+            </div>
+        </div>";
+
 
             email.Body = body;
             email.IsBodyHtml = true;  // Indicate that the email body is HTML
 
             SmtpClient smtp = new();
-            smtp.Host = "smtp.gmail.com";
+            smtp.Host = "mail-na-goldbar.barrick.com";
             smtp.Port = 587;
             smtp.Credentials = new NetworkCredential(correo_emisor, clave_emisor);
             smtp.DeliveryMethod = SmtpDeliveryMethod.Network;
             smtp.EnableSsl = true;
+            smtp.UseDefaultCredentials = false;
 
             smtp.Send(email);
 
             return Json(new { IdPago = result.Entity.IdPago });
         }
+
+
 
         [HttpPost]
         public async Task<IActionResult> Post2(Pago model, List<IFormFile> ReferenciaOC, List<IFormFile> Proformacotizacion, List<IFormFile> Factura)
@@ -369,16 +388,23 @@ namespace TSK.Controllers
             }
 
             //Obtiene el Usuario - Nombre
-             string usuarioInfoJson = HttpContext.Request.Cookies["UsuarioInfo"];
+            string usuarioInfoJson = HttpContext.Request.Cookies["UsuarioInfo"];
+            string solicitante = null; // Declarar la variable solicitante fuera del bloque if
+
             if (!string.IsNullOrEmpty(usuarioInfoJson))
             {
                 Usuario usuario = JsonConvert.DeserializeObject<Usuario>(usuarioInfoJson);
-                string solicitante = usuario.Nombre + " " + usuario.Apellido;
+                solicitante = usuario.Nombre + " " + usuario.Apellido;
             }
             //Obtener variables de datos
             var adelanto = await _context.TipoAdelantos.FirstOrDefaultAsync(p => p.IdTipoAdelanto == model.IdTipoAdelanto);
             var moneda = await _context.TipoMonedas.FirstOrDefaultAsync(p => p.IdTipoMoneda == model.IdTipoMoneda);
-            
+            var tipopago = await _context.TipoPagos.FirstOrDefaultAsync(p => p.IdTipoPago == model.IdTipoPago);
+            var banco = await _context.Bancos.FirstOrDefaultAsync(p => p.IdBanco == model.IdBanco);
+            var tipocuenta = await _context.TipoCuentas.FirstOrDefaultAsync(p => p.IdTipoCuenta == model.IdTipoCuenta);
+ 
+
+
             //------------------------------------------------------------------------
 
             string folderPath = Path.Combine(_webHostEnvironment.ContentRootPath, "Mediaa");
@@ -471,7 +497,27 @@ namespace TSK.Controllers
 
                 if (aprobador != null)
                 {
-                    model.LoginAprobador = aprobador.Aprobador.IdUsuario;
+                    if (aprobador.Aprobador.IdUsuario != model.LoginSolicitante) // Verifica si el aprobador es diferente al solicitante
+                    {
+                        model.LoginAprobador = aprobador.Aprobador.IdUsuario;
+                    }
+                    else
+                    {
+                        // Busca el siguiente aprobador disponible que sea diferente al solicitante
+                        var siguienteAprobador = aprobadoresArea
+                            .Where(aprobadorUsuario => aprobadorUsuario.Usuario.MontoAprobacion >= model.Importe && aprobadorUsuario.Aprobador.IdUsuario != model.LoginSolicitante)
+                            .OrderBy(aprobadorUsuario => aprobadorUsuario.Usuario.MontoAprobacion)
+                            .FirstOrDefault();
+
+                        if (siguienteAprobador != null)
+                        {
+                            model.LoginAprobador = siguienteAprobador.Aprobador.IdUsuario;
+                        }
+                        else
+                        {
+                            model.LoginAprobador = 49; // Asigna el valor 49 si no se encuentra un aprobador adecuado.
+                        }
+                    }
                 }
                 else
                 {
@@ -499,24 +545,154 @@ namespace TSK.Controllers
             var result = _context.Pagos.Add(model);
 
             await _context.SaveChangesAsync();
-            string correo_emisor = "leedryk@gmail.com";
-            string clave_emisor = "xxrlviitjlpqytrj";
+            string correo_emisor = "aldovasquez@barrick.com";
+            string clave_emisor = "g01nT36reat2#";
 
             MailAddress receptor = new(correoAprobador);
-            MailAddress emisor = new("leedryk@gmail.com");
+            MailAddress emisor = new("aldovasquez@barrick.com");
 
             MailMessage email = new MailMessage(emisor, receptor);
-            email.Subject = "Pruebas para SPP";
+            email.Subject = "Sistema Pago de Proveedores";
 
             string body = @"
-            <div style='background-color: #F1F0E9; padding: 20px; width: 715px; text-align: center;'>
-            <h2 style='font-weight: bold; font-size: 23px; color: #000000;'>SOLICITUD DE PAGO DE PROVEEDORES</h2>
-            <div style='text-align: left; width: 666px; background: #F1F0E9; border: 2px solid #DDDAD2; padding: 10px;'>
-                <label style='font-size: 15px; color: #000000;'>Número de Solicitud:</label>
-                <br/>
-                <div style='border: 1px solid #A79A66; width: 301px; height: 20px;'>"
-                    + proveedor +
-                @"</div>
+            <div style='background-color: #f1f0e9; padding: 20px; width: 850px; text-align: center;'>
+                <h2 style='font-weight: bold; font-size: 23px; color: #000000; margin-right: 50px;'>Solicitud de pago de proveedores</h2>
+                <div style='margin-top: 30px; margin-left: 30px; text-align: left; width: 750px; background: #f1f0e9; border: 2px solid #dddad2; padding: 10px;'>
+                    <table>
+                        <tr>
+                            <td>
+                                <label style='margin-left: 50px; font-size: 15px; color: #000000;'>Número de solicitud:</label>
+                                <br/>
+                                <div style='margin-left: 50px; border: 1px solid #a79a66; width: 301px; height: 20px;'>
+                                     " + model.IdPago + @"
+                                </div>
+                            </td>
+                            <td>
+                                <label style='font-size: 15px; color: #000000;'>Tipo de Solicitud:</label>
+                                <br/>
+                                <div style=' border: 1px solid #a79a66; width: 310px; height: 20px;'>
+                                    " + adelanto.TipoAdelanto + @"
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan='2'>
+                                <label style='margin-left: 50px; font-size: 15px; color: #000000;'>Nombre de Proveedor y/o Beneficiario:</label>
+                                <br/>
+                                <div style='margin-left: 50px; border: 1px solid #a79a66; width: 615px; height: 20px;'>
+                                    " + proveedor.NombreProveedor + @"
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <label style='margin-left: 50px; display: inline-block; font-size: 15px; color: #000000;'>Fecha de Solicitud:</label>
+                                <br/>
+                                <div style='margin-left: 50px; border: 1px solid #a79a66; width: 300px; height: 20px;'>
+                                      " + model.FechaSolicitud + @"
+                                </div>
+                            </td>
+                            <td>
+                                <div style='display: inline-block; vertical-align: top; '>
+                                    <label style='font-size: 15px; color: #000000;'>Importe:</label>
+                                    <br/>
+                                    <div style='border: 1px solid #a79a66; width: 310px; height: 20px;'>
+                                         " + moneda.TipoMoneda + " " + model.Importe.ToString("F2") + " " + @"
+                                    </div>
+ 
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan='2'>
+                                <label style='margin-left: 50px; font-size: 15px; color: #000000;'>Concepto:</label>
+                                <br/>
+                                <div style='margin-left: 50px; border: 1px solid #a79a66; width: 620px; height: 50px;'>
+                                      " + model.Concepto + @"
+                                </div>
+                            </td>
+                        </tr>
+                          <tr>
+                            <td colspan='2'>
+                                <label style='margin-left: 50px; font-size: 15px; color: #000000;'>Tipo de Pago:</label>
+                                <br/>
+                                <div style='margin-left: 50px; border: 1px solid #a79a66; width: 620px; height: 20px;'>
+                                     " + tipopago.TipoPago + @"
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <label style='margin-left: 50px; font-size: 15px; color: #000000;'>Beneficiario Nombre:</label>
+                                <br />
+                                <div style='margin-left: 50px; border: 1px solid #a79a66; width: 301px; height: 20px;'>
+                                    " + model.BeneficiarioNombre + @"
+                                </div>
+                            </td>
+                            <td>
+                                <label style='font-size: 15px; color: #000000;'>Beneficiario Dni:</label>
+                                <br />
+                                <div style=' border: 1px solid #a79a66; width: 310px; height: 20px;'>
+                                        " + model.BeneficiarioDni + @"
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <label style='margin-left: 50px; font-size: 15px; color: #000000;'>Nombre de Banco:</label>
+                                <br />
+                                <div style='margin-left: 50px; border: 1px solid #a79a66; width: 301px; height: 20px;'>
+                                        " + banco.NombreBanco + @"
+                                </div>
+                            </td>
+                            <td>
+                                <label style='font-size: 15px; color: #000000;'>Tipo Cuenta:</label>
+                                <br />
+                                <div style=' border: 1px solid #a79a66; width: 310px; height: 20px;'>
+                                        " + tipocuenta.TipoCuenta + @"
+                                </div>
+                            </td>
+                        </tr>
+                            <tr>
+                            <td colspan='2'>
+                                <label style='margin-left: 50px; font-size: 15px; color: #000000;'>Cuenta Bancaria:</label>
+                                <br/>
+                                <div style='margin-left: 50px; border: 1px solid #a79a66; width: 620px; height: 20px;'>
+                                    " + model.CuentaBancaria + @"
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan='2'>
+                                <label style='margin-left: 50px; font-size: 15px; color: #000000;'>Información Contable:</label>
+                                <br />
+                                <div style='margin-left: 50px; border: 1px solid #a79a66; width: 620px; height: 50px;'>
+                                        " + model.InformacionContable + @"
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan='2'>
+                                <label style='margin-left: 50px; font-size: 15px; color: #000000;'>Observaciones:</label>
+                                <br/>
+                                <div style='margin-left: 50px; border: 1px solid #a79a66; width: 620px; height: 50px;'>
+                                    " + model.Observaciones + @"
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan ='2'>
+                                <label style = 'margin-left: 50px; font-size: 15px; color: #000000;' > Solicitante:</label>
+                                <br />
+                                <div style = 'margin-left: 50px;; border: 1px solid #a79a66; width: 301px; height: 20px;'>
+                                    " + solicitante + @"
+                                </ div >
+                            </td>
+                        </tr>
+                    </table>
+                    <div style = 'margin-left: 250px; margin-top: 20px;' >
+                        <a href = 'http://10.133.17.21/TokenUsuario/Aprobador' style = 'background-color: #000000; color: #ffffff; padding: 10px 20px; margin-right: 10px; border: none; cursor: pointer; text-decoration: none; display: inline-block;'> Editar Estado de Pago </a>
+                    </div>
                 </div>
             </div>";
 
@@ -524,11 +700,12 @@ namespace TSK.Controllers
             email.IsBodyHtml = true;  // Indicate that the email body is HTML
 
             SmtpClient smtp = new();
-            smtp.Host = "smtp.gmail.com";
+            smtp.Host = "mail-na-goldbar.barrick.com";
             smtp.Port = 587;
             smtp.Credentials = new NetworkCredential(correo_emisor, clave_emisor);
             smtp.DeliveryMethod = SmtpDeliveryMethod.Network;
             smtp.EnableSsl = true;
+            smtp.UseDefaultCredentials = false;
 
             smtp.Send(email);
 
@@ -653,7 +830,7 @@ namespace TSK.Controllers
                          group new { i, u } by i.IdUsuario into g
                          select new
                          {
-                             Value = g.First().i.IdAprobador,
+                             Value = g.First().i.IdUsuario,
                              Text = g.First().u.Nombre + " " + g.First().u.Apellido
                          };
 
@@ -715,7 +892,7 @@ namespace TSK.Controllers
         {
             Console.WriteLine("------------------" + pago);
             string fileName = "NoData.txt"; // Reemplaza con el nombre real del archivo PDF
-            string filePath = Path.Combine(_webHostEnvironment.ContentRootPath, "Mediaa", fileName);
+            string filePath = Path.Combine(_webHostEnvironment.ContentRootPath, "Mediaa", pago);
             var fileBytes = System.IO.File.ReadAllBytes(filePath);
             return File(fileBytes, "application/txt", fileName);
         }
@@ -725,7 +902,7 @@ namespace TSK.Controllers
         {
             Console.WriteLine("------------------" + pago);
             string fileName = "NoData.txt"; // Reemplaza con el nombre real del archivo PDF
-            string filePath = Path.Combine(_webHostEnvironment.ContentRootPath, "Mediaa", fileName);
+            string filePath = Path.Combine(_webHostEnvironment.ContentRootPath, "Mediaa", pago);
             var fileBytes = System.IO.File.ReadAllBytes(filePath);
             return File(fileBytes, "application/txt", fileName);
         }
@@ -735,7 +912,7 @@ namespace TSK.Controllers
         {
             Console.WriteLine("------------------" + pago);
             string fileName = "NoData.txt"; // Reemplaza con el nombre real del archivo PDF
-            string filePath = Path.Combine(_webHostEnvironment.ContentRootPath, "Mediaa", fileName);
+            string filePath = Path.Combine(_webHostEnvironment.ContentRootPath, "Mediaa", pago);
             var fileBytes = System.IO.File.ReadAllBytes(filePath);
             return File(fileBytes, "application/txt", fileName);
         }

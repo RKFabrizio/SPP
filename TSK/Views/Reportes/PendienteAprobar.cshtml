@@ -56,6 +56,7 @@
          .LoadAction("Get")
          .Key("IdPago")
      )
+     .OnRowClick("onGridRowClick")
      .RemoteOperations(true)
      .Columns(columns =>
      {
@@ -83,7 +84,7 @@
          columns.AddFor(m => m.Importe).Caption("Importe").DataType(GridColumnDataType.Number).Format(c => c
              .Type(Format.FixedPoint)
              .Precision(2)
-         ).Width(120);
+         ).Width(110);
 
          columns.AddFor(m => m.Concepto).Width(200);
 
@@ -109,7 +110,7 @@
              .DataSource(ds => ds.WebApi().Controller("PagoPendienteAprobacion").LoadAction("TipoPagosLookup").Key("Value"))
              .ValueExpr("Value")
              .DisplayExpr("Text")
-         ).HidingPriority(8).Caption("Tipo Pago");
+         ).HidingPriority(7).Caption("Tipo Pago");
 
          columns.AddFor(m => m.Observaciones).HidingPriority(1);
 
@@ -131,13 +132,32 @@
              .DisplayExpr("Text")
          ).HidingPriority(6).Caption("Tipo Cuenta");
 
-         columns.Add()
-         .Caption("Referencia OC")
-         .CellTemplate(
-             @<text>
-                 @Html.ActionLink("Referencias", "OpenPdf", "Pagoes", new { pago = 100 })
-             </text>
-        );
+          columns.AddFor(m => m.ReferenciaOC)
+                      .HidingPriority(8)
+                      .Caption("ReferenciaOC")
+                      .CellTemplate(@<text>
+
+                          <a href="#" onclick="descargarPDF()">Descargar</a>
+
+                      </text>);
+
+        columns.AddFor(m => m.ProformaCotizacion)
+          .HidingPriority(9)
+          .Caption("ProformaCotizacion")
+          .CellTemplate(@<text>
+
+              <a href="#" onclick="descargarPDF1()">Descargar</a>
+
+          </text>);
+
+        columns.AddFor(m => m.Factura)
+          .HidingPriority(10)
+          .Caption("Factura")
+          .CellTemplate(@<text>
+
+              <a href="#" onclick="descargarPDF2()">Descargar</a>
+
+          </text>);
 
 
 
@@ -163,9 +183,110 @@
 
  
 <script>
-    function cellClick(e) {
-        if (e.column.caption === "PDF File") {
-            window.location.href = '@Url.Action("OpenPdf", "Pagoes")';
-        }
+    var rowData;
+    var rowData2;
+    var rowData3;
+
+    function onGridRowClick(e) {
+        rowData = e.data.ReferenciaOC;
+        rowData2 = e.data.ProformaCotizacion;
+        rowData3 = e.data.Factura;
+
+    }
+
+
+    function descargarPDF() {
+        $.ajax({
+            url: '@Url.Action("OpenPdf", "Pagoes")', // Reemplaza "TuControlador" con el nombre real de tu controlador
+            type: 'GET',
+            data: { pago: rowData },
+            success: function (result) {
+                var blob = new Blob([result], { type: 'application/txt' });
+
+                // Verificar el navegador y crear un enlace para descargar el archivo
+                if (window.navigator && window.navigator.msSaveOrOpenBlob) {
+                    // Para Internet Explorer o Microsoft Edge
+                    window.navigator.msSaveOrOpenBlob(blob, rowData);
+                } else {
+                    // Para otros navegadores
+                    var url = URL.createObjectURL(blob);
+                    var link = document.createElement('a');
+                    link.href = url;
+                    link.download = rowData; // Reemplaza con el nombre real del archivo
+                    link.click();
+
+                    // Liberar la URL del objeto después de la descarga
+                    URL.revokeObjectURL(url);
+                }
+            },
+            error: function (xhr, status, error) {
+                // Maneja el error de la llamada AJAX si es necesario
+                console.error(error);
+            }
+        });
+    }
+
+    function descargarPDF1() {
+        $.ajax({
+            url: '@Url.Action("OpenPdf1", "Pagoes")', // Reemplaza "TuControlador" con el nombre real de tu controlador
+            type: 'GET',
+            data: { pago: rowData2 },
+            success: function (result) {
+                var blob = new Blob([result], { type: 'application/txt' });
+
+                // Verificar el navegador y crear un enlace para descargar el archivo
+                if (window.navigator && window.navigator.msSaveOrOpenBlob) {
+                    // Para Internet Explorer o Microsoft Edge
+                    window.navigator.msSaveOrOpenBlob(blob, rowData2);
+                } else {
+                    // Para otros navegadores
+                    var url = URL.createObjectURL(blob);
+                    var link = document.createElement('a');
+                    link.href = url;
+                    link.download = rowData2; // Reemplaza con el nombre real del archivo
+                    link.click();
+
+                    // Liberar la URL del objeto después de la descarga
+                    URL.revokeObjectURL(url);
+                }
+            },
+            error: function (xhr, status, error) {
+                // Maneja el error de la llamada AJAX si es necesario
+                console.error(error);
+            }
+        });
+    }
+
+    function descargarPDF2() {
+        $.ajax({
+            url: '@Url.Action("OpenPdf2", "Pagoes")', // Reemplaza "TuControlador" con el nombre real de tu controlador
+            type: 'GET',
+            data: { pago: rowData3 },
+            success: function (result) {
+                var blob = new Blob([result], { type: 'application/txt' });
+
+                // Verificar el navegador y crear un enlace para descargar el archivo
+                if (window.navigator && window.navigator.msSaveOrOpenBlob) {
+                    // Para Internet Explorer o Microsoft Edge
+                    window.navigator.msSaveOrOpenBlob(blob, rowData3);
+                } else {
+                    // Para otros navegadores
+                    var url = URL.createObjectURL(blob);
+                    var link = document.createElement('a');
+                    link.href = url;
+                    link.download = rowData3; // Reemplaza con el nombre real del archivo
+                    link.click();
+
+                    // Liberar la URL del objeto después de la descarga
+                    URL.revokeObjectURL(url);
+                }
+            },
+            error: function (xhr, status, error) {
+                // Maneja el error de la llamada AJAX si es necesario
+                console.error(error);
+            }
+        });
     }
 </script>
+
+ 

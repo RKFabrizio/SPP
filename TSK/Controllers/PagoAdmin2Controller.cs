@@ -172,11 +172,12 @@ namespace TSK.Controllers
                          orderby i.IdUsuario
                          select new
                          {
-                             Value = i.IdAprobador,
-                             Text = u.Nombre + u.Apellido // Aquí estamos seleccionando el nombre del usuario
+                             Value = i.IdUsuario,
+                             Text = u.Nombre + " " + u.Apellido // Aquí estamos seleccionando el nombre del usuario
                          };
             return Json(await DataSourceLoader.LoadAsync(lookup, loadOptions));
         }
+
 
         [HttpGet]
         public async Task<IActionResult> TipoPagosLookup(DataSourceLoadOptions loadOptions) {
