@@ -20,6 +20,7 @@ using System.Net;
 using Microsoft.AspNetCore.Hosting;
 using DevExpress.Data.Mask.Internal;
 using Microsoft.AspNetCore.Authorization;
+using System.Text.RegularExpressions;
 
 namespace TSK.Controllers
 {
@@ -93,6 +94,11 @@ namespace TSK.Controllers
             var adelanto = await _context.TipoAdelantos.FirstOrDefaultAsync(p => p.IdTipoAdelanto == model.IdTipoAdelanto);
             var moneda = await _context.TipoMonedas.FirstOrDefaultAsync(p => p.IdTipoMoneda == model.IdTipoMoneda);
 
+
+            if (model.Importe < 1)
+            {
+                return BadRequest("El importe es invalido.");
+            }
 
             string folderPath = Path.Combine(_webHostEnvironment.ContentRootPath, "Mediaa");
 
@@ -236,15 +242,17 @@ namespace TSK.Controllers
             var result = _context.Pagos.Add(model);
 
 
-
             await _context.SaveChangesAsync();
-            string correo_emisor = "aldovasquez@barrick.com";
-            string clave_emisor = "g01nT36reat2#";
+            string correo_emisor = "svc-vd-pino@barrick.com";
+            string clave_emisor = "maVafRevUp23";
+            //string correo_emisor = "leedryk@gmail.com";
+            //string clave_emisor = "xxrlviitjlpqytrj";
 
             MailAddress receptor = new(correoAprobador);
-            MailAddress emisor = new("aldovasquez@barrick.com");
-
+            MailAddress emisor = new(correo_emisor);
+            
             MailMessage email = new MailMessage(emisor, receptor);
+
             if (lastFacturaFilePath != null)
             {
                 Attachment attachment = new Attachment(lastFacturaFilePath);
@@ -262,6 +270,7 @@ namespace TSK.Controllers
             }
 
             email.Subject = "Sistema Pago de Proveedores";
+
             string body = @"
         <div style='background-color: #f1f0e9; padding: 20px; width: 850px; text-align: center;'>
             <h2 style='font-weight: bold; font-size: 23px; color: #000000; margin-right: 50px;'>Solicitud de pago de proveedores</h2>
@@ -279,7 +288,7 @@ namespace TSK.Controllers
                     <label style='font-size: 15px; color: #000000;'>Tipo de Solicitud:</label>
                     <br/>
                     <div style=' border: 1px solid #a79a66; width: 310px; height: 20px;'>
-                        "+ adelanto.TipoAdelanto + @"
+                        " + adelanto.TipoAdelanto + @"
                     </div>
                 </td>
             </tr>
@@ -288,7 +297,7 @@ namespace TSK.Controllers
                     <label style='margin-left: 50px; font-size: 15px; color: #000000;'>Nombre de Proveedor y/o Beneficiario:</label>
                     <br/>
                     <div style='margin-left: 50px; border: 1px solid #a79a66; width: 615px; height: 20px;'>
-                        "+ proveedor.NombreProveedor + @"
+                        " + proveedor.NombreProveedor + @"
                     </div>
                 </td>
             </tr>
@@ -297,7 +306,7 @@ namespace TSK.Controllers
                     <label style='margin-left: 50px; display: inline-block; font-size: 15px; color: #000000;'>Fecha de Solicitud:</label>
                     <br/>
                     <div style='margin-left: 50px; border: 1px solid #a79a66; width: 300px; height: 20px;'>
-                          "+ model.FechaSolicitud + @"
+                          " + model.FechaSolicitud + @"
                     </div>
                 </td>
                 <td>
@@ -316,7 +325,7 @@ namespace TSK.Controllers
                     <label style='margin-left: 50px; font-size: 15px; color: #000000;'>Concepto:</label>
                     <br/>
                     <div style='margin-left: 50px; border: 1px solid #a79a66; width: 620px; height: 50px;'>
-                          "+ model.Concepto + @"
+                          " + model.Concepto + @"
                     </div>
                 </td>
             </tr>
@@ -325,7 +334,7 @@ namespace TSK.Controllers
                     <label style='margin-left: 50px; font-size: 15px; color: #000000;'>Información Contable:</label>
                     <br />
                     <div style='margin-left: 50px; border: 1px solid #a79a66; width: 620px; height: 50px;'>
-                            "+ model.InformacionContable+ @"
+                            " + model.InformacionContable + @"
                     </div>
                 </td>
             </tr>
@@ -343,7 +352,7 @@ namespace TSK.Controllers
                     <label style = 'margin-left: 50px; font-size: 15px; color: #000000;' > Solicitante:</label>
                     <br />
                     <div style = 'margin-left: 50px;; border: 1px solid #a79a66; width: 301px; height: 20px;'>
-                        "+ solicitante + @"
+                        " + solicitante + @"
                     </ div >
                 </td>
             </tr>
@@ -358,15 +367,20 @@ namespace TSK.Controllers
             email.Body = body;
             email.IsBodyHtml = true;  // Indicate that the email body is HTML
 
-            SmtpClient smtp = new();
-            smtp.Host = "mail-na-goldbar.barrick.com";
-            smtp.Port = 587;
-            smtp.Credentials = new NetworkCredential(correo_emisor, clave_emisor);
-            smtp.DeliveryMethod = SmtpDeliveryMethod.Network;
-            smtp.EnableSsl = true;
-            smtp.UseDefaultCredentials = false;
+            //SmtpClient smtp = new();
+            //smtp.Host = "smtp.gmail.com";
+            //smtp.Port = 587;
+            //smtp.Credentials = new NetworkCredential(correo_emisor, clave_emisor);
+            //smtp.DeliveryMethod = SmtpDeliveryMethod.Network;
+            //smtp.EnableSsl = true;
 
-            smtp.Send(email);
+            //smtp.Send(email);
+
+            var client = new SmtpClient("CHISANEMP1");
+
+            client.Credentials = new System.Net.NetworkCredential("svc-vd-pino@barrick.com", "");
+
+            client.Send(email);
 
             return Json(new { IdPago = result.Entity.IdPago });
         }
@@ -402,8 +416,11 @@ namespace TSK.Controllers
             var tipopago = await _context.TipoPagos.FirstOrDefaultAsync(p => p.IdTipoPago == model.IdTipoPago);
             var banco = await _context.Bancos.FirstOrDefaultAsync(p => p.IdBanco == model.IdBanco);
             var tipocuenta = await _context.TipoCuentas.FirstOrDefaultAsync(p => p.IdTipoCuenta == model.IdTipoCuenta);
- 
 
+            if (model.Importe < 1)
+            {
+                return BadRequest("El importe es invalido.");
+            }
 
             //------------------------------------------------------------------------
 
@@ -545,11 +562,13 @@ namespace TSK.Controllers
             var result = _context.Pagos.Add(model);
 
             await _context.SaveChangesAsync();
-            string correo_emisor = "aldovasquez@barrick.com";
-            string clave_emisor = "g01nT36reat2#";
+            string correo_emisor = "svc-vd-pino@barrick.com";
+            string clave_emisor = "maVafRevUp23";
+            //string correo_emisor = "leedryk@gmail.com";
+            //string clave_emisor = "xxrlviitjlpqytrj";
 
             MailAddress receptor = new(correoAprobador);
-            MailAddress emisor = new("aldovasquez@barrick.com");
+            MailAddress emisor = new(correo_emisor);
 
             MailMessage email = new MailMessage(emisor, receptor);
             email.Subject = "Sistema Pago de Proveedores";
@@ -699,15 +718,20 @@ namespace TSK.Controllers
             email.Body = body;
             email.IsBodyHtml = true;  // Indicate that the email body is HTML
 
-            SmtpClient smtp = new();
-            smtp.Host = "mail-na-goldbar.barrick.com";
-            smtp.Port = 587;
-            smtp.Credentials = new NetworkCredential(correo_emisor, clave_emisor);
-            smtp.DeliveryMethod = SmtpDeliveryMethod.Network;
-            smtp.EnableSsl = true;
-            smtp.UseDefaultCredentials = false;
+            //SmtpClient smtp = new();
+            //smtp.Host = "smtp.gmail.com";
+            //smtp.Port = 587;
+            //smtp.Credentials = new NetworkCredential(correo_emisor, clave_emisor);
+            //smtp.DeliveryMethod = SmtpDeliveryMethod.Network;
+            //smtp.EnableSsl = true;
 
-            smtp.Send(email);
+            //smtp.Send(email);
+
+            var client = new SmtpClient("CHISANEMP1");
+
+            client.Credentials = new System.Net.NetworkCredential("svc-vd-pino@barrick.com", "");
+
+            client.Send(email);
 
             return Json(new { IdPago = result.Entity.IdPago });
         }
@@ -888,33 +912,87 @@ namespace TSK.Controllers
         }
 
         [HttpGet]
-        public ActionResult OpenPdf(string pago)
+        public IActionResult Download1(string pago)
         {
-            Console.WriteLine("------------------" + pago);
-            string fileName = "NoData.txt"; // Reemplaza con el nombre real del archivo PDF
+            // Obtener la ruta completa del archivo
             string filePath = Path.Combine(_webHostEnvironment.ContentRootPath, "Mediaa", pago);
-            var fileBytes = System.IO.File.ReadAllBytes(filePath);
-            return File(fileBytes, "application/txt", fileName);
+            string extension = Path.GetExtension(pago);
+            try
+            {
+                // Leer los bytes del archivo
+                byte[] fileData = System.IO.File.ReadAllBytes(filePath);
+
+                return File(fileData, ObtenerTipoMIME(extension));
+            }
+            catch (Exception ex)
+            {
+                // Manejar el error si es necesario
+                Console.WriteLine(ex.Message);
+                return BadRequest("Error al descargar el archivo.");
+            }
         }
 
         [HttpGet]
-        public ActionResult OpenPdf1(string pago)
+        public IActionResult Download2(string pago)
         {
-            Console.WriteLine("------------------" + pago);
-            string fileName = "NoData.txt"; // Reemplaza con el nombre real del archivo PDF
+            // Obtener la ruta completa del archivo
             string filePath = Path.Combine(_webHostEnvironment.ContentRootPath, "Mediaa", pago);
-            var fileBytes = System.IO.File.ReadAllBytes(filePath);
-            return File(fileBytes, "application/txt", fileName);
+            string extension = Path.GetExtension(pago);
+            try
+            {
+                // Leer los bytes del archivo
+                byte[] fileData = System.IO.File.ReadAllBytes(filePath);
+
+                // Devolver los datos del archivo como una respuesta HTTP
+                return File(fileData, ObtenerTipoMIME(extension));
+            }
+            catch (Exception ex)
+            {
+                // Manejar el error si es necesario
+                Console.WriteLine(ex.Message);
+                return BadRequest("Error al descargar el archivo.");
+            }
         }
 
         [HttpGet]
-        public ActionResult OpenPdf2(string pago)
+        public IActionResult Download3(string pago)
         {
-            Console.WriteLine("------------------" + pago);
-            string fileName = "NoData.txt"; // Reemplaza con el nombre real del archivo PDF
+            // Obtener la ruta completa del archivo
             string filePath = Path.Combine(_webHostEnvironment.ContentRootPath, "Mediaa", pago);
-            var fileBytes = System.IO.File.ReadAllBytes(filePath);
-            return File(fileBytes, "application/txt", fileName);
+            string extension = Path.GetExtension(pago);
+            try
+            {
+                // Leer los bytes del archivo
+                byte[] fileData = System.IO.File.ReadAllBytes(filePath);
+
+                // Devolver los datos del archivo como una respuesta HTTP
+                return File(fileData, ObtenerTipoMIME(extension));
+            }
+            catch (Exception ex)
+            {
+                // Manejar el error si es necesario
+                Console.WriteLine(ex.Message);
+                return BadRequest("Error al descargar el archivo.");
+            }
+        }
+
+        private string ObtenerTipoMIME(string extension)
+        {
+            // Establecer el tipo MIME según la extensión del archivo
+            switch (extension.ToLower())
+            {
+                case ".txt":
+                    return "application/txt";
+                case ".doc":
+                    return "application/msword";
+                case ".docx":
+                    return "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
+                case ".pdf":
+                    return "application/pdf";
+                default:
+                    // Extensión de archivo no válida
+                    return string.Empty;
+            }
         }
 
         private void PopulateModel(Pago model, IDictionary values) {
@@ -961,11 +1039,13 @@ namespace TSK.Controllers
                 model.IdTipoMoneda = Convert.ToInt32(values[ID_TIPO_MONEDA]);
             }
 
-            if(values.Contains(IMPORTE)) {
+            if (values.Contains(IMPORTE))
+            {
                 model.Importe = Convert.ToSingle(values[IMPORTE], CultureInfo.InvariantCulture);
             }
 
-            if(values.Contains(CONCEPTO)) {
+
+            if (values.Contains(CONCEPTO)) {
                 model.Concepto = Convert.ToString(values[CONCEPTO]);
             }
 

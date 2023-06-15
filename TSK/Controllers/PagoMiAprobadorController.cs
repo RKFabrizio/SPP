@@ -11,6 +11,8 @@ using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using SPP.Models.Entity;
+using System.Net.Mail;
+using System.Net;
 
 namespace TSK.Controllers
 {
@@ -106,6 +108,43 @@ namespace TSK.Controllers
                 {
                     model.FechaAprobacion = DateTime.Now;
                 }
+
+            // Obtener LoginSolicitante del IdPago que se está editando
+            int idSolicitante = model.LoginSolicitante;
+
+            // Usar _context.Usuarios para buscar el correo mediante idUsuario
+            var usuario = await _context.Usuarios.FirstOrDefaultAsync(u => u.IdUsuario == idSolicitante);
+            if (usuario == null)
+                return StatusCode(409, "Usuario not found");
+
+            string correoSolicitante = usuario.Correo;
+            var estado = await _context.Estados.FirstOrDefaultAsync(p => p.IdEstado == model.IdEstado);
+
+
+            await _context.SaveChangesAsync();
+
+            string correo_emisor = "svc-vd-pino@barrick.com";
+            string clave_emisor = "maVafRevUp23";
+
+            MailAddress receptor = new MailAddress(correoSolicitante);
+            MailAddress emisor = new MailAddress(correo_emisor);
+
+            MailMessage email = new MailMessage(emisor, receptor);
+
+            email.Subject = "Sistema Pago de Proveedores";
+
+            string body = @"Tu solicitud Nro " + model.IdPago + @" fue:" + estado.NombreEstado + @"
+             ";
+
+            email.Body = body;
+            email.IsBodyHtml = true;  // Indicate that the email body is HTML
+
+
+            var client = new SmtpClient("CHISANEMP1");
+
+            client.Credentials = new System.Net.NetworkCredential("svc-vd-pino@barrick.com", "");
+
+            client.Send(email);
 
             await _context.SaveChangesAsync();
                 return Ok();

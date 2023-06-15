@@ -11,6 +11,7 @@ using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using SPP.Models.Entity;
+using Microsoft.AspNetCore.Hosting;
 
 namespace TSK.Controllers
 {
@@ -18,8 +19,10 @@ namespace TSK.Controllers
     public class PagoMiSolicitudController : Controller
     {
         private SPPEU2GIGDEVSQLContext _context;
+        private readonly IWebHostEnvironment _webHostEnvironment;
 
-        public PagoMiSolicitudController(SPPEU2GIGDEVSQLContext context) {
+        public PagoMiSolicitudController(IWebHostEnvironment webHostEnvironment, SPPEU2GIGDEVSQLContext context) {
+            _webHostEnvironment = webHostEnvironment;
             _context = context;
         }
 
@@ -34,7 +37,7 @@ namespace TSK.Controllers
                 int idUsuario = usuario.IdUsuario;  // Aquí obtenemos el IdUsuario
 
                 var pagos = _context.Pagos
-                    .Where(p => p.LoginSolicitante == idUsuario && ( p.IdEstado == 2 || p.IdEstado == 3 ))  // Filtrar por LoginSolicitante
+                    .Where(p => p.LoginSolicitante == idUsuario && ( p.IdEstado == 2 || p.IdEstado == 3 || p.IdEstado == 1))  // Filtrar por LoginSolicitante
                     .Select(i => new {
                         i.IdPago,
                         i.IdTipoAdelanto,
@@ -216,6 +219,8 @@ namespace TSK.Controllers
                          };
             return Json(await DataSourceLoader.LoadAsync(lookup, loadOptions));
         }
+
+
 
         private void PopulateModel(Pago model, IDictionary values) {
             string ID_PAGO = nameof(Pago.IdPago);

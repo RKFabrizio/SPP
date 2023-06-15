@@ -11,6 +11,9 @@ using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using SPP.Models.Entity;
+using System.Xml.Linq;
+using System.Net.Mail;
+using System.Net;
 
 namespace TSK.Controllers
 {
@@ -26,9 +29,15 @@ namespace TSK.Controllers
         [HttpGet]
         public async Task<IActionResult> Get(DataSourceLoadOptions loadOptions)
         {
-            var pagos = _context.Pagos
+            string usuarioInfoJson = HttpContext.Request.Cookies["UsuarioInfo"];
+            if (!string.IsNullOrEmpty(usuarioInfoJson))
+            {
+                Usuario usuario = JsonConvert.DeserializeObject<Usuario>(usuarioInfoJson);
+                int idUsuario = usuario.IdUsuario;  // Aquí obtenemos el IdUsuario
+
+                var pagos = _context.Pagos
                                 .OrderByDescending(i => i.IdPago)  // Ordenar por IdPago de manera descendente
-                                .Where(i => i.IdEstado == 1)
+                                .Where(i => i.IdEstado == 1 && i.LoginSolicitante != idUsuario)  // Agregar la condición adicional
                                 .Select(i => new {
                                     i.IdPago,
                                     i.IdTipoAdelanto,
@@ -54,16 +63,18 @@ namespace TSK.Controllers
                                     i.IdTipoCuenta
                                 });
 
-            // If underlying data is a large SQL table, specify PrimaryKey and PaginateViaPrimaryKey.
-            // This can make SQL execution plans more efficient.
-            // For more detailed information, please refer to this discussion: https://github.com/DevExpress/DevExtreme.AspNet.Data/issues/336.
-            // loadOptions.PrimaryKey = new[] { "IdPago" };
-            // loadOptions.PaginateViaPrimaryKey = true;
-
-            return Json(await DataSourceLoader.LoadAsync(pagos, loadOptions));
+                return Json(await DataSourceLoader.LoadAsync(pagos, loadOptions));
+            }
+            else
+            {
+                // Si no hay información del usuario en la cookie, puedes manejarlo de la manera que prefieras.
+                // Por ejemplo, podrías redirigir al usuario a la página de inicio de sesión.
+                return RedirectToAction("Login", "Acceso");
+            }
         }
 
 
+         
         [HttpPost]
         public async Task<IActionResult> Post(string values) {
             var model = new Pago();
@@ -80,20 +91,22 @@ namespace TSK.Controllers
         }
 
         [HttpPut]
-        public async Task<IActionResult> Put(int key, string values) {
+        public async Task<IActionResult> Put(int key, string values)
+        {
+           
             var model = await _context.Pagos.FirstOrDefaultAsync(item => item.IdPago == key);
-            if(model == null)
+            if (model == null)
                 return StatusCode(409, "Object not found");
 
             var valuesDict = JsonConvert.DeserializeObject<IDictionary>(values);
             PopulateModel(model, valuesDict);
 
-            if(!TryValidateModel(model))
+            if (!TryValidateModel(model))
                 return BadRequest(GetFullErrorMessage(ModelState));
 
-            await _context.SaveChangesAsync();
             return Ok();
         }
+
 
         [HttpDelete]
         public async Task Delete(int key) {
@@ -222,6 +235,8 @@ namespace TSK.Controllers
                          };
             return Json(await DataSourceLoader.LoadAsync(lookup, loadOptions));
         }
+
+
 
         private void PopulateModel(Pago model, IDictionary values) {
             string ID_PAGO = nameof(Pago.IdPago);
