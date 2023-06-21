@@ -185,7 +185,9 @@
     }
 
     .modal-body {
-        background-color: #fff;
+        background-color: #f1f0e9;
+        width: 800px;
+        align-items: center;
     }
 
     .modal-footer {
@@ -194,8 +196,11 @@
     }
 
     .modal-content {
+        background-color: #f1f0e9;
+        width: 850px;
         box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
     }
+
 
     .form-group span {
         font-weight: bold;
@@ -210,7 +215,7 @@
     }
 
     .custom-modal-header {
-        background-color: #a79a66; /* Color azul oscuro */
+        background-color: white; /* Color azul oscuro */
         border-bottom: none;
         color: black; /* Cambiado a color negro */
     }
@@ -226,87 +231,101 @@
     <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
         <div class="modal-content">
             <div class="modal-header custom-modal-header ">
-                <h5 class="modal-title modal-size" id="exampleModalLongTitle">Pago</h5>
+                <h5 class="modal-title modal-size" id="exampleModalLongTitle">Solicitud de Pago de Proveedores</h5>
             </div>
             <div class="modal-body">
-                <div class="row">
-                    <div class="col-md-4">
-                        <div class="form-group">
-                            <label for="nroSolicitud">Nro de Solicitud:</label>
-                            <span id="nroSolicitud" class="form-control"></span>
-                        </div>
-                        <div class="form-group">
-                            <label for="tipoSolicitud">Tipo de Solicitud:</label>
-                            <span id="tipoSolicitud" class="form-control"></span>
-                        </div>
-                        <div class="form-group">
-                            <label for="proveedor">Proveedor:</label>
-                            <span id="proveedor" class="form-control"></span>
-                        </div>
-                        <div class="form-group">
-                            <label for="importe">Importe:</label>
-                            <span id="importe" class="form-control"></span>
-                        </div>
-                        <div class="form-group">
-                            <label for="fechaSolicitud">Fecha Solicitud:</label>
-                            <span id="fechaSolicitud" class="form-control"></span>
-                        </div>
-                        <div class="form-group">
-                            <label for="concepto">Concepto:</label>
-                            <textarea id="concepto" class="form-control"></textarea>
-                        </div>
+
+                <div style="display: flex;">
+                    <div class="form-group" style="margin-right: 20px ;">
+                        <label for="nroSolicitud">Nro de Solicitud:</label>
+                        <span id="nroSolicitud" class="form-control"></span>
                     </div>
-                    <div class="col-md-4">
-                        <div class="form-group">
-                            <label for="informacionContable">Informacion Contable:</label>
-                            <textarea id="informacionContable" class="form-control"></textarea>
-                        </div>
-                        <div class="form-group">
-                            <label for="observaciones">Observaciones:</label>
-                            <textarea id="observaciones" class="form-control"></textarea>
-                        </div>
-                        <div class="form-group">
-                            <label for="solicitanteText">Solicitante:</label>
-                            <span id="solicitanteText" class="form-control"></span>
-                        </div>
-                        <div class="form-group">
-                            <label for="aprobadorText">Aprobador:</label>
-                            <span id="aprobadorText" class="form-control"></span>
-                        </div>
-                        <div class="form-group">
-                            <label for="estado">Estado:</label>
-                            <span id="estado" class="form-control"></span>
-                        </div>
-                        <div class="form-group">
-                            <label for="beneficiarioDni">BeneficiarioDni:</label>
-                            <span id="beneficiarioDni" class="form-control"></span>
-                        </div>
-                        <div class="form-group">
-                            <label for="nombreBanco">Banco:</label>
-                            <span id="nombreBanco" class="form-control"></span>
-                        </div>
+                    <div class="form-group" style="margin-right: 20px;">
+                        <label for="tipoSolicitud">Tipo de Solicitud:</label>
+                        <span id="tipoSolicitud" class="form-control"></span>
                     </div>
-                    <div class="col-md-4">
-                        <div class="form-group">
-                            <label for="tipoCuenta">Tipo Cuenta:</label>
-                            <span id="tipoCuenta" class="form-control"></span>
-                        </div>
-                        <div class="form-group">
-                            <label for="cuentaBancaria">Cuenta Bancaria:</label>
-                            <span id="cuentaBancaria" class="form-control"></span>
-                        </div>
-                        <br />
-                        <div class="form-group">
-                            <label>Documentos Adjuntos:</label>
-                            <br />
-                            <p>ReferenciaOC: <a href="#" onclick="descargarPDF1()"><span id="rowData" class="form-control"></span></a></p>
-                            <p>ProformaCotizacion: <a href="#" onclick="descargarPDF2()"><span id="rowData2" class="form-control"></span></a></a></p>
-                            <p>Factura: <a href="#" onclick="descargarPDF3()"><span id="rowData3" class="form-control"></span></a></a></p>
-                        </div>
+                    <div class="form-group">
+                        <label for="proveedor">Nombre de Proveedor y/o Beneficiario:</label>
+                        <span id="proveedor" class="form-control"></span>
                     </div>
                 </div>
 
+                <div style="display: flex;">
+                    <div class="form-group" style="margin-right: 20px;">
+                        <label for="fechaSolicitud">Fecha Solicitud:</label>
+                        <span id="fechaSolicitud" class="form-control"></span>
+                    </div>
+                    <div class="form-group" style="margin-right: 20px;">
+                        <label for="importe">Importe:</label>
+                        <span id="importe" class="form-control"></span>
+                    </div>
+                    <div class="form-group" style="margin-right: 20px;">
+                        <label for="estado">Estado:</label>
+                        <span id="estado" class="form-control"></span>
+                    </div>
+                </div>
+
+                <div>
+                    <div class="form-group">
+                        <label for="concepto">Concepto:</label>
+                        <textarea id="concepto" class="form-control"></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="informacionContable">Informacion Contable:</label>
+                        <textarea id="informacionContable" class="form-control"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="observaciones">Observaciones:</label>
+                        <textarea id="observaciones" class="form-control"></textarea>
+                    </div>
+                </div>
+
+                <div style="display: flex;">
+                    <div class="form-group" style="margin-right: 20px;">
+                        <label for="solicitanteText">Solicitante:</label>
+                        <span id="solicitanteText" class="form-control"></span>
+                    </div>
+                    <div class="form-group">
+                        <label for="aprobadorText">Aprobador:</label>
+                        <span id="aprobadorText" class="form-control"></span>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="beneficiarioDni">BeneficiarioDni:</label>
+                    <span id="beneficiarioDni" class="form-control"></span>
+                </div>
+                <div style="display: flex;">
+                    <div class="form-group" style="margin-right: 20px;">
+                        <label for="nombreBanco">Banco:</label>
+                        <span id="nombreBanco" class="form-control"></span>
+                    </div>
+
+
+                    <div class="form-group">
+                        <label for="tipoCuenta">Tipo Cuenta:</label>
+                        <span id="tipoCuenta" class="form-control"></span>
+                    </div>
+
+                </div>
+
+                <div class="form-group">
+                    <label for="cuentaBancaria">Cuenta Bancaria:</label>
+                    <span id="cuentaBancaria" class="form-control"></span>
+                </div>
+                <br />
+                <div class="form-group">
+                    <label>Documentos Adjuntos:</label>
+                    <br />
+                    <p>ReferenciaOC: <a href="#" onclick="descargarPDF1()"><span id="rowData" class="form-control"></span></a></p>
+                    <p>ProformaCotizacion: <a href="#" onclick="descargarPDF2()"><span id="rowData2" class="form-control"></span></a></a></p>
+                    <p>Factura: <a href="#" onclick="descargarPDF3()"><span id="rowData3" class="form-control"></span></a></a></p>
+                </div>
+
             </div>
+
+
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
             </div>
