@@ -406,7 +406,9 @@ namespace TSK.Controllers
                 var client = new SmtpClient("CHISANEMP1");
                 client.Credentials = new System.Net.NetworkCredential("svc-vd-pino@barrick.com", "");
                 client.DeliveryMethod = SmtpDeliveryMethod.Network;
+
                 client.Send(email);
+
                 return Json(new { IdPago = result.Entity.IdPago });
             }
             catch (Exception ex)
