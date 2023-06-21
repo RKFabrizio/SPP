@@ -37,8 +37,10 @@ namespace SPP.Data
                             IdArea = dr["IDAREA"] == DBNull.Value ? 0 : Convert.ToInt32(dr["IDAREA"]),
                             Habilitado = dr["HABILITADO"] == DBNull.Value ? false : Convert.ToBoolean(dr["HABILITADO"]),
                             Companias = new string[] { dr["NOMBRECOMPANIA"].ToString() },
+                            IdCompania = dr["IDCOMPANIA"] == DBNull.Value ? 0 : Convert.ToInt32(dr["IDCOMPANIA"]),
                             Token = dr["TOKEN"].ToString(),
                             IdPais = dr["IDPAIS"] == DBNull.Value ? 0 : Convert.ToInt32(dr["IDPAIS"]),
+                            Contacto = dr["CONTACTO"] == DBNull.Value ? false : Convert.ToBoolean(dr["CONTACTO"]),
                         });
 
                     }

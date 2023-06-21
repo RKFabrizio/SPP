@@ -19,6 +19,8 @@ namespace SPP.Models.Entity
 
             public string Correo { get; set; }
 
+            public string Compania { get; set; }
+
             public virtual Usuario IdAreaNavigation { get; set; }
             public virtual Area IdUsrNavigation { get; set; }
             public virtual ICollection<Pago> LoginAprobador { get; set; }

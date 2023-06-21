@@ -24,7 +24,7 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="6.0.13" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="6.0.14" />
     <PackageReference Include="Rotativa.AspNetCore" Version="1.2.0" />
     <PackageReference Include="System.CodeDom" Version="8.0.0-preview.2.23128.3" />
     <PackageReference Include="System.Data.SqlClient" Version="4.8.3" />
@@ -42,9 +42,6 @@
     <Reference Include="DevExpress.Web.v22.1">
       <HintPath>..\..\..\..\..\..\..\Program Files\DevExpress 22.1\Components\Bin\Framework\DevExpress.Web.v22.1.dll</HintPath>
     </Reference>
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Mediaa\" />
   </ItemGroup>
   <ProjectExtensions>
     <VisualStudio>

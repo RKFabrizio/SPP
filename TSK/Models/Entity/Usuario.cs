@@ -19,13 +19,14 @@ namespace SPP.Models.Entity
         public string Login { get; set; }
         public string Contrasena { get; set; }
         public string Correo { get; set; }
-        public int MontoAprobacion { get; set; }
+        public int? MontoAprobacion { get; set; }
         public int IdPerfil { get; set; }
         public int? IdArea { get; set; }
         public bool Habilitado { get; set; }
         public string? Token { get; set; }
         public int IdCompania { get; set; }
         public int? IdPais { get; set; }
+        public bool Contacto { get; set;  }
 
 
         public virtual Perfil PerfilDisNavigation { get; set; }

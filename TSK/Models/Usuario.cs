@@ -28,6 +28,8 @@ namespace SPP.Models
 
         public string Token { get; set; }
 
+        public bool Contacto { get; set; }
+
         public int IdPais { get; set; }
 
         public string[] Perfiles { get; set; }

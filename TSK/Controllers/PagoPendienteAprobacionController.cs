@@ -58,7 +58,8 @@ namespace TSK.Controllers
                         i.BeneficiarioDni,
                         i.IdBanco,
                         i.IdTipoCuenta
-                    });
+                    })
+                    .OrderByDescending(i => i.IdPago);
 
                 return Json(await DataSourceLoader.LoadAsync(pagos, loadOptions));
             }

@@ -23,7 +23,6 @@ namespace TSK.Controllers
             _context = context;
         }
 
-
         [HttpGet]
         public async Task<IActionResult> Get(DataSourceLoadOptions loadOptions)
         {
@@ -33,14 +32,14 @@ namespace TSK.Controllers
             {
                 Usuario usuario = JsonConvert.DeserializeObject<Usuario>(usuarioInfoJson);
                 int idUsuario = usuario.IdUsuario;  // Aquí obtenemos el IdUsuario
-                int? idPais1 = usuario.IdPais;  // Aquí obtenemos el IdPais
+                int idCompania = usuario.IdCompania;  // Aquí obtenemos el IdPais
 
                 var pagos = _context.Pagos
                     .Join(_context.Usuarios,  // Tabla a la que nos unimos
                           p => p.LoginSolicitante,  // Propiedad en la tabla principal (Pagos)
                           u => u.IdUsuario,  // Propiedad en la tabla de unión (Usuarios)
                           (p, u) => new { Pago = p, Usuario = u })  // Resultado de la unión
-                    .Where(pu => pu.Usuario.IdPais == idPais1 )  // Filtrar por LoginSolicitante y IdPais
+                    .Where(pu => pu.Usuario.IdCompania == idCompania)  // Filtrar por LoginSolicitante y IdPais
                     .Select(i => new {
                         i.Pago.IdPago,
                         i.Pago.IdTipoAdelanto,
@@ -63,8 +62,10 @@ namespace TSK.Controllers
                         i.Pago.BeneficiarioNombre,
                         i.Pago.BeneficiarioDni,
                         i.Pago.IdBanco,
-                        i.Pago.IdTipoCuenta
-                    });
+                        i.Pago.IdTipoCuenta,
+                        i.Pago.Compania
+                    })
+                    .OrderByDescending(i => i.FechaSolicitud);  // Ordenar por FechaSolicitud en orden descendente
 
                 return Json(await DataSourceLoader.LoadAsync(pagos, loadOptions));
             }
@@ -75,6 +76,7 @@ namespace TSK.Controllers
                 return RedirectToAction("Login", "Acceso");
             }
         }
+
 
 
 

@@ -53,14 +53,14 @@
 @(Html.DevExtreme().DataGrid<SPP.Models.Entity.Usuario>()
     .ID("grid1")
     .DataSource(ds => ds.Mvc()
-        .Controller("Usuarios")
+        .Controller("UsuariosNew")
         .LoadAction("Get")
         .InsertAction("Post")
         .UpdateAction("Put")
         .Key("IdUsuario")
     )
     .RemoteOperations(true)
-    .OnContentReady("applyDefaultFilter")
+ 
     .Columns(columns => {
 
         columns.AddFor(m => m.Login).Caption("Username").Width(200);
@@ -94,6 +94,8 @@
         ).Caption("Compañia").Visible(false);
 
         columns.AddFor(m => m.Habilitado).Caption("Estado").Width(200);
+ 
+
         
 
     })
@@ -144,6 +146,7 @@
                                 groupItems.AddSimpleFor(m => m.IdArea);
                                 groupItems.AddSimpleFor(m => m.IdCompania);
                                 groupItems.AddSimpleFor(m => m.Habilitado).CssClass("myFormMargin").Label(label => label.Location(FormLabelLocation.Left));
+                                
 
                             });
                     }))
@@ -154,21 +157,4 @@
 )
 
   
-<script>
-
-    function applyDefaultFilter(e) {
-    e.component.filter(['Habilitado', '=', true]);
-    }
-
-    function toggleFilter(e) {
-        let grid = $("#grid1").dxDataGrid("instance");
-
-        if (e.value) {
-            grid.clearFilter();
-        } else {
-            grid.filter(["Habilitado", "=", true]);
-        }
-    }
-
-
-</script>
+ 

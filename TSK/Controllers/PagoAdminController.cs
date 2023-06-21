@@ -26,31 +26,32 @@ namespace TSK.Controllers
         public async Task<IActionResult> Get(DataSourceLoadOptions loadOptions)
         {
             var pagos = _context.Pagos
-                                .OrderByDescending(i => i.IdPago)  // Ordenar por IdPago de manera descendente
-                                .Select(i => new {
-                                    i.IdPago,
-                                    i.IdTipoAdelanto,
-                                    i.IdProveedor,
-                                    i.FechaSolicitud,
-                                    i.IdTipoMoneda,
-                                    i.Importe,
-                                    i.Concepto,
-                                    i.LoginSolicitante,
-                                    i.LoginAprobador,
-                                    i.ReferenciaOC,
-                                    i.ProformaCotizacion,
-                                    i.Factura,
-                                    i.IdTipoPago,
-                                    i.Observaciones,
-                                    i.FechaAprobacion,
-                                    i.IdEstado,
-                                    i.InformacionContable,
-                                    i.CuentaBancaria,
-                                    i.BeneficiarioNombre,
-                                    i.BeneficiarioDni,
-                                    i.IdBanco,
-                                    i.IdTipoCuenta
-                                });
+                .Select(i => new {
+                    i.IdPago,
+                    i.IdTipoAdelanto,
+                    i.IdProveedor,
+                    i.FechaSolicitud,
+                    i.IdTipoMoneda,
+                    i.Importe,
+                    i.Concepto,
+                    i.LoginSolicitante,
+                    i.LoginAprobador,
+                    i.ReferenciaOC,
+                    i.ProformaCotizacion,
+                    i.Factura,
+                    i.IdTipoPago,
+                    i.Observaciones,
+                    i.FechaAprobacion,
+                    i.IdEstado,
+                    i.InformacionContable,
+                    i.CuentaBancaria,
+                    i.BeneficiarioNombre,
+                    i.BeneficiarioDni,
+                    i.IdBanco,
+                    i.IdTipoCuenta,
+                    i.Compania
+                })
+                .OrderByDescending(i => i.FechaSolicitud);  // Ordenar por FechaSolicitud en orden descendente
 
             return Json(await DataSourceLoader.LoadAsync(pagos, loadOptions));
         }

@@ -14,7 +14,7 @@ namespace SPP.Models.Entity
         }
 
         public int IdArea { get; set; }
-        public string NombreArea { get; set; }
+        public string? NombreArea { get; set; }
 
         public virtual ICollection<Usuario> Usuarios { get; set; }
         public virtual ICollection<Aprobador_Area> AprobadorAreas { get; set; }

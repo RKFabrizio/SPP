@@ -18,5 +18,11 @@ namespace SPP.Controllers
             @ViewBag.pendienteaprobar = "active";
             return View();
         }
+        public IActionResult PendienteAprobarxAprobador()
+        {
+            @ViewBag.rep = "active";
+            @ViewBag.pendienteaprobarxaprobador = "active";
+            return View();
+        }
     }
 }

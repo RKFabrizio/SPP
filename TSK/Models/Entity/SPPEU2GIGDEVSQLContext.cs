@@ -62,9 +62,14 @@ namespace SPP.Models.Entity
                      .HasColumnName("ID_USUARIO");
 
                 entity.Property(e => e.Correo)
-                    .IsRequired()
+                    .IsRequired(false)
                     .HasMaxLength(100)
                     .HasColumnName("CORREO");
+
+                entity.Property(e => e.Compania)
+                .IsRequired(false)
+                .HasMaxLength(100)
+                .HasColumnName("COMPANIA");
 
                 entity.HasOne(d => d.IdAreaNavigation)
                     .WithMany(p => p.AprobadorAreas)
@@ -193,7 +198,7 @@ namespace SPP.Models.Entity
                 entity.Property(e => e.IdArea).HasColumnName("IDAREA");
 
                 entity.Property(e => e.NombreArea)
-                    .IsRequired()
+                    .IsRequired(false)
                     .HasMaxLength(50)
                     .HasColumnName("NOMBREAREA");
             });
@@ -247,11 +252,13 @@ namespace SPP.Models.Entity
                     .HasColumnName("LOGIN");
 
 
-                entity.Property(e => e.MontoAprobacion).HasColumnName("MONTOAPROBACION");
+                entity.Property(e => e.MontoAprobacion).HasColumnName("MONTOAPROBACION")
+                .IsRequired(false);
                 entity.Property(e => e.IdPerfil).HasColumnName("IDPERFIL");
                 entity.Property(e => e.IdArea).HasColumnName("IDAREA");
                 entity.Property(e => e.IdCompania).HasColumnName("IDCOMPANIA");
                 entity.Property(e => e.Habilitado).HasColumnName("HABILITADO");
+                entity.Property(e => e.Contacto).HasColumnName("CONTACTO");
 
                 entity.Property(e => e.Token)
                    .IsRequired(false)
@@ -307,6 +314,12 @@ namespace SPP.Models.Entity
                     .IsRequired()
                     .HasMaxLength(50)
                     .HasColumnName("NOMBRECOMPANIA");
+
+                entity.HasOne(d => d.IdDisPais)
+                   .WithMany(p => p.Companias)
+                   .HasForeignKey(d => d.IdPais)
+                   .HasConstraintName("FK_COMPANIA_PAIS");
+
             });
 
 
@@ -497,6 +510,11 @@ namespace SPP.Models.Entity
                   .IsRequired(false)
                   .HasMaxLength(50)
                   .HasColumnName("CUENTABANCARIA");
+
+                entity.Property(e => e.Compania)
+                    .IsRequired(false)
+                    .HasMaxLength(100)
+                    .HasColumnName("COMPANIA");
 
 
                 entity.HasOne(d => d.ProveedorNavigation)

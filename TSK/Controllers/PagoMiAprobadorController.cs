@@ -126,6 +126,9 @@ namespace TSK.Controllers
             string correo_emisor = "svc-vd-pino@barrick.com";
             string clave_emisor = "maVafRevUp23";
 
+            //string correo_emisor = "leedryk@gmail.com";
+            //string clave_emisor = "xxrlviitjlpqytrj";
+
             MailAddress receptor = new MailAddress(correoSolicitante);
             MailAddress emisor = new MailAddress(correo_emisor);
 
@@ -133,23 +136,30 @@ namespace TSK.Controllers
 
             email.Subject = "Sistema Pago de Proveedores";
 
-            string body = @"Tu solicitud Nro " + model.IdPago + @" fue:" + estado.NombreEstado + @"
-             ";
+            string body = @"Tu solicitud Nro " + model.IdPago + @" fue: " + estado.NombreEstado + @" ";
 
             email.Body = body;
             email.IsBodyHtml = true;  // Indicate that the email body is HTML
 
 
+            //SmtpClient smtp = new();
+            //smtp.Host = "smtp.gmail.com";
+            //smtp.Port = 587;
+            //smtp.Credentials = new NetworkCredential(correo_emisor, clave_emisor);
+            //smtp.DeliveryMethod = SmtpDeliveryMethod.Network;
+            //smtp.EnableSsl = true;
+
             var client = new SmtpClient("CHISANEMP1");
-
             client.Credentials = new System.Net.NetworkCredential("svc-vd-pino@barrick.com", "");
-
+            client.DeliveryMethod = SmtpDeliveryMethod.Network;
             client.Send(email);
+
+
+            //smtp.Send(email);
 
             await _context.SaveChangesAsync();
                 return Ok();
             
-        
         }
 
 

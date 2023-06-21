@@ -28,6 +28,10 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5pc3RyYWNpb25cUGVuZGllbnRlUGFnby5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
+[C:/Users/fabri/OneDrive/Escritorio/GitMain/TSK/Views/Contacto/ContactoUsuario.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ29udGFjdG9cQ29udGFjdG9Vc3VhcmlvLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
 [C:/Users/fabri/OneDrive/Escritorio/GitMain/TSK/Views/Inicio/Bienvenida.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSW5pY2lvXEJpZW52ZW5pZGEuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
@@ -36,8 +40,20 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTWFudGVuaW1pZW50b1xBcHJvYmFkb3IuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
+[C:/Users/fabri/OneDrive/Escritorio/GitMain/TSK/Views/Mantenimiento/Area.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTWFudGVuaW1pZW50b1xBcmVhLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/fabri/OneDrive/Escritorio/GitMain/TSK/Views/Mantenimiento/Banco.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTWFudGVuaW1pZW50b1xCYW5jby5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
 [C:/Users/fabri/OneDrive/Escritorio/GitMain/TSK/Views/Mantenimiento/Compania.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTWFudGVuaW1pZW50b1xDb21wYW5pYS5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/fabri/OneDrive/Escritorio/GitMain/TSK/Views/Mantenimiento/Contacto.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTWFudGVuaW1pZW50b1xDb250YWN0by5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/fabri/OneDrive/Escritorio/GitMain/TSK/Views/Mantenimiento/Correo.cshtml]
@@ -62,6 +78,10 @@ build_metadata.AdditionalFiles.CssScope =
 
 [C:/Users/fabri/OneDrive/Escritorio/GitMain/TSK/Views/Reportes/PendienteAprobar.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUmVwb3J0ZXNcUGVuZGllbnRlQXByb2Jhci5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/fabri/OneDrive/Escritorio/GitMain/TSK/Views/Reportes/PendienteAprobarxAprobador.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUmVwb3J0ZXNcUGVuZGllbnRlQXByb2JhcnhBcHJvYmFkb3IuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/fabri/OneDrive/Escritorio/GitMain/TSK/Views/Shared/Error.cshtml]

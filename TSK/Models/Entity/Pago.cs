@@ -36,6 +36,7 @@ namespace SPP.Models.Entity
         public int? IdBanco { get; set; }
         public int? IdTipoCuenta { get; set; }
 
+        public string Compania { get; set; }
 
         public virtual Tipo_Adelanto TipoAdelantoNavigation { get; set; }
         public virtual Proveedor ProveedorNavigation { get; set; }

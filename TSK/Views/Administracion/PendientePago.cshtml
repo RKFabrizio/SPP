@@ -24,6 +24,11 @@
         color: #a79a66;
     }
 
+        .btn-primary.custom-btn {
+        background-color: #A79A66;
+        border-color: #A79A66;
+    }
+
 </style>
 
 @section PagePreTitle{
@@ -63,6 +68,10 @@
 
         columns.AddFor(m => m.IdPago).Caption("Nro de Solicitud").Width(120);
 
+        columns.AddFor(m => m.FechaSolicitud)
+          .SortOrder(SortOrder.Desc)
+          .Width(150).Caption("Fecha de Solicitud");
+
         columns.AddFor(m => m.IdTipoAdelanto).Lookup(lookup => lookup
             .DataSource(ds => ds.WebApi().Controller("PagoPendPago").LoadAction("TipoAdelantosLookup").Key("Value"))
             .ValueExpr("Value")
@@ -86,7 +95,7 @@
             .Precision(2)
         ).Width(120);
 
-        columns.AddFor(m => m.Concepto).Width(200);
+        columns.AddFor(m => m.Concepto).Width(200).Visible(false);
 
         columns.AddFor(m => m.LoginSolicitante).Lookup(lookup => lookup
             .DataSource(ds => ds.WebApi().Controller("PagoPendPago").LoadAction("UsuariosLookup").Key("Value"))
@@ -98,7 +107,7 @@
             .DataSource(ds => ds.WebApi().Controller("PagoPendPago").LoadAction("AprobadorAreasLookup").Key("Value"))
             .ValueExpr("Value")
             .DisplayExpr("Text")
-        ).Caption("Aprobador");
+        ).Caption("Aprobador").Visible(false); ;
 
         columns.AddFor(m => m.IdEstado).Lookup(lookup => lookup
             .DataSource(ds => ds.WebApi().Controller("PagoPendPago").LoadAction("EstadosLookup").Key("Value"))
@@ -110,55 +119,36 @@
             .DataSource(ds => ds.WebApi().Controller("PagoPendPago").LoadAction("TipoPagosLookup").Key("Value"))
             .ValueExpr("Value")
             .DisplayExpr("Text")
-        ).HidingPriority(8).Caption("Tipo Pago");
+        ).HidingPriority(8).Caption("Tipo Pago").Visible(false);;
 
-        columns.AddFor(m => m.Observaciones).HidingPriority(1);
+        columns.AddFor(m => m.Observaciones).HidingPriority(1).Visible(false);;
 
-        columns.AddFor(m => m.InformacionContable).HidingPriority(2).Caption("Información Contable");
+        columns.AddFor(m => m.InformacionContable).HidingPriority(2).Caption("Información Contable").Visible(false);;
 
-        columns.AddFor(m => m.CuentaBancaria).HidingPriority(3).Caption("Cuenta Bancaria");
+        columns.AddFor(m => m.CuentaBancaria).HidingPriority(3).Caption("Cuenta Bancaria").Visible(false);;
 
-        columns.AddFor(m => m.BeneficiarioNombre).HidingPriority(4).Caption("Beneficiario Nombre");
+        columns.AddFor(m => m.BeneficiarioNombre).HidingPriority(4).Caption("Beneficiario Nombre").Visible(false); ;
 
         columns.AddFor(m => m.IdBanco).Lookup(lookup => lookup
             .DataSource(ds => ds.WebApi().Controller("PagoPendPago").LoadAction("BancosLookup").Key("Value"))
             .ValueExpr("Value")
             .DisplayExpr("Text")
-        ).HidingPriority(5).Caption("Banco");
+        ).HidingPriority(5).Caption("Banco").Visible(false);;
 
         columns.AddFor(m => m.IdTipoCuenta).Lookup(lookup => lookup
             .DataSource(ds => ds.WebApi().Controller("PagoPendPago").LoadAction("TipoCuentasLookup").Key("Value"))
             .ValueExpr("Value")
             .DisplayExpr("Text")
-        ).HidingPriority(6).Caption("Tipo Cuenta");
+        ).HidingPriority(6).Caption("Tipo Cuenta").Visible(false); ;
 
-        columns.AddFor(m => m.ReferenciaOC)
-                      .HidingPriority(7)
-                      .Caption("ReferenciaOC")
-                      .CellTemplate(@<text>
-
-                          <a href="#" onclick="descargarPDF1()">Descargar</a>
-
-                      </text>);
-
-        columns.AddFor(m => m.ProformaCotizacion)
-          .HidingPriority(9)
-          .Caption("ProformaCotizacion")
-          .CellTemplate(@<text>
-
-              <a href="#" onclick="descargarPDF2()">Descargar</a>
-
-          </text>);
-
-        columns.AddFor(m => m.Factura)
-          .HidingPriority(10)
-          .Caption("Factura")
-          .CellTemplate(@<text>
-
-              <a href="#" onclick="descargarPDF3()">Descargar</a>
-
-          </text>);
+        columns.Add().Caption("Acción").Width(100).CellTemplate(@<text>
+            <button type="button" class="btn btn-primary custom-btn" data-toggle="modal" data-target="#exampleModalCenter">
+                Ver
+            </button>
+        </text>);
     })
+       .OnSelectionChanged("selection_changed")
+      .Selection(s => s.Mode(SelectionMode.Single))
        .ShowBorders(true)
             .AllowColumnReordering(true)
             .RowAlternationEnabled(false)
@@ -201,16 +191,291 @@
                 )
 )
 
+<style>
+    /* Estilos personalizados para el popup */
+    .modal-header {
+        background-color: #f8f9fa;
+        border-bottom: none;
+    }
+
+    .modal-title {
+        color: #333;
+    }
+
+    .modal-body {
+        background-color: #fff;
+    }
+
+    .modal-footer {
+        background-color: #f8f9fa;
+        border-top: none;
+    }
+
+    .modal-content {
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    }
+
+    .form-group span {
+        font-weight: bold;
+        font-size: 1rem; /* Tamaño de fuente aumentado */
+        color: #333; /* Color del texto */
+        display: block; /* Asegurar que cada <span> esté en una línea separada */
+        margin-bottom: 5px; /* Espacio entre cada <span> */
+    }
+
+    .form-control {
+        border-radius: 0;
+    }
+
+    .custom-modal-header {
+        background-color: #a79a66; /* Color azul oscuro */
+        border-bottom: none;
+        color: black; /* Cambiado a color negro */
+    }
+
+    .modal-size {
+        font-weight: bold;
+        font-size: 1.5rem;
+    }
+</style>
+
+<!-- PopUp -->
+<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-header custom-modal-header ">
+                <h5 class="modal-title modal-size" id="exampleModalLongTitle">Pago</h5>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label for="nroSolicitud">Nro de Solicitud:</label>
+                            <span id="nroSolicitud" class="form-control"></span>
+                        </div>
+                        <div class="form-group">
+                            <label for="tipoSolicitud">Tipo de Solicitud:</label>
+                            <span id="tipoSolicitud" class="form-control"></span>
+                        </div>
+                        <div class="form-group">
+                            <label for="proveedor">Proveedor:</label>
+                            <span id="proveedor" class="form-control"></span>
+                        </div>
+                        <div class="form-group">
+                            <label for="importe">Importe:</label>
+                            <span id="importe" class="form-control"></span>
+                        </div>
+                        <div class="form-group">
+                            <label for="fechaSolicitud">Fecha Solicitud:</label>
+                            <span id="fechaSolicitud" class="form-control"></span>
+                        </div>
+                        <div class="form-group">
+                            <label for="concepto">Concepto:</label>
+                            <textarea id="concepto" class="form-control"></textarea>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label for="informacionContable">Informacion Contable:</label>
+                            <textarea id="informacionContable" class="form-control"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="observaciones">Observaciones:</label>
+                            <textarea id="observaciones" class="form-control"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="solicitanteText">Solicitante:</label>
+                            <span id="solicitanteText" class="form-control"></span>
+                        </div>
+                        <div class="form-group">
+                            <label for="aprobadorText">Aprobador:</label>
+                            <span id="aprobadorText" class="form-control"></span>
+                        </div>
+                        <div class="form-group">
+                            <label for="estado">Estado:</label>
+                            <span id="estado" class="form-control"></span>
+                        </div>
+                        <div class="form-group">
+                            <label for="beneficiarioDni">BeneficiarioDni:</label>
+                            <span id="beneficiarioDni" class="form-control"></span>
+                        </div>
+                        <div class="form-group">
+                            <label for="nombreBanco">Banco:</label>
+                            <span id="nombreBanco" class="form-control"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label for="tipoCuenta">Tipo Cuenta:</label>
+                            <span id="tipoCuenta" class="form-control"></span>
+                        </div>
+                        <div class="form-group">
+                            <label for="cuentaBancaria">Cuenta Bancaria:</label>
+                            <span id="cuentaBancaria" class="form-control"></span>
+                        </div>
+                        <br />
+                        <div class="form-group">
+                            <label>Documentos Adjuntos:</label>
+                            <br />
+                            <p>ReferenciaOC: <a href="#" onclick="descargarPDF1()"><span id="rowData" class="form-control"></span></a></p>
+                            <p>ProformaCotizacion: <a href="#" onclick="descargarPDF2()"><span id="rowData2" class="form-control"></span></a></a></p>
+                            <p>Factura: <a href="#" onclick="descargarPDF3()"><span id="rowData3" class="form-control"></span></a></a></p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
 <script>
     var rowData;
     var rowData2;
     var rowData3;
 
+    // Cheque
+    var nroSolicitud;
+    var proveedor;
+    var moneda;
+    var importe;
+    var tipoSolicitudText;
+    var fechaSolicitud;
+    var solicitante;
+    var aprobador;
+    var concepto;
+    var informacionContable;
+    var observaciones;
+    var estado;
+    // Abono
+    var beneficiarioDni;
+    var nombreBanco;
+    var tipoCuenta;
+    var cuentaBancaria;
+
+    function selection_changed(selectedItems) {
+        var data = selectedItems.selectedRowsData[0];
+        console.log(data);
+        var tipoSolicitud = data.IdTipoAdelanto;
+        moneda = data.IdTipoMoneda;
+        // Cambio de id a Moneda
+        if (moneda == 1) {
+            moneda = "USD (Dolar Estadounidense)";
+        } else if (moneda == 2) {
+            moneda = "PEN (Sol Peruano)";
+        } else if (moneda == 3) {
+            moneda = "CPL (Peso Chileno)";
+        }
+        // Cambio de id a estado
+        estado = data.IdEstado;
+        if (estado == 0) {
+            estado = "Pendiente";
+        } else if (estado == 1) {
+            estado = "Aprobado";
+        } else if (estado == 2) {
+            estado = "Pagado";
+        } else if (estado == 3) {
+            estado = "Rechazado";
+        }
+
+
+        if (tipoSolicitud === 1) {
+            //  FORMATO CHEQUE
+            tipoSolicitudText = "Cheque";
+            nroSolicitud = data.IdPago;              // id : 5080
+            proveedor = data.IdProveedor;            // Cambiar a Proveedor
+            importe = data.Importe;
+            importe = importe + " " + moneda;
+            fechaSolicitud = data.FechaSolicitud;
+            solicitante = data.LoginSolicitante; // Cambiar a Solicitante
+            aprobador = data.LoginAprobador;     // Cambiar a Aprobador
+            concepto = data.Concepto;
+            informacionContable = data.InformacionContable;
+            observaciones = data.Observaciones;
+
+            // Data vacia
+            beneficiarioDni = "---";
+            nombreBanco = "---";
+            tipoCuenta = "---";
+            cuentaBancaria = "---";
+
+
+        } else if (tipoSolicitud === 2) {
+            // FORMATO ABONO EN CUENTA
+            tipoSolicitudText = "Abono en cuenta";
+            nroSolicitud = data.IdPago;              // id : 5080
+            proveedor = data.IdProveedor;            // Cambiar a Proveedor
+            importe = data.Importe;
+            importe = importe + " " + moneda;
+            fechaSolicitud = data.FechaSolicitud;
+            solicitante = data.LoginSolicitante; // Cambiar a Solicitante
+            aprobador = data.LoginAprobador;     // Cambiar a Aprobador
+            concepto = data.Concepto;
+            informacionContable = data.InformacionContable;
+            observaciones = data.Observaciones;
+            // Extra
+            beneficiarioDni = data.BeneficiarioDni;
+            nombreBanco = data.IdBanco;
+            if (nombreBanco == 1) {
+                nombreBanco = "Banco de Credito";
+            } else if (nombreBanco == 2) {
+                nombreBanco = "Scotiabank";
+            }
+            tipoCuenta = data.IdTipoCuenta;
+            if (tipoCuenta == 1) {
+                tipoCuenta = "Ahorro";
+            } else if (tipoCuenta == 2) {
+                tipoCuenta = "Corriente";
+            }
+            cuentaBancaria = data.CuentaBancaria;
+
+        } else {
+            tipoSolicitudText = "";
+        }
+
+
+
+    }
+
     function onGridRowClick(e) {
+
         rowData = e.data.ReferenciaOC;
         rowData2 = e.data.ProformaCotizacion;
         rowData3 = e.data.Factura;
 
+        document.getElementById("nroSolicitud").textContent = nroSolicitud;
+        document.getElementById("tipoSolicitud").textContent = tipoSolicitudText;
+        document.getElementById("importe").textContent = importe;
+        document.getElementById("fechaSolicitud").textContent = fechaSolicitud;
+        document.getElementById("concepto").textContent = concepto;
+        document.getElementById("informacionContable").textContent = informacionContable;
+        document.getElementById("observaciones").textContent = observaciones;
+        document.getElementById("estado").textContent = estado;
+
+        document.getElementById("beneficiarioDni").textContent = beneficiarioDni;
+        document.getElementById("nombreBanco").textContent = nombreBanco;
+        document.getElementById("tipoCuenta").textContent = tipoCuenta;
+        document.getElementById("cuentaBancaria").textContent = cuentaBancaria;
+
+        document.getElementById("rowData").textContent = rowData;
+        document.getElementById("rowData2").textContent = rowData2;
+        document.getElementById("rowData3").textContent = rowData3;
+
+        $.ajax({
+            url: '@Url.Action("ObtenerInformacionPago", "Pagoes")',
+            type: 'GET',
+            data: { IdProveedor: proveedor, IdSolicitante: solicitante, IdAprobador: aprobador },
+            success: function (response) {
+                document.getElementById("proveedor").textContent = response.proveedor;
+                document.getElementById("solicitanteText").textContent = response.solicitante;
+                document.getElementById("aprobadorText").textContent = response.aprobador;
+            }
+        });
     }
 
 
@@ -299,3 +564,4 @@
         });
     }
 </script>
+

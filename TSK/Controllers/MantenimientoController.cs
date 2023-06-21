@@ -6,7 +6,12 @@ namespace SPP.Controllers
     [Authorize]
     public class MantenimientoController : Controller
     {
-
+        public IActionResult Area()
+        {
+            @ViewBag.mantenimiento = "active";
+            @ViewBag.area = "active";
+            return View();
+        }
         public IActionResult Usuario()
         {
             @ViewBag.mantenimiento = "active";
@@ -35,6 +40,19 @@ namespace SPP.Controllers
         {
             @ViewBag.mantenimiento = "active";
             @ViewBag.proveedor = "active";
+            return View();
+        }
+
+        public IActionResult Banco()
+        {
+            @ViewBag.mantenimiento = "active";
+            @ViewBag.banco = "active";
+            return View();
+        }
+        public IActionResult Contacto()
+        {
+            @ViewBag.mantenimiento = "active";
+            @ViewBag.contacto = "active";
             return View();
         }
     }

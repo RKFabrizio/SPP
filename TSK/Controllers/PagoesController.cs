@@ -21,6 +21,9 @@ using Microsoft.AspNetCore.Hosting;
 using DevExpress.Data.Mask.Internal;
 using Microsoft.AspNetCore.Authorization;
 using System.Text.RegularExpressions;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
+using Microsoft.AspNetCore.Identity;
+using SPP.Models;
 
 namespace TSK.Controllers
 {
@@ -76,9 +79,15 @@ namespace TSK.Controllers
             return Json(await DataSourceLoader.LoadAsync(pagos, loadOptions));
         }
 
+
+
         [HttpPost]
         public async Task<IActionResult> Post(Pago model, List<IFormFile> ReferenciaOC, List<IFormFile> Proformacotizacion, List<IFormFile> Factura)
         {
+            if(model.IdTipoAdelanto == 0)
+            {
+                model.IdTipoAdelanto = 1;
+            }
             // Obtiene el NombreProveedor usando el IdProveedor
             var proveedor = await _context.Proveedores.FirstOrDefaultAsync(p => p.IdProveedor == model.IdProveedor);
             // Obtiene el Usuario - Nombre
@@ -87,9 +96,24 @@ namespace TSK.Controllers
 
             if (!string.IsNullOrEmpty(usuarioInfoJson))
             {
-                Usuario usuario = JsonConvert.DeserializeObject<Usuario>(usuarioInfoJson);
+                SPP.Models.Usuario usuario = JsonConvert.DeserializeObject<SPP.Models.Usuario>(usuarioInfoJson);
                 solicitante = usuario.Nombre + " " + usuario.Apellido;
             }
+
+            if (!string.IsNullOrEmpty(usuarioInfoJson))
+            {
+                SPP.Models.Usuario usuario = JsonConvert.DeserializeObject<SPP.Models.Usuario>(usuarioInfoJson);
+                int idUsuario = usuario.IdUsuario;
+
+                if (model.LoginSolicitante == 0)
+                {
+                    model.LoginSolicitante = idUsuario;
+                }
+
+            }
+
+            model.IdTipoPago = 2;
+
             //Obtener variables de datos
             var adelanto = await _context.TipoAdelantos.FirstOrDefaultAsync(p => p.IdTipoAdelanto == model.IdTipoAdelanto);
             var moneda = await _context.TipoMonedas.FirstOrDefaultAsync(p => p.IdTipoMoneda == model.IdTipoMoneda);
@@ -169,20 +193,22 @@ namespace TSK.Controllers
 
             // Asigna la fecha y hora actuales a FechaSolicitud
             model.FechaSolicitud = DateTime.Now;
-
             if (!string.IsNullOrEmpty(usuarioInfoJson))
             {
-                Usuario usuario = JsonConvert.DeserializeObject<Usuario>(usuarioInfoJson);
+                SPP.Models.Usuario usuario = JsonConvert.DeserializeObject<SPP.Models.Usuario>(usuarioInfoJson);
                 int? AreaUsuario = usuario.IdArea;
+                int CompaniaUsuario = usuario.IdCompania;
+
 
                 // Crea una consulta de unión para combinar la información de las tablas AprobadorArea y Usuarios
-                var aprobadoresArea = _context.AprobadorAreas
-                    .Join(_context.Usuarios,
-                        aprobador => aprobador.IdUsuario,
-                        usuario => usuario.IdUsuario,
-                        (aprobador, usuario) => new { Aprobador = aprobador, Usuario = usuario })
-                    .Where(aprobadorUsuario => aprobadorUsuario.Aprobador.IdArea == AreaUsuario)
-                    .ToList();
+                        var aprobadoresArea = _context.AprobadorAreas
+                .Join(_context.Usuarios,
+                    aprobador => aprobador.IdUsuario,
+                    usuario => usuario.IdUsuario,
+                    (aprobador, usuario) => new { Aprobador = aprobador, Usuario = usuario })
+                .Where(aprobadorUsuario => aprobadorUsuario.Aprobador.IdArea == AreaUsuario && aprobadorUsuario.Usuario.Habilitado == true && aprobadorUsuario.Usuario.IdCompania == CompaniaUsuario)  // Added condition here
+                .ToList();
+
 
                 // Filtra la lista de aprobadores para encontrar el que tiene la mayor capacidad de aprobación
                 // que aún sea igual o menor al importe. Si no se encuentra ninguno, usa el IdAprobador = 49.
@@ -190,7 +216,6 @@ namespace TSK.Controllers
                 .Where(aprobadorUsuario => aprobadorUsuario.Usuario.MontoAprobacion >= model.Importe)
                 .OrderBy(aprobadorUsuario => aprobadorUsuario.Usuario.MontoAprobacion)
                 .FirstOrDefault();
-
 
                 if (aprobador != null)
                 {
@@ -212,16 +237,16 @@ namespace TSK.Controllers
                         }
                         else
                         {
-                            model.LoginAprobador = 49; // Asigna el valor 49 si no se encuentra un aprobador adecuado.
+                            model.LoginAprobador = 218; // Asigna el valor 52 si no se encuentra un aprobador adecuado.
                         }
                     }
                 }
                 else
                 {
-                    model.LoginAprobador = 49; // Asigna el valor 49 si no se encuentra un aprobador adecuado.
+                    model.LoginAprobador = 218; // Asigna el valor 52 si no se encuentra un aprobador adecuado.
                 }
-
             }
+
 
             // Obtiene el ID del usuario aprobador
             var aprobadorId = model.LoginAprobador;
@@ -245,12 +270,13 @@ namespace TSK.Controllers
             await _context.SaveChangesAsync();
             string correo_emisor = "svc-vd-pino@barrick.com";
             string clave_emisor = "maVafRevUp23";
+
             //string correo_emisor = "leedryk@gmail.com";
             //string clave_emisor = "xxrlviitjlpqytrj";
 
             MailAddress receptor = new(correoAprobador);
             MailAddress emisor = new(correo_emisor);
-            
+
             MailMessage email = new MailMessage(emisor, receptor);
 
             if (lastFacturaFilePath != null)
@@ -358,7 +384,7 @@ namespace TSK.Controllers
             </tr>
         </table>
         <div style = 'margin-left: 250px; margin-top: 20px;' >
-            <a href = 'http://10.133.17.21/TokenUsuario/Aprobador' style = 'background-color: #000000; color: #ffffff; padding: 10px 20px; margin-right: 10px; border: none; cursor: pointer; text-decoration: none; display: inline-block;'> Editar Estado de Pago </a>
+            <a href = 'http://10.133.17.21/Reportes/Aprobador' style = 'background-color: #000000; color: #ffffff; padding: 10px 20px; margin-right: 10px; border: none; cursor: pointer; text-decoration: none; display: inline-block;'> Editar Estado de Pago </a>
                 </div>
             </div>
         </div>";
@@ -377,9 +403,8 @@ namespace TSK.Controllers
             //smtp.Send(email);
 
             var client = new SmtpClient("CHISANEMP1");
-
             client.Credentials = new System.Net.NetworkCredential("svc-vd-pino@barrick.com", "");
-
+            client.DeliveryMethod = SmtpDeliveryMethod.Network;
             client.Send(email);
 
             return Json(new { IdPago = result.Entity.IdPago });
@@ -390,6 +415,10 @@ namespace TSK.Controllers
         [HttpPost]
         public async Task<IActionResult> Post2(Pago model, List<IFormFile> ReferenciaOC, List<IFormFile> Proformacotizacion, List<IFormFile> Factura)
         {
+            if (model.IdTipoAdelanto == 0)
+            {
+                model.IdTipoAdelanto = 2;
+            }
             // Obtiene el NombreProveedor usando el IdProveedor
             var proveedor = await _context.Proveedores.FirstOrDefaultAsync(p => p.IdProveedor == model.IdProveedor);
             if (proveedor != null)
@@ -407,9 +436,24 @@ namespace TSK.Controllers
 
             if (!string.IsNullOrEmpty(usuarioInfoJson))
             {
-                Usuario usuario = JsonConvert.DeserializeObject<Usuario>(usuarioInfoJson);
+                SPP.Models.Usuario usuario = JsonConvert.DeserializeObject<SPP.Models.Usuario>(usuarioInfoJson);
                 solicitante = usuario.Nombre + " " + usuario.Apellido;
             }
+
+            if (!string.IsNullOrEmpty(usuarioInfoJson))
+            {
+                SPP.Models.Usuario usuario = JsonConvert.DeserializeObject<SPP.Models.Usuario>(usuarioInfoJson);
+                int idUsuario = usuario.IdUsuario;
+
+                if (model.LoginSolicitante == 0)
+                {
+                    model.LoginSolicitante = idUsuario;
+                }
+
+            }
+
+            model.IdTipoPago = 1;
+
             //Obtener variables de datos
             var adelanto = await _context.TipoAdelantos.FirstOrDefaultAsync(p => p.IdTipoAdelanto == model.IdTipoAdelanto);
             var moneda = await _context.TipoMonedas.FirstOrDefaultAsync(p => p.IdTipoMoneda == model.IdTipoMoneda);
@@ -492,17 +536,19 @@ namespace TSK.Controllers
 
             if (!string.IsNullOrEmpty(usuarioInfoJson))
             {
-                Usuario usuario = JsonConvert.DeserializeObject<Usuario>(usuarioInfoJson);
+                SPP.Models.Usuario usuario = JsonConvert.DeserializeObject<SPP.Models.Usuario>(usuarioInfoJson);
                 int? AreaUsuario = usuario.IdArea;
+                int CompaniaUsuario = usuario.IdCompania;
+
 
                 // Crea una consulta de unión para combinar la información de las tablas AprobadorArea y Usuarios
                 var aprobadoresArea = _context.AprobadorAreas
-                    .Join(_context.Usuarios,
-                        aprobador => aprobador.IdUsuario,
-                        usuario => usuario.IdUsuario,
-                        (aprobador, usuario) => new { Aprobador = aprobador, Usuario = usuario })
-                    .Where(aprobadorUsuario => aprobadorUsuario.Aprobador.IdArea == AreaUsuario)
-                    .ToList();
+                .Join(_context.Usuarios,
+                    aprobador => aprobador.IdUsuario,
+                    usuario => usuario.IdUsuario,
+                    (aprobador, usuario) => new { Aprobador = aprobador, Usuario = usuario })
+                .Where(aprobadorUsuario => aprobadorUsuario.Aprobador.IdArea == AreaUsuario && aprobadorUsuario.Usuario.Habilitado == true && aprobadorUsuario.Usuario.IdCompania == CompaniaUsuario)  // Added condition here
+                .ToList();
 
                 // Filtra la lista de aprobadores para encontrar el que tiene la mayor capacidad de aprobación
                 // que aún sea igual o menor al importe. Si no se encuentra ninguno, usa el IdAprobador = 49.
@@ -532,16 +578,17 @@ namespace TSK.Controllers
                         }
                         else
                         {
-                            model.LoginAprobador = 49; // Asigna el valor 49 si no se encuentra un aprobador adecuado.
+                            model.LoginAprobador = 218; // Asigna el valor 49 si no se encuentra un aprobador adecuado.
                         }
                     }
                 }
                 else
                 {
-                    model.LoginAprobador = 49; // Asigna el valor 49 si no se encuentra un aprobador adecuado.
+                    model.LoginAprobador = 218; // Asigna el valor 49 si no se encuentra un aprobador adecuado.
                 }
 
             }
+            
 
             // Obtiene el ID del usuario aprobador
             var aprobadorId = model.LoginAprobador;
@@ -564,14 +611,15 @@ namespace TSK.Controllers
             await _context.SaveChangesAsync();
             string correo_emisor = "svc-vd-pino@barrick.com";
             string clave_emisor = "maVafRevUp23";
+
             //string correo_emisor = "leedryk@gmail.com";
             //string clave_emisor = "xxrlviitjlpqytrj";
 
             MailAddress receptor = new(correoAprobador);
             MailAddress emisor = new(correo_emisor);
-
             MailMessage email = new MailMessage(emisor, receptor);
             email.Subject = "Sistema Pago de Proveedores";
+
 
             string body = @"
             <div style='background-color: #f1f0e9; padding: 20px; width: 850px; text-align: center;'>
@@ -641,15 +689,9 @@ namespace TSK.Controllers
                             </td>
                         </tr>
                         <tr>
+                       
                             <td>
-                                <label style='margin-left: 50px; font-size: 15px; color: #000000;'>Beneficiario Nombre:</label>
-                                <br />
-                                <div style='margin-left: 50px; border: 1px solid #a79a66; width: 301px; height: 20px;'>
-                                    " + model.BeneficiarioNombre + @"
-                                </div>
-                            </td>
-                            <td>
-                                <label style='font-size: 15px; color: #000000;'>Beneficiario Dni:</label>
+                                <label style='font-size: 15px; color: #000000;'>Beneficiario o Tramitador (Dni):</label>
                                 <br />
                                 <div style=' border: 1px solid #a79a66; width: 310px; height: 20px;'>
                                         " + model.BeneficiarioDni + @"
@@ -715,6 +757,7 @@ namespace TSK.Controllers
                 </div>
             </div>";
 
+
             email.Body = body;
             email.IsBodyHtml = true;  // Indicate that the email body is HTML
 
@@ -728,14 +771,15 @@ namespace TSK.Controllers
             //smtp.Send(email);
 
             var client = new SmtpClient("CHISANEMP1");
-
             client.Credentials = new System.Net.NetworkCredential("svc-vd-pino@barrick.com", "");
-
+            client.DeliveryMethod = SmtpDeliveryMethod.Network;
             client.Send(email);
+            //10.8.12.15
 
             return Json(new { IdPago = result.Entity.IdPago });
         }
 
+         
 
         [HttpPut]
         public async Task<IActionResult> Put(int key, string values) {
@@ -823,7 +867,7 @@ namespace TSK.Controllers
             string usuarioInfoJson = HttpContext.Request.Cookies["UsuarioInfo"];
             if (!string.IsNullOrEmpty(usuarioInfoJson))
             {
-                Usuario usuarioActual = JsonConvert.DeserializeObject<Usuario>(usuarioInfoJson);
+                SPP.Models.Usuario usuarioActual = JsonConvert.DeserializeObject<SPP.Models.Usuario>(usuarioInfoJson);
                 int idUsuario = usuarioActual.IdUsuario;  // Aquí obtenemos el IdUsuario
 
                 var lookup = from i in _context.Usuarios
@@ -914,6 +958,10 @@ namespace TSK.Controllers
         [HttpGet]
         public IActionResult Download1(string pago)
         {
+            if(pago == null)
+            {
+                pago = "nodata.txt";
+            }
             // Obtener la ruta completa del archivo
             string filePath = Path.Combine(_webHostEnvironment.ContentRootPath, "Mediaa", pago);
             string extension = Path.GetExtension(pago);
@@ -935,6 +983,10 @@ namespace TSK.Controllers
         [HttpGet]
         public IActionResult Download2(string pago)
         {
+            if (pago == null)
+            {
+                pago = "nodata.txt";
+            }
             // Obtener la ruta completa del archivo
             string filePath = Path.Combine(_webHostEnvironment.ContentRootPath, "Mediaa", pago);
             string extension = Path.GetExtension(pago);
@@ -957,6 +1009,10 @@ namespace TSK.Controllers
         [HttpGet]
         public IActionResult Download3(string pago)
         {
+            if (pago == null)
+            {
+                pago = "nodata.txt";
+            }
             // Obtener la ruta completa del archivo
             string filePath = Path.Combine(_webHostEnvironment.ContentRootPath, "Mediaa", pago);
             string extension = Path.GetExtension(pago);
@@ -982,18 +1038,140 @@ namespace TSK.Controllers
             switch (extension.ToLower())
             {
                 case ".txt":
-                    return "application/txt";
+                    return "text/plain";
                 case ".doc":
                     return "application/msword";
                 case ".docx":
                     return "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
                 case ".pdf":
                     return "application/pdf";
+                case ".msg":
+                    return "application/vnd.ms-outlook";
+                case ".xlsx":
+                    return "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+                case ".xls":
+                    return "application/vnd.ms-excel";
+                case ".csv":
+                    return "text/csv";
+                case ".jpg":
+                case ".jpeg":
+                    return "image/jpeg";
+                case ".png":
+                    return "image/png";
+                case ".gif":
+                    return "image/gif";
+                case ".svg":
+                    return "image/svg+xml";
+                case ".eml":
+                    return "message/rfc822";
                 default:
                     // Extensión de archivo no válida
                     return string.Empty;
             }
         }
+
+
+
+        [HttpGet]
+        public ActionResult ObtenerInformacionPago(int IdProveedor, int IdSolicitante, int IdAprobador)
+        {
+            var proveedorNombre = _context.Proveedores.FirstOrDefault(u => u.IdProveedor == IdProveedor)?.NombreProveedor;
+            var solicitanteNombre = _context.Usuarios.FirstOrDefault(u => u.IdUsuario == IdSolicitante)?.Nombre;
+            solicitanteNombre = solicitanteNombre + " " + _context.Usuarios.FirstOrDefault(u => u.IdUsuario == IdSolicitante)?.Apellido;
+
+            var aprobadorNombre = _context.Usuarios.FirstOrDefault(u => u.IdUsuario == IdAprobador)?.Nombre;
+            aprobadorNombre = aprobadorNombre + " " + _context.Usuarios.FirstOrDefault(u => u.IdUsuario == IdAprobador)?.Apellido;
+
+            var resultado = new
+            {
+                proveedor = proveedorNombre,
+                solicitante = solicitanteNombre,
+                aprobador = aprobadorNombre
+
+                
+            };
+            return Json(resultado);
+        }
+
+
+        [HttpGet]
+        public ActionResult AprobadorNombre(int Importe)
+        {
+
+            int LoginAprobador = 0;
+
+            string usuarioInfoJson = HttpContext.Request.Cookies["UsuarioInfo"];
+            if (!string.IsNullOrEmpty(usuarioInfoJson))
+            {
+
+                SPP.Models.Usuario usuario = JsonConvert.DeserializeObject<SPP.Models.Usuario>(usuarioInfoJson);
+                int? AreaUsuario = usuario.IdArea;
+                int? LoginSolicitante = usuario.IdUsuario;
+                int CompaniaUsuario = usuario.IdCompania;
+
+ 
+                // Crea una consulta de unión para combinar la información de las tablas AprobadorArea y Usuarios
+                var aprobadoresArea = _context.AprobadorAreas
+                .Join(_context.Usuarios,
+                    aprobador => aprobador.IdUsuario,
+                    usuario => usuario.IdUsuario,
+                    (aprobador, usuario) => new { Aprobador = aprobador, Usuario = usuario })
+                .Where(aprobadorUsuario => aprobadorUsuario.Aprobador.IdArea == AreaUsuario && aprobadorUsuario.Usuario.Habilitado == true && aprobadorUsuario.Usuario.IdCompania == CompaniaUsuario)  // Added condition here
+                .ToList();
+
+                // Filtra la lista de aprobadores para encontrar el que tiene la mayor capacidad de aprobación
+                // que aún sea igual o menor al importe. Si no se encuentra ninguno, usa el IdAprobador = 49.
+                var aprobador = aprobadoresArea
+                .Where(aprobadorUsuario => aprobadorUsuario.Usuario.MontoAprobacion >= Importe)
+                .OrderBy(aprobadorUsuario => aprobadorUsuario.Usuario.MontoAprobacion)
+                .FirstOrDefault();
+
+
+                if (aprobador != null)
+                {
+                    if (aprobador.Aprobador.IdUsuario != LoginSolicitante) // Verifica si el aprobador es diferente al solicitante
+                    {
+                        LoginAprobador = aprobador.Aprobador.IdUsuario;
+                    }
+                    else
+                    {
+                        // Busca el siguiente aprobador disponible que sea diferente al solicitante
+                        var siguienteAprobador = aprobadoresArea
+                        .Where(aprobadorUsuario => aprobadorUsuario.Usuario.MontoAprobacion >= Importe && aprobadorUsuario.Aprobador.IdUsuario != LoginSolicitante)
+                        .OrderBy(aprobadorUsuario => aprobadorUsuario.Usuario.MontoAprobacion)
+                            .FirstOrDefault();
+
+                        if (siguienteAprobador != null)
+                        {
+                            LoginAprobador = siguienteAprobador.Aprobador.IdUsuario;
+                        }
+                        else
+                        {
+                            LoginAprobador = 218; // Asigna el valor 49 si no se encuentra un aprobador adecuado.
+                        }
+                    }
+                }
+                else
+                {
+                    LoginAprobador = 218; // Asigna el valor 49 si no se encuentra un aprobador adecuado.
+                }
+
+            }
+
+            var solicitanteNombre = _context.Usuarios.FirstOrDefault(u => u.IdUsuario == LoginAprobador)?.Nombre;
+            solicitanteNombre = solicitanteNombre + " " + _context.Usuarios.FirstOrDefault(u => u.IdUsuario == LoginAprobador)?.Apellido;
+            var solicitanteImporte = _context.Usuarios.FirstOrDefault(u => u.IdUsuario == LoginAprobador)?.MontoAprobacion;
+
+            var resultado = new
+            {
+                proveedor = solicitanteNombre,
+                importe = solicitanteImporte
+            };
+
+
+            return Json(resultado);
+        }
+
 
         private void PopulateModel(Pago model, IDictionary values) {
             string ID_PAGO = nameof(Pago.IdPago);

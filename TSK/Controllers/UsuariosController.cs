@@ -38,7 +38,8 @@ namespace TSK.Controllers
                 i.Habilitado,
                 i.Token,
                 i.IdCompania,
-                i.IdPais
+                i.IdPais,
+                i.Contacto
             });
 
             // If underlying data is a large SQL table, specify PrimaryKey and PaginateViaPrimaryKey.
@@ -137,6 +138,7 @@ namespace TSK.Controllers
             string TOKEN = nameof(Usuario.Token);
             string ID_COMPANIA = nameof(Usuario.IdCompania);
             string ID_PAIS = nameof(Usuario.IdPais);
+            string CONTACTO = nameof(Usuario.Contacto);
 
             if(values.Contains(ID_USUARIO)) {
                 model.IdUsuario = Convert.ToInt32(values[ID_USUARIO]);
@@ -176,6 +178,11 @@ namespace TSK.Controllers
 
             if(values.Contains(HABILITADO)) {
                 model.Habilitado = Convert.ToBoolean(values[HABILITADO]);
+            }
+
+            if (values.Contains(HABILITADO))
+            {
+                model.Contacto = Convert.ToBoolean(values[CONTACTO]);
             }
 
             if (values.Contains(TOKEN) && values[TOKEN] != null && values[TOKEN] != DBNull.Value)

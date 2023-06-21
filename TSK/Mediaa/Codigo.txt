@@ -1,0 +1,65 @@
+Pago -> Compañia en base a que? Solicitante o Aprobador
+Trigger o Ambos son del mismo Pais
+
+Filtros Primarios (idArea, MontoAprobacion, Habilitado = true, Compania)
+
+
+-------------------------------------------
+
+
+Reportes
+Solicitudes por Aprobar
+
+
+Pago -> Compañia
+LoginAprobador
+LoginSolicitante
+
+Pagos -> Compania del Solicitante
+
+Solicitudes -> Solicitante Barrick Peru -> Aprobador Barrick Peru
+Lista de Solicitudes: 
+Solicitudes Usuario 
+
+Todas las Solicitudes (Filtro Compañia) 
+Orden de FechaSolicitud Descendente
+
+
+Archivos de Configuracion -> SMTP 
+
+Editarlo (Administradores) 2 registros
+Informacion de Contacto
+Usuarios con href -> En Bienvenida
+"Informacion de Contacto" 
+
+SuperAprobador (En base a que parametros? Mayor Monto de Todos && Usuario.Estado = true)
+
+ 
+Beneficiario Nombre? 
+
+Aprobador Revisar
+
+Fumagali > 1 millon - 
+
+Acceso al SIstema - Nombre Modificable
+
+
+
+
+
+
+
+
+ 
+
+
+
+
+
+
+ 
+
+
+
+
+

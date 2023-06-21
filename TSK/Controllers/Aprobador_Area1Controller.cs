@@ -23,20 +23,23 @@ namespace TSK.Controllers
             _context = context;
         }
 
-        [HttpGet]
-        public async Task<IActionResult> Get(DataSourceLoadOptions loadOptions) {
-            var aprobadorareas = _context.AprobadorAreas.Select(i => new {
-                i.IdAprobador,
-                i.IdArea,
-                i.IdUsuario,
-                i.Correo
-            });
 
-            // If underlying data is a large SQL table, specify PrimaryKey and PaginateViaPrimaryKey.
-            // This can make SQL execution plans more efficient.
-            // For more detailed information, please refer to this discussion: https://github.com/DevExpress/DevExtreme.AspNet.Data/issues/336.
-            // loadOptions.PrimaryKey = new[] { "IdAprobador" };
-            // loadOptions.PaginateViaPrimaryKey = true;
+        [HttpGet]
+        public async Task<IActionResult> Get(DataSourceLoadOptions loadOptions)
+        {
+            var aprobadorareas = _context.AprobadorAreas
+                .Join(_context.Usuarios,
+                    aprobador => aprobador.IdUsuario,
+                    usuario => usuario.IdUsuario,
+                    (aprobador, usuario) => new { Aprobador = aprobador, Usuario = usuario })
+                .Where(aprobadorUsuario => aprobadorUsuario.Usuario.Habilitado == true)
+                .Select(i => new {
+                    i.Aprobador.IdAprobador,
+                    i.Aprobador.IdArea,
+                    i.Aprobador.IdUsuario,
+                    i.Aprobador.Correo,
+                    i.Aprobador.Compania
+                });
 
             return Json(await DataSourceLoader.LoadAsync(aprobadorareas, loadOptions));
         }
