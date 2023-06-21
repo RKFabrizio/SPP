@@ -215,22 +215,30 @@
 
                                                 </a>
 
-                                                <a asp-controller="Reportes" asp-action="PendienteAprobarxAprobador" class="dropdown-item @ViewBag.pendienteaprobarxaprobador">
-                                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-checks" width="32" height="32" viewBox="0 0 24 24" stroke-width="1.5" stroke="#a79a66" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                                                        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                                                        <path d="M7 12l5 5l10 -10" />
-                                                        <path d="M2 12l5 5m5 -5l5 -5" />
-                                                    </svg>
+                                                @if (User.Claims.Any(c => c.Type == "Monto" && Convert.ToInt32(c.Value) > 0))
+                                                {
 
-                                                    <span class="nav-link-title">
-                                                        Pagos por Aprobar
-                                                    </span>
-                                                </a>
+                                        <a asp-controller="TokenUsuario" asp-action="Aprobador" class="dropdown-item @ViewBag.Aprobador">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-checks" width="32" height="32" viewBox="0 0 24 24" stroke-width="1.5" stroke="#a79a66" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                                <path d="M7 12l5 5l10 -10" />
+                                                <path d="M2 12l5 5m5 -5l5 -5" />
+                                            </svg>
+
+                                            <span class="nav-link-title">
+                                                Pagos por Aprobar
+                                            </span>
+                                        </a>
+
+                                                }
+                                                     
+                                                
                                             </div>
                                         </div>
                                     </div>
                                 </li>
                             }
+
                             @if (User.IsInRole("Supervisor") || (User.IsInRole("Administrador") || (User.IsInRole("Usuario") )))
                             {
                                 <li class="nav-item @ViewBag.adelantopago">
@@ -246,6 +254,10 @@
                                     </a>
                                 </li>
                             }
+                        
+                 
+ 
+                            
 
                             @if (User.IsInRole("Administrador") || (User.IsInRole("Supervisor")))
                             {
@@ -302,7 +314,7 @@
                                     </div>
                                 </li>
 
-                                @if (User.IsInRole("Administrador"))
+                                @if (User.Claims.Any(c => c.Value == "Administrador"))
                                 {
                                     <li class="nav-item dropdown @ViewBag.mantenimiento">
                                         <a class="nav-link dropdown-toggle" href="#navbar-base" data-bs-toggle="dropdown" data-bs-auto-close="outside" role="button" aria-expanded="false">

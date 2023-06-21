@@ -35,6 +35,7 @@ namespace TSK.Controllers
             new Claim(ClaimTypes.Name, usuario.Nombre),
             new Claim("Usuario", usuario.Login),
             new Claim("NOMBREPERFIL", usuario.Perfiles[0]),
+            new Claim ("Monto", usuario.MontoAprobacion.ToString()),
             new Claim("IdCompania", usuario.IdCompania.ToString())
         };
 

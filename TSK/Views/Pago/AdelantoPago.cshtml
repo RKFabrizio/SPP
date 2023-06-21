@@ -221,6 +221,22 @@
                         )
                         .ColSpan(2);
 
+                                items.AddSimple()
+                            .Template(
+                            @<text>
+                                <div>
+                                    <div class="form-group">
+                                        <label for="proveedor">Nombre del Aprobador:</label>
+                                        <span id="proveedor" class="form-control"></span>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="beneficiarioDni">Monto Max Aprobación:</label>
+                                        <span id="Importe" class="form-control"></span>
+                                    </div>
+                                </div>
+                            </text>
+                        )
+                        .ColSpan(2);
 
 
                                 items.AddButton()
@@ -267,7 +283,7 @@
                             .Disabled(true));
 
 
-                                items.AddSimpleFor(m => m.Importe).Editor(e => e.NumberBox().OnValueChanged("guardarImporte"));
+                                items.AddSimpleFor(m => m.Importe).Editor(e => e.NumberBox().OnValueChanged("guardarImporte2"));
 
                                 items.AddSimpleFor(m => m.IdTipoMoneda)
                             .Label(l => l.Text("Moneda:"))
@@ -383,10 +399,28 @@
                         .ColSpan(2);
 
 
+                                items.AddSimple()
+                            .Template(
+                            @<text>
+                                <div>
+                                    <div class="form-group">
+                                        <label for="proveedor">Nombre del Aprobador:</label>
+                                        <span id="proveedor1" class="form-control"></span>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="beneficiarioDni">Monto Max Aprobación:</label>
+                                        <span id="Importe1" class="form-control"></span>
+                                    </div>
+                                </div>
+                            </text>
+                        )
+                        .ColSpan(2);
+
+
 
                                 items.AddButton()
                     .HorizontalAlignment(HorizontalAlignment.Center)
-                    .ButtonOptions(b => b.Text("Guardar")
+                    .ButtonOptions(b => b.Text("Enviar")
                     .Type(ButtonType.Default)
                     .UseSubmitBehavior(true)
                     ).ColSpan(2);
@@ -400,20 +434,7 @@
         }
     </div>
 
-    <div class="col-md-4">
-        <!-- Aquí pones tu código del último bloque -->
-        <div>
-            <div class="form-group">
-                <label for="proveedor">Aprobador:</label>
-                <span id="proveedor" class="form-control"></span>
-            </div>
-            <div class="form-group">
-                <label for="beneficiarioDni">Monto (Max Aprobación):</label>
-                <span id="Importe" class="form-control"></span>
-            </div>
-        </div>
-    </div>
-</div>
+ </div>
 
  
 <script>
@@ -427,6 +448,21 @@
             success: function (response) {
                 document.getElementById("proveedor").textContent = response.proveedor;
                 document.getElementById("Importe").textContent = response.importe;
+                //document.getElementById("correo").textContent = response.correo;
+            }
+        });
+
+    }
+
+    function guardarImporte2(e) {
+
+        $.ajax({
+            url: '@Url.Action("AprobadorNombre", "Pagoes")',
+            type: 'GET',
+            data: { Importe: e.value },
+            success: function (response) {
+                document.getElementById("proveedor1").textContent = response.proveedor;
+                document.getElementById("Importe1").textContent = response.importe;
                 //document.getElementById("correo").textContent = response.correo;
             }
         });

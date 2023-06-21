@@ -268,11 +268,11 @@ namespace TSK.Controllers
 
 
             await _context.SaveChangesAsync();
-            string correo_emisor = "svc-vd-pino@barrick.com";
-            string clave_emisor = "maVafRevUp23";
+            //string correo_emisor = "svc-vd-pino@barrick.com";
+            //string clave_emisor = "maVafRevUp23";
 
-            //string correo_emisor = "leedryk@gmail.com";
-            //string clave_emisor = "xxrlviitjlpqytrj";
+            string correo_emisor = "leedryk@gmail.com";
+            string clave_emisor = "xxrlviitjlpqytrj";
 
             MailAddress receptor = new(correoAprobador);
             MailAddress emisor = new(correo_emisor);
@@ -401,14 +401,21 @@ namespace TSK.Controllers
             //smtp.EnableSsl = true;
 
             //smtp.Send(email);
+            try
+            {
+                var client = new SmtpClient("CHISANEMP1");
+                client.Credentials = new System.Net.NetworkCredential("svc-vd-pino@barrick.com", "");
+                client.DeliveryMethod = SmtpDeliveryMethod.Network;
+                client.Send(email);
+                return Json(new { IdPago = result.Entity.IdPago });
+            }
+            catch (Exception ex)
+            {
+                // Aquí puedes manejar la excepción y retornar un mensaje de error
+                return Json(new { IdPago = "Fallo en la conexión: " + ex.Message });
+            }
 
-            var client = new SmtpClient("CHISANEMP1");
-            client.Credentials = new System.Net.NetworkCredential("svc-vd-pino@barrick.com", "");
-            client.DeliveryMethod = SmtpDeliveryMethod.Network;
-            client.Send(email);
-
-            return Json(new { IdPago = result.Entity.IdPago });
-        }
+    }
 
 
 
@@ -769,14 +776,19 @@ namespace TSK.Controllers
             //smtp.EnableSsl = true;
 
             //smtp.Send(email);
-
-            var client = new SmtpClient("CHISANEMP1");
-            client.Credentials = new System.Net.NetworkCredential("svc-vd-pino@barrick.com", "");
-            client.DeliveryMethod = SmtpDeliveryMethod.Network;
-            client.Send(email);
-            //10.8.12.15
-
-            return Json(new { IdPago = result.Entity.IdPago });
+            try
+            {
+                var client = new SmtpClient("CHISANEMP1");
+                client.Credentials = new System.Net.NetworkCredential("svc-vd-pino@barrick.com", "");
+                client.DeliveryMethod = SmtpDeliveryMethod.Network;
+                client.Send(email);
+                return Json(new { IdPago = result.Entity.IdPago });
+            }
+            catch (Exception ex)
+            {
+                // Aquí puedes manejar la excepción y retornar un mensaje de error
+                return Json(new { IdPago = "Fallo en la conexión: " + ex.Message });
+            }
         }
 
          
