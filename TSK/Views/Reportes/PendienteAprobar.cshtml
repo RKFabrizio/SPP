@@ -200,7 +200,6 @@
         box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
     }
 
-
     .form-group span {
         font-weight: bold;
         font-size: 1rem; /* Tamaño de fuente aumentado */
@@ -209,8 +208,11 @@
         margin-bottom: 5px; /* Espacio entre cada <span> */
     }
 
-    .form-control {
+    .form-control, .form-control textarea, .form-control input {
         border-radius: 0;
+        color: #f1f0e9; /* Color del texto cambiado al color de fondo */
+        background-color: #f1f0e9; /* Color de fondo cambiado al color de fondo del formulario */
+        border: 1px solid #ccc; /* Agregar un contorno */
     }
 
     .custom-modal-header {
@@ -225,6 +227,8 @@
     }
 </style>
 
+
+
 <!-- PopUp -->
 <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
@@ -236,7 +240,7 @@
 
                 <div style="display: flex;">
                     <div class="form-group" style="margin-right: 20px ;">
-                        <label for="nroSolicitud">Nro de Solicitud:</label>
+                        <label for="nroSolicitud">Número de Solicitud:</label>
                         <span id="nroSolicitud" class="form-control"></span>
                     </div>
                     <div class="form-group" style="margin-right: 20px;">
@@ -251,32 +255,38 @@
 
                 <div style="display: flex;">
                     <div class="form-group" style="margin-right: 20px;">
-                        <label for="fechaSolicitud">Fecha Solicitud:</label>
+                        <label for="fechaSolicitud">Fecha y Hora de Solicitud:</label>
                         <span id="fechaSolicitud" class="form-control"></span>
                     </div>
                     <div class="form-group" style="margin-right: 20px;">
                         <label for="importe">Importe:</label>
                         <span id="importe" class="form-control"></span>
                     </div>
-                    <div class="form-group" style="margin-right: 20px;">
-                        <label for="estado">Estado:</label>
-                        <span id="estado" class="form-control"></span>
-                    </div>
                 </div>
 
                 <div>
                     <div class="form-group">
                         <label for="concepto">Concepto:</label>
-                        <textarea id="concepto" class="form-control"></textarea>
+                        <textarea id="concepto" class="form-control" readonly style="color: black;"></textarea>
+                    </div>
+
+                    <br />
+                    <div class="form-group">
+                        <label>Documentos Adjuntos:</label>
+                        <br />
+                        <br />
+                        <p>ReferenciaOC: <a href="#" onclick="descargarPDF1()" id="rowData"></a></p>
+                        <p>ProformaCotizacion: <a href="#" onclick="descargarPDF2()" id="rowData2"></a></p>
+                        <p>Factura: <a href="#" onclick="descargarPDF3()" id="rowData3"></a></p>
                     </div>
 
                     <div class="form-group">
-                        <label for="informacionContable">Informacion Contable:</label>
-                        <textarea id="informacionContable" class="form-control"></textarea>
+                        <label for="informacionContable">Información Contable:</label>
+                        <textarea id="informacionContable" class="form-control" readonly style="color: black;"></textarea>
                     </div>
                     <div class="form-group">
                         <label for="observaciones">Observaciones:</label>
-                        <textarea id="observaciones" class="form-control"></textarea>
+                        <textarea id="observaciones" class="form-control" readonly style="color: black;"></textarea>
                     </div>
                 </div>
 
@@ -291,50 +301,56 @@
                     </div>
                 </div>
 
-                <div class="form-group">
+                <div class="form-group" style="display: none;">
                     <label for="beneficiarioDni">BeneficiarioDni:</label>
                     <span id="beneficiarioDni" class="form-control"></span>
                 </div>
                 <div style="display: flex;">
-                    <div class="form-group" style="margin-right: 20px;">
+                    <div class="form-group" style="margin-right: 20px; display: none;">
                         <label for="nombreBanco">Banco:</label>
                         <span id="nombreBanco" class="form-control"></span>
                     </div>
 
 
-                    <div class="form-group">
+                    <div class="form-group" style="display: none;">
                         <label for="tipoCuenta">Tipo Cuenta:</label>
                         <span id="tipoCuenta" class="form-control"></span>
                     </div>
 
                 </div>
 
-                <div class="form-group">
+                <div class="form-group" style="display: none;">
                     <label for="cuentaBancaria">Cuenta Bancaria:</label>
                     <span id="cuentaBancaria" class="form-control"></span>
                 </div>
                 <br />
-                <div class="form-group">
-                    <label>Documentos Adjuntos:</label>
-                    <br />
-                    <p>ReferenciaOC: <a href="#" onclick="descargarPDF1()"><span id="rowData" class="form-control"></span></a></p>
-                    <p>ProformaCotizacion: <a href="#" onclick="descargarPDF2()"><span id="rowData2" class="form-control"></span></a></a></p>
-                    <p>Factura: <a href="#" onclick="descargarPDF3()"><span id="rowData3" class="form-control"></span></a></a></p>
+
+                <div class="form-group" style="display: none;">
+                    <label for="estado">Estado:</label>
+                    <span id="estado" class="form-control"></span>
                 </div>
+
+                <div class="form-group" style="margin-right: 20px; display:none;">
+                    <label for="fechaAprobacion">Fecha de Aprobación:</label>
+                    <span id="fechaAprobacion" class="form-control"></span>
+                </div>
+
 
             </div>
 
 
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
             </div>
         </div>
     </div>
 </div>
 
 
- 
+
 <script>
+
+
     var rowData;
     var rowData2;
     var rowData3;
@@ -346,6 +362,7 @@
     var importe;
     var tipoSolicitudText;
     var fechaSolicitud;
+    var fechaAprobacion;
     var solicitante;
     var aprobador;
     var concepto;
@@ -358,6 +375,7 @@
     var tipoCuenta;
     var cuentaBancaria;
 
+
     function selection_changed(selectedItems) {
         var data = selectedItems.selectedRowsData[0];
         console.log(data);
@@ -365,11 +383,11 @@
         moneda = data.IdTipoMoneda;
         // Cambio de id a Moneda
         if (moneda == 1) {
-            moneda = "USD (Dolar Estadounidense)";
+            moneda = "USD";
         } else if (moneda == 2) {
-            moneda = "PEN (Sol Peruano)";
+            moneda = "PEN";
         } else if (moneda == 3) {
-            moneda = "CPL (Peso Chileno)";
+            moneda = "CPL";
         }
         // Cambio de id a estado
         estado = data.IdEstado;
@@ -397,6 +415,7 @@
             concepto = data.Concepto;
             informacionContable = data.InformacionContable;
             observaciones = data.Observaciones;
+            fechaAprobacion = data.FechaAprobacion;
 
             // Data vacia
             beneficiarioDni = "---";
@@ -413,6 +432,7 @@
             importe = data.Importe;
             importe = importe + " " + moneda;
             fechaSolicitud = data.FechaSolicitud;
+            fechaAprobacion = data.FechaAprobacion;
             solicitante = data.LoginSolicitante; // Cambiar a Solicitante
             aprobador = data.LoginAprobador;     // Cambiar a Aprobador
             concepto = data.Concepto;
@@ -442,6 +462,8 @@
 
     }
 
+
+
     function onGridRowClick(e) {
 
         rowData = e.data.ReferenciaOC;
@@ -452,6 +474,7 @@
         document.getElementById("tipoSolicitud").textContent = tipoSolicitudText;
         document.getElementById("importe").textContent = importe;
         document.getElementById("fechaSolicitud").textContent = fechaSolicitud;
+        document.getElementById("fechaAprobacion").textContent = fechaAprobacion
         document.getElementById("concepto").textContent = concepto;
         document.getElementById("informacionContable").textContent = informacionContable;
         document.getElementById("observaciones").textContent = observaciones;
@@ -564,5 +587,4 @@
         });
     }
 </script>
-
  

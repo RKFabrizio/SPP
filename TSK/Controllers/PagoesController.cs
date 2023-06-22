@@ -92,12 +92,14 @@ namespace TSK.Controllers
             var proveedor = await _context.Proveedores.FirstOrDefaultAsync(p => p.IdProveedor == model.IdProveedor);
             // Obtiene el Usuario - Nombre
             string usuarioInfoJson = HttpContext.Request.Cookies["UsuarioInfo"];
+            string solicitanteCorreo = string.Empty;
             string solicitante = string.Empty; // Declaración de la variable en un nivel superior.
 
             if (!string.IsNullOrEmpty(usuarioInfoJson))
             {
                 SPP.Models.Usuario usuario = JsonConvert.DeserializeObject<SPP.Models.Usuario>(usuarioInfoJson);
                 solicitante = usuario.Nombre + " " + usuario.Apellido;
+                solicitanteCorreo = usuario.Correo;
             }
 
             if (!string.IsNullOrEmpty(usuarioInfoJson))
@@ -271,13 +273,28 @@ namespace TSK.Controllers
             //string correo_emisor = "svc-vd-pino@barrick.com";
             //string clave_emisor = "maVafRevUp23";
 
+            var correosPerfil23 = _context.Usuarios
+            .Where(u => u.IdPerfil == 2 || u.IdPerfil == 3)
+            .Select(u => u.Correo)
+            .ToList();
+
+
+
             string correo_emisor = "leedryk@gmail.com";
             string clave_emisor = "xxrlviitjlpqytrj";
 
             MailAddress receptor = new(correoAprobador);
             MailAddress emisor = new(correo_emisor);
-
             MailMessage email = new MailMessage(emisor, receptor);
+
+            // Agrega los correos de los usuarios con idPerfil 2 y 3 a CC
+            foreach (var correo in correosPerfil23)
+            {
+                email.CC.Add(correo);
+            }
+
+            // Agrega el correo del solicitante a CC
+            email.CC.Add(solicitanteCorreo);
 
             if (lastFacturaFilePath != null)
             {
@@ -390,8 +407,8 @@ namespace TSK.Controllers
         </div>";
 
 
-            email.Body = body;
-            email.IsBodyHtml = true;  // Indicate that the email body is HTML
+            //email.Body = body;
+            //email.IsBodyHtml = true;  // Indicate that the email body is HTML
 
             //SmtpClient smtp = new();
             //smtp.Host = "smtp.gmail.com";
@@ -401,6 +418,8 @@ namespace TSK.Controllers
             //smtp.EnableSsl = true;
 
             //smtp.Send(email);
+            //return Json(new { IdPago = result.Entity.IdPago });
+
             try
             {
                 var client = new SmtpClient("CHISANEMP1");
@@ -418,7 +437,7 @@ namespace TSK.Controllers
             }
 
 
-    }
+        }
 
 
 
@@ -443,11 +462,13 @@ namespace TSK.Controllers
             //Obtiene el Usuario - Nombre
             string usuarioInfoJson = HttpContext.Request.Cookies["UsuarioInfo"];
             string solicitante = null; // Declarar la variable solicitante fuera del bloque if
+            string solicitanteCorreo = null;
 
             if (!string.IsNullOrEmpty(usuarioInfoJson))
             {
                 SPP.Models.Usuario usuario = JsonConvert.DeserializeObject<SPP.Models.Usuario>(usuarioInfoJson);
                 solicitante = usuario.Nombre + " " + usuario.Apellido;
+                solicitanteCorreo = usuario.Correo;
             }
 
             if (!string.IsNullOrEmpty(usuarioInfoJson))
@@ -619,6 +640,13 @@ namespace TSK.Controllers
             var result = _context.Pagos.Add(model);
 
             await _context.SaveChangesAsync();
+
+            var correosPerfil23 = _context.Usuarios
+           .Where(u => u.IdPerfil == 2 || u.IdPerfil == 3)
+           .Select(u => u.Correo)
+           .ToList();
+
+
             string correo_emisor = "svc-vd-pino@barrick.com";
             string clave_emisor = "maVafRevUp23";
 
@@ -628,6 +656,16 @@ namespace TSK.Controllers
             MailAddress receptor = new(correoAprobador);
             MailAddress emisor = new(correo_emisor);
             MailMessage email = new MailMessage(emisor, receptor);
+
+            // Agrega los correos de los usuarios con idPerfil 2 y 3 a CC
+            foreach (var correo in correosPerfil23)
+            {
+                email.CC.Add(correo);
+            }
+
+            // Agrega el correo del solicitante a CC
+            email.CC.Add(solicitanteCorreo);
+
             email.Subject = "Sistema Pago de Proveedores";
 
 

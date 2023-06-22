@@ -50,7 +50,7 @@
                 <path d="M4 17v-1a8 8 0 1 1 16 0v1a4 4 0 0 1 -4 4h-8a4 4 0 0 1 -4 -4z" />
             </svg>
             <h2 class="page-title">
-                Adelanto de Pago
+                Solicitud de Pago
             </h2>
         </div>
     </div>
@@ -398,23 +398,35 @@
                         )
                         .ColSpan(2);
 
-
                                 items.AddSimple()
                             .Template(
                             @<text>
-                                <div>
-                                    <div class="form-group">
+                                <div class="dx-field">
+                                    <div class="dx-field-label">
                                         <label for="proveedor">Nombre del Aprobador:</label>
-                                        <span id="proveedor1" class="form-control"></span>
                                     </div>
-                                    <div class="form-group">
-                                        <label for="beneficiarioDni">Monto Max Aprobación:</label>
-                                        <span id="Importe1" class="form-control"></span>
+                                    <div class="dx-field-value">
+                                        @(Html.DevExtreme().TextBox()
+                                                .ID("proveedor1")
+                                                .ReadOnly(true))
+                                        </div>
                                     </div>
-                                </div>
-                            </text>
+                                    <div class="dx-field">
+                                        <div class="dx-field-label">
+                                            <label for="montoMax">Monto Max Aprobación:</label>
+                                        </div>
+                                        <div class="dx-field-value">
+                                            @(Html.DevExtreme().TextBox()
+                                                .ID("montoMax")
+                                                .ReadOnly(true))
+                                        </div>
+                                    </div>
+                                </text>
                         )
                         .ColSpan(2);
+
+
+
 
 
 

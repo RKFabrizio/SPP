@@ -88,7 +88,7 @@
             .DisplayExpr("Text")
             ).GroupIndex(0).Caption("Perfil");
 
-            columns.AddFor(m => m.Contacto).Caption("Contacto").Width(200);
+            columns.AddFor(m => m.Contacto).Caption("Contacto").Width(200).Caption("Soporte");
 
 
         })
@@ -130,7 +130,15 @@
                 groupItems.AddSimpleFor(m => m.Nombre);
                 groupItems.AddSimpleFor(m => m.Apellido);
                 groupItems.AddSimpleFor(m => m.Login);
-                groupItems.AddSimpleFor(m => m.Contacto).CssClass("myFormMargin").Label(label => label.Location(FormLabelLocation.Left));
+                       groupItems.AddSimpleFor(m => m.Contacto)
+            .CssClass("myFormMargin")
+            .Label(label => 
+            { 
+                label.Text("Soporte"); 
+                label.Location(FormLabelLocation.Left); 
+            });
+
+
 
             });
         }))
